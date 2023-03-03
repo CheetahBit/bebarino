@@ -36,7 +36,7 @@ class AccountBot
         $userId = $message->from->id;
         $this->api->deleteCache($userId);
 
-        $messageId = $message->message_id;
+        $messageId = $message->message_id - 1;
         $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
 
         $cache = $message->cache;
