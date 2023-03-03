@@ -57,11 +57,15 @@ return json_decode(json_encode([
         "submitPackage" => "ثبت بسته",
         "myRequests" => "درخواست‌های من",
         "myAddresses" => "آدرس‌های من",
-        
+        "sharePhone" => "اشتراک گذاری شماره",
+        "backward" => "بازگشت"
 
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
-        "mainMenu" => "",
+        "mainMenu" => "منوی اصلی",
+
+        "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
+
     ]
 ]));
