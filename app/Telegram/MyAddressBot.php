@@ -38,10 +38,8 @@ class MyAddressBot
         $userId = $message->from->id;
         $id = $message->text ?? $message->cache->address;
 
-        $messageId = $message->message_id ?? $message->message->message_id ?? 0;
-        if ($messageId > 0) {
-            $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
-        }
+        $messageId = $message->message_id ?? ($message->message->message_id ?? 0) + 1;
+        if ($messageId > 0)  $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
 
         $address = User::find($userId)->addresses()->find($id);
 
