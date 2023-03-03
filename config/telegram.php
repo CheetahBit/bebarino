@@ -64,6 +64,9 @@ return json_decode(json_encode([
     "messages" => [
         "guestMenu" => "منوی میهمان",
         "mainMenu" => "منوی اصلی",
+        "aboutUs" => "متن درباره ما",
+        "support" => "متن پشتیبانی",
+
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
