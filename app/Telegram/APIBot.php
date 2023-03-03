@@ -116,8 +116,11 @@ class APIBot
 
     public function inlineKeyboard()
     {
-        if (!isset($this->data->reply_markup))
-            $this->data->reply_markup->inline_keyboard = [];
+        if (!isset($this->data->reply_markup)){
+            $temp = new stdClass;
+            $temp->inline_keyboard = [];
+            $this->data->reply_markup = $temp;
+        }
         return $this;
     }
 
