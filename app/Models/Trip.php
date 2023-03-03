@@ -28,25 +28,12 @@ class Trip extends Model
     {
         $this->fromAddress = implode(",", array_slice(explode(",", $this->fromAddress), 0, 2));
         $this->toAddress = implode(",", array_slice(explode(",", $this->toAddress), 0, 2));
-
-        return $this;
     }
 
-    public function hasTicket()
+    public function checkRequirment()
     {
         $this->hasTicket = isset($this->ticket) ? "✅" : "❌";
-        return $this;
-    }
-
-    public function hasPassport()
-    {
         $this->hasPassport = isset($this->user->identity->passport) ? "✅" : "❌";
-        return $this;
-    }
-
-    public function hasContact()
-    {
         $this->hasContact = $this->user->contact->isFullFill() ? "✅" : "❌";
-        return $this;
     }
 }
