@@ -128,6 +128,11 @@ class PackageBot
         $user->packages()->find($id)->update([
             'message_id' => $result->message_id
         ]);
+
+        $message = new stdClass;
+        $message->from = (object)['id' => $userId];
+        $main = new MainBot();
+        $main->menu($message);
     }
 
     public function form($callback)
