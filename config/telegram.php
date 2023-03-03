@@ -82,6 +82,14 @@ return json_decode(json_encode([
         "inputFirstname" => "نام خود را وارد کنید",
         "inputLastname" => "نام خانوادگی خود را وارد کنید",
         "inputPassport" => "تصویر پاسپورت خود را وارد کنید",
+        
+        "inputPhone" => "شماره موبایل را وارد کنید",
+        "inputEmail" => "ایمیل را وارد کنید",
+        "inputCountry" => "کشور را انتخاب یا وارد کنید",
+        "inputCity" => "شهر را وارد کنید",
+        "inputAddress" => "نشانی را وارد کنید",
+        "inputAccountName" => "نام صاحب حساب را وارد کنید",
+        "inputAccountNumber" => "شماره حساب را وارد کنید",
 
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
         "saveSuccessfully" => "باموفقیت ذخیره شد !",
