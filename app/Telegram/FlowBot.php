@@ -18,6 +18,7 @@ class FlowBot
 
     public function start($userId, $name, $class, $method, $backward)
     {
+        $config = config('telegram');
         $this->userId = $userId;
 
         $data = new stdClass;
@@ -29,7 +30,7 @@ class FlowBot
         $data->cursor = -1;
 
         $this->api->putCache($userId, 'flow', $data);
-        $this->api->putCache($userId, 'action', config('telegram.actions.flow'));
+        $this->api->putCache($userId, 'action', $config->actions->flow);
         $this->next();
     }
 
