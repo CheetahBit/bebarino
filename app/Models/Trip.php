@@ -16,7 +16,8 @@ class Trip extends Model
         "ticket",
         "weight",
         "price",
-        "desc"
+        "desc",
+        "message_id",
     ];
 
     public function user()

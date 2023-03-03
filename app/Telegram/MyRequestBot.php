@@ -18,15 +18,14 @@ class MyRequestBot
     public function index($message)
     {
         $userId = $message->from->id;
-        $cache = $message->cache;
 
         $this->api->chat($userId)->sendMessage()->text('myRequests')->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('selectRequest', 'query', time())->inlineMode('requests');
             $m->button('backward', 'data', 'Main.menu');
         })->exec();
 
-        $cache->action = config('telegram.actions.myRequestShow');
-        $this->api->setCache($userId, $cache);
+        $action = config('telegram')->actions->myRequestShow;
+        $this->api->putCache($userId, 'action', $action);
     }
 
     public function show($message)

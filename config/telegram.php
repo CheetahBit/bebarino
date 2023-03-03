@@ -71,6 +71,7 @@ return json_decode(json_encode([
         "createAddress" => "➕ افزودن آدرس",
         "indexAddress" => "📍 نمایش آدرس‌ها",
         "selectAddress" => "📍 انتخاب آدرس",
+        "indexRequest" => "نمایش درخواست‌ها",
         "sendFormRequest" => "📨 ارسال درخواست",
 
     ],
@@ -87,6 +88,8 @@ return json_decode(json_encode([
 
         "myAddresses" => "آدرس‌های من",
         "addressInfo" => "آدرس\n\nکشور : :country\nشهر : :city\nنشانی : :address",
+
+        "myRequests" => "درخواست‌های من",
 
         "submitPackage" => "ثبت بسته \n\nلطفا اطلاعات زیر را وارد نمایید",
         "submitTrip" => "ثبت سفر \n\nلطفا اطلاعات زیر را وارد نمایید",

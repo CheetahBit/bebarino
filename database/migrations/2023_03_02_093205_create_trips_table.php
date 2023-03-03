@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('fromAddress');
             $table->string('toAddress');
             $table->string('date');
-            $table->string('ticket');
+            $table->string('ticket')->nullable();
             $table->string('weight');
             $table->string('price');
             $table->string('desc')->nullable();
+            $table->string('message_id')->nullable();
             $table->timestamps();
         });
     }

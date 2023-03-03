@@ -13,7 +13,8 @@ class Package extends Model
     protected $fillable = [
         "fromAddress",
         "toAddress",
-        "desc"
+        "desc",
+        "message_id",
     ];
 
     public function user()
