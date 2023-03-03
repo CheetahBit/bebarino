@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\NotEntered;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,8 +27,8 @@ class AccountContact extends Model
         'phone' => NotEntered::class,
         'email' => NotEntered::class,
         'country' => NotEntered::class,
-        'city' => PassportImg::class,
-        'address' => PassportImg::class,
+        'city' => NotEntered::class,
+        'address' => NotEntered::class,
     ];
 
     public function user()
