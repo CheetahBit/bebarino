@@ -26,7 +26,8 @@ class BotController extends Controller
             elseif (isset($update->callback_query)) $this->callbackHandler($update->callback_query);
             elseif (isset($update->inline_query)) $this->inlineHandler($update->inline_query);
         } catch (ErrorException $th) {
-            Log::alert($th->getTraceAsString());
+            Log::alert($th->getMessage());
+            Log::alert($th->getTrace());
         }
         return response('ok');
     }
