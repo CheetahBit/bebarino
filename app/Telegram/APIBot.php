@@ -55,6 +55,7 @@ class APIBot
     public function sendMessage()
     {
         $this->data->method = "sendMessage";
+        $this->data->parse_mode = "HTML";
         return $this;
     }
 

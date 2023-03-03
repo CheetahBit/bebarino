@@ -69,7 +69,13 @@ class AccountBot
 
         User::find($userId)->{$key}()->update((array)$data);
 
-        $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->exec();
+        $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->keyboard()->rowKeys(function ($m) {
+            $m->key('contactInfo');
+            $m->key('identityInfo');
+        })->rowKeys(function ($m) {
+            $m->key('bankInfo');
+            $m->key('backward');
+        })->exec();
 
         $message = new stdClass;
         $message->from = new stdClass;
