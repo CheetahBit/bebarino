@@ -113,7 +113,11 @@ class MyAddressBot
     public function delete($callback)
     {
         $userId = $callback->from->id;
-        $id = $callback->data;
+        $id = $callback->cache->address;
+        $messageId = $callback->message->message_id;
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        
         User::find($userId)->addresses()->find($id)->delete();
 
         $this->index($callback);
