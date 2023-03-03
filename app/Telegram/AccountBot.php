@@ -39,9 +39,8 @@ class AccountBot
         $user = User::find($userId);
         $data = $user->{$key};
 
-        $this->api->chat($userId)->sendMessage()->text($key . "Info", $data)->keyboard()->rowKeys(function ($m) {
-            $m->key('edit');
-            $m->key('backward');
+        $this->api->chat($userId)->sendMessage()->text($key . "Info", $data)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('edit', 'data', 'Account.edit');
         })->exec();
 
         $cache->key = $key;
@@ -52,6 +51,9 @@ class AccountBot
     {
         $key = $message->cache->key;
         $userId = $message->from->id;
+        $messageId = $message->message_id;
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
 
         $flow = new FlowBot();
         $flow->start($userId, $key, 'Account', 'update', 'show');

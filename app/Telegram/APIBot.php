@@ -64,6 +64,12 @@ class APIBot
         return $this;
     }
 
+    public function updateButton()
+    {
+        $this->data->method = 'editMessageReplyMarkup';
+        return $this;
+    }
+
     public function deleteMessage()
     {
         $this->data->method = 'editMessageText';
@@ -121,7 +127,7 @@ class APIBot
 
     public function inlineKeyboard()
     {
-        if (!isset($this->data->reply_markup)){
+        if (!isset($this->data->reply_markup)) {
             $temp = new stdClass;
             $temp->inline_keyboard = [];
             $this->data->reply_markup = $temp;
