@@ -36,8 +36,10 @@ class AccountBot
         $userId = $message->from->id;
         $this->api->deleteCache($userId);
 
-        $messageId = $message->message_id - 1;
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        if (isset($message->message_id)) {
+            $messageId = $message->message_id - 1;
+            $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        }
 
         $cache = $message->cache;
         $key = $cache->key ?? str_replace('Info', '', array_search($message->text, (array) $this->config->keywords));
@@ -82,7 +84,6 @@ class AccountBot
         $message = new stdClass;
         $message->from = new stdClass;
         $message->from->id = $userId;
-        $message->message_id = 0;
         $message->cache = (object) ["key" => $key];
         $this->show($message);
     }
