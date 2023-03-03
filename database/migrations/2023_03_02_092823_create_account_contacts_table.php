@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('account_contacts', function (Blueprint $table) {
             $table->foreignId('userId');
-            $table->foreignId('country')->nullable();
-            $table->foreignId('city')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('country')->nullable();
+            $table->string('city')->nullable();
             $table->text('address')->nullable();
             $table->timestamps();
         });
