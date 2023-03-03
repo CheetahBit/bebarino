@@ -20,7 +20,7 @@ class MyRequestBot
         $userId = $message->from->id;
 
         $this->api->chat($userId)->sendMessage()->text('myRequests')->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('selectRequest', 'query', time())->inlineMode('requests');
+            $m->button('indexRequest', 'query', time())->inlineMode('requests');
             $m->button('backward', 'data', 'Main.menu');
         })->exec();
 
