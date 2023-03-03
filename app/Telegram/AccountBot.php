@@ -57,8 +57,8 @@ class AccountBot
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('backward', 'data', 'Account.backward');
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($key){
+            $m->button('backward', 'data', 'Account.backward.'.$key);
         })->exec();
 
         $flow = new FlowBot();
@@ -90,6 +90,7 @@ class AccountBot
 
     public function backward($callback)
     {
+        $key = $callback->data;
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
 
@@ -101,7 +102,8 @@ class AccountBot
             $m->key('bankInfo');
             $m->key('backward');
         })->exec();
-
+        
+        $callback->cache = (object) ["key" => $key];
         $this->show($callback);
     }
 }
