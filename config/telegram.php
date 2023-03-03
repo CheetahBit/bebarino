@@ -29,6 +29,7 @@ return json_decode(json_encode([
     ],
     "actions" => [
         "/start" => ["class" => "Main", "method" => "menu"],
+        "backward" => ["class" => "Main", "method" => "menu"],
         "beginning" => ["class" => "Main", "method" => "beginning"],
         "support" => ["class" => "Main", "method" => "support"],
         "aboutUs" => ["class" => "Main", "method" => "aboutUs"],
