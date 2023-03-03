@@ -82,7 +82,7 @@ return json_decode(json_encode([
         "inputPassport" => "تصویر پاسپورت خود را وارد کنید",
 
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
-        "saveSuccessfully " => "باموفقیت ذخیره شد !",
+        "saveSuccessfully" => "باموفقیت ذخیره شد !",
 
         "errorInvalidContact" => 'خطای شماره موبایل',
         "errorAnotherContact" => 'خطای شماره متعلق به شما نیست',
