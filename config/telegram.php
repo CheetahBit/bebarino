@@ -58,6 +58,7 @@ return json_decode(json_encode([
         "myRequests" => "درخواست‌های من",
         "myAddresses" => "آدرس‌های من",
         "sharePhone" => "اشتراک گذاری شماره",
+        "contactSupport " => "ارتباط با پشتیبان",
         "backward" => "بازگشت"
 
     ],
