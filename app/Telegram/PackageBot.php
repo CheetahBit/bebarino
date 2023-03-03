@@ -26,7 +26,7 @@ class PackageBot
         $package = User::find($userId)->packages()->find($id);
         $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('delete', 'data', 'Package.delete');
-            // $m->button('edit', 'data', 'Package.edit');
+            $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
 
@@ -35,12 +35,9 @@ class PackageBot
 
     public function edit($callback)
     {
-        $cache = $callback->cache;
         $userId = $callback->from->id;
-        $cache->package = $callback->data;
         $flow = new FlowBot();
         $flow->start($userId, 'package', 'Package', 'update', 'show');
-        $this->api->setCache($userId, $cache);
     }
 
     public function update($data)
