@@ -199,6 +199,7 @@ class APIBot
     {
         $token = config('telegram.token');
         Log::info(json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        Log::info('https://api.telegram.org/bot' . $token . '/');
         Log::info(json_encode(Cache::store('database')->get($this->data->chat_id ?? ''), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         $response = Http::connectTimeout(10)
             // ->withOptions(['proxy' => '192.168.48.164:10809'])
