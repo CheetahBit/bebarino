@@ -40,6 +40,11 @@ class MainBot
             $m->key('support');
             $m->key('aboutUs');
         })->exec();
+
+        if (isset($message->message)) {
+            $messageId = $message->message->message_id;
+            $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        }
     }
 
     public function beginning($message)
