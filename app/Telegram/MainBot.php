@@ -64,8 +64,9 @@ class MainBot
         $user->contact()->update(['phone' => $data->contact]);
 
         $this->api->chat($userId)->sendMessage()->text('loginSuccessfully')->exec();
-        
+
         $message = new stdClass;
+        $message->from = new stdClass;
         $message->from->id = $userId;
         $this->menu($message);
     }
