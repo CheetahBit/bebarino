@@ -34,9 +34,9 @@ return json_decode(json_encode([
         "aboutUs" => ["class" => "Main", "method" => "aboutUs"],
 
         "account" => ["class" => "Account", "method" => "index"],
-        "identity" => ["class" => "Account", "method" => "identity"],
-        "bank" => ["class" => "Account", "method" => "bank"],
-        "contact" => ["class" => "Account", "method" => "contact"],
+        "identityInfo" => ["class" => "Account", "method" => "identity"],
+        "bankInfo" => ["class" => "Account", "method" => "bank"],
+        "contactInfo" => ["class" => "Account", "method" => "contact"],
 
         "submitTravel" => ["class" => "Main", "method" => "submitTravel"],
         "submitPackage" => ["class" => "Main", "method" => "submitPackage"],
