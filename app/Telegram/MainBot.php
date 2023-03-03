@@ -90,12 +90,17 @@ class MainBot
         $this->api->chat($userId)->sendMessage()->text('aboutUs')->exec();
     }
 
-    public function submitTravel($message)
+    public function submitTrip($message)
     {
         $userId = $message->from->id;
         if ($this->checkLogin($userId)) {
+            $this->api->chat($userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
+            $this->api->chat($userId)->sendMessage()->text('submitTrip')->inlineKeyboard()->rowButtons(function($m){
+                $m->button('selectAddress', 'query', time())->inlineMode('addresses');
+                $m->button('backward', 'data', 'Main.menu');
+            })->exec();
             $flow = new FlowBot();
-            $flow->start($userId, 'travel', 'Travel', 'submit', 'menu');
+            $flow->start($userId, 'trip', 'Trip', 'submit', 'menu');
         } else $this->needLogin($userId);
     }
 

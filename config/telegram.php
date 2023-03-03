@@ -20,7 +20,7 @@ return json_decode(json_encode([
         "address" => [
             "country", "city", "address"
         ],
-        "travel" => [
+        "trip" => [
             "fromAddress", "toAddress", "date", "ticket", "weight", "price", "desc"
         ],
         "package" => [
@@ -39,7 +39,7 @@ return json_decode(json_encode([
         "bankInfo" => ["class" => "Account", "method" => "show"],
         "contactInfo" => ["class" => "Account", "method" => "show"],
 
-        "submitTravel" => ["class" => "Main", "method" => "submitTravel"],
+        "submitTrip" => ["class" => "Main", "method" => "submitTrip"],
         "submitPackage" => ["class" => "Main", "method" => "submitPackage"],
 
         "myAddresses" => ["class" => "MyAddress", "method" => "index"],
@@ -54,7 +54,7 @@ return json_decode(json_encode([
         "account" => "👤 حساب کاربری",
         "aboutUs" => "🏢 درباره ما",
         "support" => "🎧 پشتیبانی",
-        "submitTravel" => "✈️ ثبت سفر",
+        "submitTrip" => "✈️ ثبت سفر",
         "submitPackage" => "📦 ثبت بسته",
         "myRequests" => "📝 درخواست‌های من",
         "myAddresses" => "📍آدرس‌های من",
