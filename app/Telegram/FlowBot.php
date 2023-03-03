@@ -53,7 +53,7 @@ class FlowBot
                 $countries = Country::all();
                 foreach ($countries->chunk(3) as $keys) {
                     $temp->rowKeys(function (APIBot $m) use ($keys) {
-                        foreach ($keys as $key) $m->key($key->title);
+                        foreach ($keys as $key) $m->key($key->fullTitle());
                     });
                 }
                 

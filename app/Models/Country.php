@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,12 +9,9 @@ class Country extends Model
 {
     use HasFactory;
 
-    public function title()
+    public function fullTitle()
     {
-        return Attribute::make(
-            get: fn (string $value) => $this->flag() . ' ' . $value,
-        );
-        
+        return $this->flag() . ' ' . $this->title;
     }
 
     public function flag(): string
