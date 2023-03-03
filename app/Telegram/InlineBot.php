@@ -10,7 +10,7 @@ use App\Telegram\APIBot;
 use Illuminate\Support\Facades\Cache;
 use stdClass;
 
-class BotInlineHandler
+class InlineBot
 {
 
     static function handle($inline)

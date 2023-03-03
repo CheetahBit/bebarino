@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TelegramBot\InlineBot;
 use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -66,8 +67,8 @@ class BotController extends Controller
     public function inlineHandler($inline)
     {
         if ($inline->chat_type = "sender") {
-            $class = new ReflectionClass("InlineBot");
-            $class->{'handle'}($inline);
+            $inlineBot = new InlineBot();
+            $inlineBot->handle($inline);
         }
     }
 
