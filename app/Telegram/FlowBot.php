@@ -118,7 +118,7 @@ class FlowBot
 
     public function output($result)
     {
-        $class = new ReflectionClass($result->class . "Bot");
+        $class = new ("App\Telegram\\" . $result->class . "Bot")();
         $class->{$result->method}($result);
     }
 
