@@ -21,11 +21,11 @@ class MyAddressBot
         $cache = $message->cache;
 
         $this->api->chat($userId)->sendMessage()->text('myAddresses')->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('createAddress', 'data', 'Address.create');
+            $m->button('createAddress', 'data', 'MyAddress.create');
             $m->button('indexAddress', 'query', time())->inlineMode('addresses');
         })->exec();
 
-        $cache->action = config('telegram.actions.myAddressesShow');
+        $cache->action = config('telegram')->actions->myAddressesShow;
         $this->api->setCache($userId, $cache);
     }
 
@@ -76,7 +76,7 @@ class MyAddressBot
     {
         $userId = $callback->from->id;
         $flow = new FlowBot();
-        $flow->start($userId, 'address', 'Address', 'store', 'main');
+        $flow->start($userId, 'address', 'Address', 'store', 'index');
     }
 
     public function store($result)
