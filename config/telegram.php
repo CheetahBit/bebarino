@@ -63,7 +63,8 @@ return json_decode(json_encode([
         "identityInfo" => "🪪 اطلاعات هویتی",
         "bankInfo" => "🏦 اطلاعات بانکی",
         "backward" => "➡️ بازگشت",
-        "notEntered" => "وارد نشده"
+        "notEntered" => "وارد نشده",
+        "edit" => "✍️ ویرایش",
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
