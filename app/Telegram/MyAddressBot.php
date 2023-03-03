@@ -72,7 +72,7 @@ class MyAddressBot
         $userId = $result->userId;
         $data = $result->data;
         $cache = $this->api->getCache($userId);
-        User::find($userId)->addresses()->find($cache->address)->update($data);
+        User::find($userId)->addresses()->find($cache->address)->update((array)$data);
 
         $message = new stdClass;
         $message->form->id = $userId;
