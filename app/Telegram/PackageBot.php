@@ -97,6 +97,8 @@ class PackageBot
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
         $messageId = $callback->message->message_id;
         $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
+
+        (new MyRequestBot())->index($callback);
     }
 
     public function submit($result)
