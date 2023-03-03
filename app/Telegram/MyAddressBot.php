@@ -68,9 +68,10 @@ class MyAddressBot
 
     }
 
-    public function update($data)
+    public function update($result)
     {
-        $userId = $data->userId;
+        $userId = $result->userId;
+        $data = $result->data;
         $cache = $this->api->getCache($userId);
         User::find($userId)->addresses()->find($cache->address)->update($data);
 
