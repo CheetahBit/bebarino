@@ -48,6 +48,10 @@ class FlowBot
                 $temp->text('inputContact')->keyboard()->rowKeys(function ($m) {
                     $m->key('sharePhone', 'request_contact', true);
                 });
+            } else if ($step == 'ticket') {
+                $temp->text('inputTicket')->keyboard()->rowKeys(function ($m) {
+                    $m->key('desire');
+                });
             } else if ($step == 'country') {
                 $temp->text('inputCountry')->keyboard();
                 $countries = Country::all();
@@ -84,7 +88,11 @@ class FlowBot
             else $message->text = $message->contact->phone_number;
         } else if ($step == 'phone' && $type != 'phone_number') $error = 'errorInvalidPhone';
         else if ($step == 'email' && $type != 'email')  $error = 'errorInvalidEmail';
-        else if (($step == 'passport' || $step == 'ticket') && !isset($message->photo))  $error = 'errorInvalidPhoto';
+        else if (
+            ($step == 'passport' ||
+                ($step == 'ticket' && $message->text != $config->keywords->desire)) &&
+            !isset($message->photo)
+        )  $error = 'errorInvalidPhoto';
 
         if (isset($error)) $this->api->chat($this->userId)->sendMessage()->text($error)->exec();
         else $cache->data->{$step} = $message->text ?? $this->download($message->photo, $step);

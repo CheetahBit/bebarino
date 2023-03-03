@@ -99,7 +99,8 @@ class TripBot
 
     public function submit($result)
     {
-        $channel = config('telegram')->channel;
+        $config = config('telegram');
+        $channel = $config->channel;
         $userId = $result->userId;
         $data = $result->data;
 
@@ -108,7 +109,8 @@ class TripBot
         $toAddress = $user->addresses()->find($data->toAddress)->toArray();
         $data->fromAddress = collect($fromAddress)->join(" , ");
         $data->toAddress = collect($toAddress)->join(" , ");
-
+        if($config->keywords->desire == $data->ticket) $data->ticket = null;
+        
         $trip = $user->trips()->create((array) $data);
         $id = $trip->id;
         $trip->save();
@@ -126,7 +128,7 @@ class TripBot
             "channel" => $channel,
             "post" => $result->message_id
         ];
-        $this->api->chat($channel)->sendMessage()->text('tripSubmitted', $args)->exec();
+        $this->api->chat($userId)->sendMessage()->text('tripSubmitted', $args)->exec();
 
         $user->trips()->find($id)->update([
             'message_id' => $result->message_id

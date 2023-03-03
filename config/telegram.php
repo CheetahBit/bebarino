@@ -67,6 +67,7 @@ return json_decode(json_encode([
         "notEntered" => "وارد نشده",
         "edit" => "✍️ ویرایش",
         "delete" => "🗑️ حذف",
+        "desire" => "تمایل ندارم",
         "createAddress" => "➕ افزودن آدرس",
         "indexAddress" => "📍 نمایش آدرس‌ها",
         "selectAddress" => "📍 انتخاب آدرس",
