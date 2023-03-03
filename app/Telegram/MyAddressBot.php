@@ -82,7 +82,7 @@ class MyAddressBot
         })->exec();
 
         $flow = new FlowBot();
-        $flow->start($userId, 'address', 'Address', 'store', 'index');
+        $flow->start($userId, 'address', 'MyAddress', 'store', 'index');
     }
 
     public function store($result)
