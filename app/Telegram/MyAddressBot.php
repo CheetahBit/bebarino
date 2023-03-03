@@ -64,7 +64,7 @@ class MyAddressBot
         })->exec();
 
         $flow = new FlowBot();
-        $flow->start($userId, 'address', 'MyAddress', 'store', 'index');
+        $flow->start($userId, 'address', 'MyAddress', 'update', 'index');
 
     }
 
