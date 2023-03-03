@@ -32,15 +32,12 @@ class MyRequestBot
 
     public function show($message)
     {
-        $userId = $message->from->id;
-        $id = $message->text;
-
-        $user = User::find($userId);
+        $text = $message->text;
+        $data = explode('-', $text);
         
-        $package = $user->packages()->find($id);
-        if (isset($package)) return (new PackageBot())->show($message);
-
-        $trip = $user->trips()->find($id);
-        if (isset($trip)) (new TripBot())->show($message);
+        match($data[0]){
+            "package" => (new PackageBot())->show($message),
+            "trip" => (new TripBot())->show($message)
+        };
     }
 }

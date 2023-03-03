@@ -103,6 +103,9 @@ return json_decode(json_encode([
         "packageSubmitted" => "بسته شما ثبت شد\n\nt.me/:channel/:post",
         "tripSubmitted" => "سفر شما ثبت شد\n\nt.me/:channel/:post",
 
+        "packageInfo" => "بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc",
+        "tripInfo" => "بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nنوضیحات: :desc",
+
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",
