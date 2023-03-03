@@ -130,6 +130,10 @@ class MyAddressBot
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
 
+        $this->api->chat($userId)->sendMessage()->text('cancelEdit')->keyboard()->rowKeys(function ($m) {
+            $m->key('backward');
+        })->exec();
+
         $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
         $this->index($callback);
     }
