@@ -1,6 +1,6 @@
 <?php
 
-return [
+return json_decode(json_encode([
     "token" => env("BOT_TOKEN"),
     "channel" => "bebarinoTest",
     "admins" => [],
@@ -49,6 +49,6 @@ return [
         "flow" => ["class" => "Flow", "method" => "input"],
     ],
     "keywords" => [
-        
+
     ]
-];
+]));
