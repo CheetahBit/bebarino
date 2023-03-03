@@ -14,7 +14,7 @@ class NotEntered implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return $value ?? config('telegram')->notEntered;
+        return $value ?? config('telegram')->keywords->notEntered;
     }
 
     /**

@@ -15,7 +15,9 @@ class PassportImg implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        return isset($value) ? "<a href='" . Request::getHttpHost() . "/api/files/passports/" . $value . "'>تصویر</a>" : config('telegram')->notEntered;
+        return isset($value) ? 
+        "<a href='" . Request::getHttpHost() . "/api/files/passports/" . $value . "'>تصویر</a>" :
+         config('telegram')->keywords->notEntered;
     }
 
     /**
