@@ -36,6 +36,9 @@ class MyAddressBot
         $userId = $message->from->id;
         $id = $message->text;
 
+        $messageId = $message->message_id - 1;
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        
         $address = User::find($userId)->addresses()->find($id);
 
         $this->api->chat($userId)->sendMessage()->text('addressInfo', $address)->inlineKeyboard()->rowButtons(function ($m) {
