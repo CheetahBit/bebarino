@@ -66,7 +66,7 @@ return json_decode(json_encode([
         "backward" => "➡️ بازگشت",
         "notEntered" => "وارد نشده",
         "edit" => "✍️ ویرایش",
-
+        "delete" => "🗑️ حذف",
         "createAddress" => "➕ افزودن آدرس",
         "indexAddress" => "📍 نمایش آدرس‌ها",
         "selectAddress" => "📍 انتخاب آدرس",
