@@ -100,7 +100,7 @@ class APIBot
     {
         $this->keys = [];
         $callback($this);
-        $this->data->reply_markup->keyboard[] = $this->keys;
+        if (count($this->keys) > 0) $this->data->reply_markup->keyboard[] = $this->keys;
         return $this;
     }
 
@@ -125,7 +125,7 @@ class APIBot
     {
         $this->buttons = [];
         $callback($this);
-        $this->data->reply_markup->inline_keyboard[] = $this->keys;
+        if (count($this->buttons) > 0) $this->data->reply_markup->inline_keyboard[] = $this->keys;
         return $this;
     }
 
@@ -191,7 +191,7 @@ class APIBot
         $response = Http::connectTimeout(1000)->timeout(1000)
             // ->withOptions(['proxy' => '192.168.48.164:10809'])
             ->get('https://api.telegram.org/file/bot' . $token . '/' . $file_path);
-            
+
         Storage::put($folder . "/" . $file->file_unique_id, $response);
     }
 
