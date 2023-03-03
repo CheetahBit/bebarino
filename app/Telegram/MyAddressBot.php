@@ -18,15 +18,17 @@ class MyAddressBot
     public function index($message)
     {
         $userId = $message->from->id;
-        $cache = $message->cache;
+
+        $messageId = $message->message_id - 1;
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
 
         $this->api->chat($userId)->sendMessage()->text('myAddresses')->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('createAddress', 'data', 'MyAddress.create');
             $m->button('indexAddress', 'query', time())->inlineMode('addresses');
         })->exec();
 
-        $cache->action = config('telegram')->actions->myAddressesShow;
-        $this->api->setCache($userId, $cache);
+        $action = config('telegram')->actions->myAddressesShow;
+        $this->api->setCache($userId, 'action', $action);
     }
 
     public function show($message)
@@ -42,7 +44,7 @@ class MyAddressBot
             $m->button('backward', 'data', 'MyAddress.backward');
         })->exec();
 
-        $this->api->putCache($userId,'address', $id);
+        $this->api->putCache($userId, 'address', $id);
     }
 
     public function edit($callback)
@@ -75,7 +77,7 @@ class MyAddressBot
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function($m){
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'MyAddress.backward');
         })->exec();
 
