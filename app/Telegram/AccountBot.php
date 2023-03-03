@@ -41,17 +41,14 @@ class AccountBot
         $user = User::find($userId);
         $data = $user->{$key};
 
-        $this->api->chat($userId)->sendMessage()->text($key . "Info", $data)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('edit', 'data', 'Account.edit');
+        $this->api->chat($userId)->sendMessage()->text($key . "Info", $data)->inlineKeyboard()->rowButtons(function ($m) use ($key) {
+            $m->button('edit', 'data', 'Account.edit.'.$key);
         })->exec();
-
-        $cache->key = $key;
-        $this->api->setCache($userId, $cache);
     }
 
     public function edit($callback)
     {
-        $key = $callback->cache->key;
+        $key = $callback->data;
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
 
@@ -92,7 +89,7 @@ class AccountBot
     {
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
-        
+
         $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
         $this->api->chat($userId)->sendMessage()->text('cancelEdit')->keyboard()->rowKeys(function ($m) {
             $m->key('contactInfo');
