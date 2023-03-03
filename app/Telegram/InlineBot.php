@@ -1,14 +1,10 @@
 <?php
 
-namespace App\Services\TelegramBot;
+namespace App\Services\Telegram;
 
-use App\Models\Category;
-use App\Models\City;
-use App\Models\Country;
 use App\Models\User;
 use App\Telegram\APIBot;
 use Illuminate\Support\Facades\Cache;
-use stdClass;
 
 class InlineBot
 {
