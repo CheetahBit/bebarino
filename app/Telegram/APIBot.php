@@ -90,7 +90,7 @@ class APIBot
             $temp = new stdClass;
             $temp->keyboard = [];
             $temp->one_time_keyboar = false;
-            $temp->resize_keyboar = true;
+            $temp->resize_keyboard = true;
             $this->data->reply_markup = $temp;
         }
         return $this;
@@ -180,7 +180,7 @@ class APIBot
 
     public function download($file, $folder)
     {
-        $token = config('telegram.token');
+        $token = config('telegram')->token;
 
         $this->data->method = 'getFile';
         $this->data->file_id = $file->file_id;
@@ -199,7 +199,6 @@ class APIBot
     {
         $token = config('telegram')->token;
         Log::info(json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        Log::info('https://api.telegram.org/bot' . $token . '/');
         Log::info(json_encode(Cache::store('database')->get($this->data->chat_id ?? ''), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         $response = Http::connectTimeout(10)
             // ->withOptions(['proxy' => '192.168.48.164:10809'])
