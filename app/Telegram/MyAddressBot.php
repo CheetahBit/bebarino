@@ -18,8 +18,8 @@ class MyAddressBot
     public function index($message)
     {
         $userId = $message->from->id;
-        
-        if ($message->message_id) {
+
+        if (isset($message->message_id)) {
             $messageId = $message->message_id - 1;
             $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
         }
@@ -38,7 +38,7 @@ class MyAddressBot
         $userId = $message->from->id;
         $id = $message->text;
 
-        if ($message->message_id) {
+        if (isset($message->message_id)) {
             $messageId = $message->message_id - 1;
             $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
         }
