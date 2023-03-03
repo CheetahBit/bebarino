@@ -81,7 +81,8 @@ class AccountBot
         $message->from = new stdClass;
         $message->from->id = $userId;
         $message->cache = $cache;
-
         $this->show($message);
+        
+        $this->api->deleteCache($userId);
     }
 }

@@ -98,7 +98,7 @@ class APIBot
 
     public function keyboard()
     {
-        if (!isset($this->data->reply_markup)) {
+        if (!isset($this->data->reply_markup->keyboard)) {
             $temp = new stdClass;
             $temp->keyboard = [];
             $temp->one_time_keyboar = false;
@@ -128,7 +128,7 @@ class APIBot
 
     public function inlineKeyboard()
     {
-        if (!isset($this->data->reply_markup)) {
+        if (!isset($this->data->reply_markup->inline_keyboard)) {
             $temp = new stdClass;
             $temp->inline_keyboard = [];
             $this->data->reply_markup = $temp;
