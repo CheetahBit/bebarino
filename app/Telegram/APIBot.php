@@ -128,7 +128,7 @@ class APIBot
     {
         $this->buttons = [];
         $callback($this);
-        if (count($this->buttons) > 0) $this->data->reply_markup->inline_keyboard[] = $this->keys;
+        if (count($this->buttons) > 0) $this->data->reply_markup->inline_keyboard[] = $this->buttons;
         return $this;
     }
 
