@@ -26,7 +26,7 @@ class PackageBot
         $package = User::find($userId)->packages()->find($id);
         $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('delete', 'data', 'Package.delete');
-            $m->button('edit', 'data', 'Package.edit');
+            // $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'Package.index');
         })->exec();
     }
@@ -114,7 +114,7 @@ class PackageBot
         $package->save();
         $package = $user->packages()->find($id);
         $package->cc();
-        
+
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)
             ->inlineKeyboard()->rowButtons(function ($m) use ($id) {
                 $m->button('sendFormRequest', 'data', 'Trip.form.' . $id);
