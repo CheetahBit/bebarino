@@ -45,7 +45,7 @@ class AccountBot
         $data = $user->{$key};
 
         $this->api->chat($userId)->sendMessage()->text($key . "Info", $data)->inlineKeyboard()->rowButtons(function ($m) use ($key) {
-            $m->button('edit', 'data', 'Account.edit.'.$key);
+            $m->button('edit', 'data', 'Account.edit.' . $key);
         })->exec();
     }
 
@@ -66,10 +66,8 @@ class AccountBot
     public function update($result)
     {
         $userId = $result->userId;
+        $key = $result->name;
         $data = $result->data;
-
-        $cache = $this->api->getCache($userId);
-        $key = $cache->key;
 
         User::find($userId)->{$key}()->update((array)$data);
 
@@ -84,7 +82,8 @@ class AccountBot
         $message = new stdClass;
         $message->from = new stdClass;
         $message->from->id = $userId;
-        $message->cache = $cache;
+        $message->message_id = 0;
+        $message->cache = (object) ["key" => $key];
         $this->show($message);
     }
 
