@@ -28,7 +28,7 @@ class MyAddressBot
         })->exec();
 
         $action = config('telegram')->actions->myAddressesShow;
-        $this->api->setCache($userId, 'action', $action);
+        $this->api->putCache($userId, 'action', $action);
     }
 
     public function show($message)
