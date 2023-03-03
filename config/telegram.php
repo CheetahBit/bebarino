@@ -88,6 +88,7 @@ return json_decode(json_encode([
         "addressInfo" => "آدرس\n\nکشور : :country\nشهر : :city\nنشانی : :address",
 
         "submitPackage" => "ثبت بسته \n\nلطفا اطلاعات زیر را وارد نمایید",
+        "submitTrip" => "ثبت سفر \n\nلطفا اطلاعات زیر را وارد نمایید",
 
         "deleted" => "حذف شد",
         "removeKeyboard" => ".",
