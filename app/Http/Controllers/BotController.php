@@ -29,7 +29,7 @@ class BotController extends Controller
             Log::alert($th->getMessage());
             Log::alert($th->getTrace());
         }
-        return response('ok');
+        return response('ok', 200);
     }
 
 
@@ -48,7 +48,7 @@ class BotController extends Controller
         if (!isset($action)) $action = $message->cache->action;
 
 
-        $class = new ("App\Telegram\\". $action->class . "Bot")();
+        $class = new ("App\Telegram\\" . $action->class . "Bot")();
         $class->{$action->method}($message);
     }
 

@@ -49,7 +49,7 @@ return json_decode(json_encode([
         "flow" => ["class" => "Flow", "method" => "input"],
     ],
     "keywords" => [
-
+        "beginning" => "شروع (عضویت در ربات)"
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان"
