@@ -35,7 +35,7 @@ class AccountBot
     {
         $userId = $message->from->id;
         $this->api->deleteCache($userId);
-        
+
         $cache = $message->cache;
         $key = $cache->key ?? str_replace('Info', '', array_search($message->text, (array) $this->config->keywords));
         $user = User::find($userId);
@@ -55,7 +55,9 @@ class AccountBot
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('backward', 'data', 'Account.show');
+        })->exec();
 
         $flow = new FlowBot();
         $flow->start($userId, $key, 'Account', 'update', 'show');

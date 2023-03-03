@@ -47,7 +47,6 @@ class FlowBot
             if ($step == 'contact') {
                 $temp->text('inputContact')->keyboard()->rowKeys(function ($m) {
                     $m->key('sharePhone', 'request_contact', true);
-                    $m->key('backward');
                 });
             } else if ($step == 'country') {
                 $temp->text('inputCountry')->keyboard();
@@ -57,17 +56,12 @@ class FlowBot
                         foreach ($keys as $key) $m->key($key->title);
                     });
                 }
-                $temp->rowKeys(function (APIBot $m) {
-                    $m->key('backward');
-                });
+                
             } else if (str_contains($step, 'Address')) {
                 $temp->text('selectAddress')->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectPackage', 'query', time())->inlineMode('selectPackage');
-                    $m->button('backward', 'data', 'Flow.prev');
                 });
-            } else $temp->text('input' . ucfirst($step))->keyboard()->rowKeys(function (APIBot $m) {
-                $m->key('backward');
-            });
+            } else $temp->text('input' . ucfirst($step));
             $temp->exec();
             $this->api->putCache($cache->userId, 'flow', $cache);
         } else $this->output($cache);
