@@ -75,7 +75,7 @@ class APIBot
 
     public function deleteMessage()
     {
-        $this->data->method = 'editMessageText';
+        $this->data->method = 'deleteMessage';
         return $this;
     }
 
