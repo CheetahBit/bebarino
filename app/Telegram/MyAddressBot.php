@@ -21,10 +21,8 @@ class MyAddressBot
         $cache = $message->cache;
 
         $this->api->chat($userId)->sendMessage()->text('myAddresses')->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('indexAddress', 'query', time())->inlineMode('addresses');
-        })->rowButtons(function ($m) {
             $m->button('createAddress', 'data', 'Address.create');
-            $m->button('backward', 'data', 'Main.menu');
+            $m->button('indexAddress', 'query', time())->inlineMode('addresses');
         })->exec();
 
         $cache->action = config('telegram.actions.myAddressesShow');
