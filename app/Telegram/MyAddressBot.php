@@ -18,9 +18,11 @@ class MyAddressBot
     public function index($message)
     {
         $userId = $message->from->id;
-
-        $messageId = $message->message_id - 1;
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        
+        if ($message->message_id) {
+            $messageId = $message->message_id - 1;
+            $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        }
 
         $this->api->chat($userId)->sendMessage()->text('myAddresses')->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('createAddress', 'data', 'MyAddress.create');
@@ -36,8 +38,10 @@ class MyAddressBot
         $userId = $message->from->id;
         $id = $message->text;
 
-        $messageId = $message->message_id - 1;
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        if ($message->message_id) {
+            $messageId = $message->message_id - 1;
+            $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        }
 
         $address = User::find($userId)->addresses()->find($id);
 
@@ -117,7 +121,10 @@ class MyAddressBot
 
     public function backward($callback)
     {
-        $callback->message_id = $callback->message->message_id + 1;
+        $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
         $this->index($callback);
     }
 }
