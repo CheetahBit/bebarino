@@ -46,7 +46,8 @@ class BotController extends Controller
         }
         if (!isset($action)) $action = $message->cache->action;
 
-        $class = new ReflectionClass("App\Telegram\\". $action->class . "Bot");
+
+        $class = new ("App\Telegram\\". $action->class . "Bot")();
         $class->{$action->method}($message);
     }
 
