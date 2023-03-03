@@ -89,7 +89,7 @@ class TripBot
         $data = $callback->data;
         $text = $callback->message->text . "\n\n" . $deleted;
 
-        $trip = User::find($userId)->packages()->find($data);
+        $trip = User::find($userId)->trips()->find($data);
         $messageId = $trip->messageId;
         $trip->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
@@ -131,7 +131,7 @@ class TripBot
         $this->api->chat($userId)->sendMessage()->text('tripSubmitted', $args)->exec();
 
         $user->trips()->find($id)->update([
-            'message_id' => $result->message_id
+            'messageId' => $result->message_id
         ]);
 
         $message = new stdClass;

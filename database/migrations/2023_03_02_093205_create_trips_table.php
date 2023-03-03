@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('weight');
             $table->string('price');
             $table->string('desc')->nullable();
-            $table->string('message_id')->nullable();
+            $table->string('messageId')->nullable();
             $table->timestamps();
         });
     }

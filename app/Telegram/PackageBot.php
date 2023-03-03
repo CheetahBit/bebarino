@@ -29,6 +29,8 @@ class PackageBot
             // $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
+
+        $this->api->putCache($userId, 'package', $id);
     }
 
     public function edit($callback)
@@ -86,10 +88,10 @@ class PackageBot
         $channel = $config->channel;
         $deleted = $config->messages->deleted;
         $userId = $callback->from->id;
-        $data = $callback->data;
+        $cache = $callback->cache;
         $text = $callback->message->text . "\n\n" . $deleted;
 
-        $package = User::find($userId)->packages()->find($data);
+        $package = User::find($userId)->packages()->find($cache->package);
         $messageId = $package->messageId;
         $package->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
@@ -127,7 +129,7 @@ class PackageBot
         $this->api->chat($userId)->sendMessage()->text('packageSubmitted', $args)->exec();
 
         $user->packages()->find($id)->update([
-            'message_id' => $result->message_id
+            'messageId' => $result->message_id
         ]);
 
         $message = new stdClass;

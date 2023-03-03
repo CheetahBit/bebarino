@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('fromAddress');
             $table->string('toAddress');
             $table->string('desc');
-            $table->string('message_id')->nullable();
+            $table->string('messageId')->nullable();
             $table->timestamps();
         });
     }
