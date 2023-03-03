@@ -19,6 +19,9 @@ class MyRequestBot
     {
         $userId = $message->from->id;
 
+        $messageId = $message->message_id - 1;
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+
         $this->api->chat($userId)->sendMessage()->text('myRequests')->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('indexRequest', 'query', time())->inlineMode('requests');
         })->exec();
