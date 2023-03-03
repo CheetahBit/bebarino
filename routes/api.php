@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('/bot', BotController::class);
 Route::get('/files/{folder}/{name}', [BotController::class, 'download']);
+Route::get('/reset', [BotController::class, 'reset']);

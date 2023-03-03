@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use ReflectionClass;
@@ -26,7 +27,7 @@ class BotController extends Controller
             elseif (isset($update->callback_query)) $this->callbackHandler($update->callback_query);
             elseif (isset($update->inline_query)) $this->inlineHandler($update->inline_query);
         } catch (ErrorException $th) {
-            Log::alert($th->getLine(). $th->getMessage());
+            Log::alert($th->getLine() . $th->getMessage());
             Log::alert($th->getTraceAsString());
         }
         return response('ok', 200);
@@ -71,5 +72,13 @@ class BotController extends Controller
     public function download($folder, $name)
     {
         return Storage::download($folder . '/' . $name, $name . '.jpg');
+    }
+
+    public function reset()
+    {
+        $token = config('telegram')->token;
+        Http::get('https://api.telegram.org/bot' . $token . '/deleteWebhook');
+        Http::get('https://api.telegram.org/bot' . $token . '/getUpdates?offset=9999999999999');
+        Http::get('https://api.telegram.org/bot' . $token . '/setwebhook?url=https://bot.cheetahbit.org/api/bot');
     }
 }
