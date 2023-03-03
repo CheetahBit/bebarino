@@ -4,7 +4,7 @@ return json_decode(json_encode([
     "token" => env("BOT_TOKEN"),
     "channel" => "bebarinoTest",
     "admins" => [],
-    "flow" => [
+    "flows" => [
         "beginning" => [
             'contact'
         ],
