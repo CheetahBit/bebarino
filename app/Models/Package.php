@@ -18,20 +18,12 @@ class Package extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class,'userId');
+        return $this->belongsTo(User::class, 'userId');
     }
 
-    public function fromCC()
+    public function cc()
     {
-        return Attribute::make(
-            get: fn () => implode(",", array_slice(explode(",", $this->fromAddress),0,2))
-        );
-    }
-
-    public function toCC()
-    {
-        return Attribute::make(
-            get: fn () => implode(",", array_slice(explode(",", $this->toAddress),0,2))
-        );
+        $this->fromAddress = implode(",", array_slice(explode(",", $this->fromAddress), 0, 2));
+        $this->toAddress = implode(",", array_slice(explode(",", $this->toAddress), 0, 2));
     }
 }
