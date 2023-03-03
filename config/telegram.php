@@ -47,5 +47,8 @@ return [
         "myRequestShow" => ["class" => "MyRequest", "method" => "show"],
 
         "flow" => ["class" => "Flow", "method" => "input"],
+    ],
+    "keywords" => [
+        
     ]
 ];
