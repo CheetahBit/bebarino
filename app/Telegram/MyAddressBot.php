@@ -37,9 +37,9 @@ class MyAddressBot
         $address = User::find($userId)->addresses()->find($id);
 
         $this->api->chat($userId)->sendMessage()->text('addressInfo', $address)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('delete', 'data', 'Address.delete');
-            $m->button('edit', 'data', 'Address.edit');
-            $m->button('backward', 'data', 'Address.main');
+            $m->button('delete', 'data', 'MyAddress.delete');
+            $m->button('edit', 'data', 'MyAddress.edit');
+            $m->button('backward', 'data', 'MyAddress.index');
         })->exec();
 
         $this->api->putCache($userId,'address', $id);
