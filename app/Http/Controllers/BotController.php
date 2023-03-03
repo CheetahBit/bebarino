@@ -40,8 +40,8 @@ class BotController extends Controller
         $action = new stdClass;
         if (isset($message->text)) {
             $text = $message->text;
-            $text = array_search($message->text, $config->keywords) ?: $text;
-            if (array_key_exists($text,  $config->actions))
+            $text = array_search($message->text, (array) $config->keywords) ?: $text;
+            if (array_key_exists($text, (array) $config->actions))
                 $action = $config->actions->{$text};
         }
         if (!isset($action)) $action = $message->cache->action;
