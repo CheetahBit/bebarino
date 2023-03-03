@@ -6,7 +6,7 @@ return json_decode(json_encode([
     "admins" => [],
     "flows" => [
         "beginning" => [
-            'contact'
+            "contact"
         ],
         "identity" => [
             "username", "firstname", "lastname", "passport"

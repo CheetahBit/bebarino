@@ -40,7 +40,7 @@ class FlowBot
         $cache->cursor++;
         $flow = $config->flows->{$cache->name};
         if (count($flow) > $cache->cursor) {
-            $step = $flow->{$cache->cursor};
+            $step = $flow[$cache->cursor];
             $temp = $this->api->chat($cache->userId)->sendMessage();
             if ($step == 'contact') {
                 $temp->text('inputContact')->keyboard()->rowKeys(function ($m) {

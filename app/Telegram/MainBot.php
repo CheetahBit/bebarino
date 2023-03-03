@@ -37,8 +37,8 @@ class MainBot
                 $m->key('submitPackage');
             }
         })->rowKeys(function (APIBot $m) {
-            $m->key('aboutUs');
             $m->key('support');
+            $m->key('aboutUs');
         })->exec();
     }
 
