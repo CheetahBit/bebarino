@@ -95,8 +95,8 @@ class MyAddressBot
         $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->exec();
 
         $message = new stdClass;
-        $message->form = new stdClass;
-        $message->form->id = $userId;
+        $message->from = new stdClass;
+        $message->from->id = $userId;
         $message->text = $id;
         $this->show($message);
     }
