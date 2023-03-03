@@ -21,7 +21,6 @@ class MyRequestBot
 
         $this->api->chat($userId)->sendMessage()->text('myRequests')->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('indexRequest', 'query', time())->inlineMode('requests');
-            $m->button('backward', 'data', 'Main.menu');
         })->exec();
 
         $action = config('telegram')->actions->myRequestShow;
