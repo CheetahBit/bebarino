@@ -3,6 +3,7 @@
 namespace App\Telegram;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use stdClass;
 
 class AccountBot
@@ -20,6 +21,7 @@ class AccountBot
     public function index($message)
     {
         $userId = $message->from->id;
+        $this->api->deleteCache($userId);
         $this->api->chat($userId)->sendMessage()->text('accountInfo')->keyboard()->rowKeys(function ($m) {
             $m->key('contactInfo');
             $m->key('identityInfo');

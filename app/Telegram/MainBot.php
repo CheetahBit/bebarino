@@ -18,7 +18,7 @@ class MainBot
     public function menu($message)
     {
         $userId = $message->from->id;
-        Cache::delete($userId);
+        $this->api->deleteCache($userId);
 
         $isLogged = false;
         if ($this->checkExistsUser($userId)) $isLogged = $this->checkLogin($userId);

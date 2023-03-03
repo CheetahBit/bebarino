@@ -29,6 +29,11 @@ class APIBot
         return json_decode(Cache::store('database')->get($id, '{}'));
     }
 
+    public function deleteCache($id)
+    {
+        return Cache::store('database')->delete($id);
+    }
+
     public function setCache($id, $data)
     {
         Cache::store('database')->put($id, json_encode($data));
