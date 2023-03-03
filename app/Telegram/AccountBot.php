@@ -34,7 +34,7 @@ class AccountBot
     public function show($message)
     {
         $cache = $message->cache;
-        $key = $cache->key ?: str_replace('Info', '', array_search($message->text, $this->config->keywords));
+        $key = $cache->key ?? str_replace('Info', '', array_search($message->text, $this->config->keywords));
         $userId = $message->from->id;
         $user = User::find($userId);
         $data = $user->{$key};
