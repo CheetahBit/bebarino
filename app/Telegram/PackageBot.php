@@ -27,7 +27,7 @@ class PackageBot
         $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('delete', 'data', 'Package.delete');
             // $m->button('edit', 'data', 'Package.edit');
-            $m->button('backward', 'data', 'Package.index');
+            $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
     }
 

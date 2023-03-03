@@ -29,7 +29,7 @@ class TripBot
         $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip->toArray())->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('delete', 'data', 'Trip.delete');
             // $m->button('edit', 'data', 'Trip.edit');
-            $m->button('backward', 'data', 'Trip.index');
+            $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
     }
 
