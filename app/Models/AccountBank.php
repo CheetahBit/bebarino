@@ -11,13 +11,19 @@ class AccountBank extends Model
 
     protected $fillable = [
         "country",
+        "accountName",
         "accountNumber",
-        "accountName"
     ];
 
     public $hidden = [
         'created_at',
         'updated_at'
+    ];
+
+    protected $casts = [
+        'country' => NotEntered::class,
+        'accountName' => PassportImg::class,
+        'accountNumber' => PassportImg::class,
     ];
 
     public function user()

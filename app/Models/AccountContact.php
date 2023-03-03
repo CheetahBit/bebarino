@@ -10,6 +10,8 @@ class AccountContact extends Model
     use HasFactory;
 
     protected $fillable = [
+        'phone',
+        'email',
         'country',
         'city',
         'address',
@@ -18,6 +20,14 @@ class AccountContact extends Model
     public $hidden = [
         'created_at',
         'updated_at'
+    ];
+
+    protected $casts = [
+        'phone' => NotEntered::class,
+        'email' => NotEntered::class,
+        'country' => NotEntered::class,
+        'city' => PassportImg::class,
+        'address' => PassportImg::class,
     ];
 
     public function user()
