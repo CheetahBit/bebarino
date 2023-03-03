@@ -39,7 +39,7 @@ class MainBot
         })->rowKeys(function (APIBot $m) {
             $m->key('aboutUs');
             $m->key('support');
-        });
+        })->exec();
     }
 
     public function beginning($message)
