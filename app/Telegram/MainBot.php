@@ -28,7 +28,7 @@ class MainBot
             $m->key($isLogged ? 'account' : 'beginning');
         })->rowKeys(function (APIBot $m) use ($isLogged) {
             if ($isLogged) {
-                $m->key('submitTravel');
+                $m->key('submitTrip');
                 $m->key('submitPackage');
             }
         })->rowKeys(function (APIBot $m) use ($isLogged) {
