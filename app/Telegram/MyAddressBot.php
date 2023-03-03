@@ -73,6 +73,7 @@ class MyAddressBot
         User::find($userId)->addresses()->find($cache->address)->update((array)$data);
 
         $message = new stdClass;
+        $message->form = new stdClass;
         $message->form->id = $userId;
         $message->cache = $cache;
         $this->show($message);
