@@ -34,7 +34,7 @@ class AccountBot
     public function show($message)
     {
         $cache = $message->cache;
-        $key = $cache->key ?? str_replace('Info', '', array_search($message->text, $this->config->keywords));
+        $key = $cache->key ?? str_replace('Info', '', array_search($message->text, (array) $this->config->keywords));
         $userId = $message->from->id;
         $user = User::find($userId);
         $data = $user->{$key};
@@ -68,7 +68,7 @@ class AccountBot
         User::find($userId)->{$key}()->update((array)$data);
 
         $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->exec();
-        
+
         $message = new stdClass;
         $message->from->id = $userId;
         $message->cache = $cache;
