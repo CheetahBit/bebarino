@@ -35,15 +35,18 @@ class Trip extends Model
     public function hasTicket()
     {
         $this->hasTicket = isset($this->ticket) ? "✅" : "❌";
+        return $this;
     }
 
     public function hasPassport()
     {
         $this->hasPassport = isset($this->user->identity->passport) ? "✅" : "❌";
+        return $this;
     }
 
     public function hasContact()
     {
         $this->hasPassport = $this->user->contact->isFullFill() ? "✅" : "❌";
+        return $this;
     }
 }
