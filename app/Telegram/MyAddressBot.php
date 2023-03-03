@@ -115,9 +115,11 @@ class MyAddressBot
         $userId = $callback->from->id;
         $id = $callback->cache->address;
         $messageId = $callback->message->message_id;
-
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        $text = $callback->message->text;
+        $text .= config('telegram')->messages->deleted;
         
+        $this->api->chat($userId)->updateMessage()->text(plain:$text)->messageId($messageId)->exec();
+
         User::find($userId)->addresses()->find($id)->delete();
 
         $this->index($callback);

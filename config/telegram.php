@@ -85,6 +85,8 @@ return json_decode(json_encode([
         "myAddresses" => "آدرس‌های من",
         "addressInfo" => "آدرس\n\nکشور : :country\nشهر : :city\nنشانی : :address",
 
+        "deleted" => "حذف شد",
+
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",
         "inputFirstname" => "نام خود را وارد کنید",
