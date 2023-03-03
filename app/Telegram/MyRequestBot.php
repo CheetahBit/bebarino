@@ -32,12 +32,17 @@ class MyRequestBot
 
     public function show($message)
     {
+        $userId = $message->from->id;
         $text = $message->text;
+
         $data = explode('-', $text);
         $message->text = $data[1];
         match($data[0]){
             "package" => (new PackageBot())->show($message),
             "trip" => (new TripBot())->show($message)
         };
+
+        $messageId = $message->message_id - 1;
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
     }
 }
