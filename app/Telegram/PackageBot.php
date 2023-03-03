@@ -123,7 +123,7 @@ class PackageBot
             "channel" => $channel,
             "post" => $result->message_id
         ];
-        $this->api->chat($channel)->sendMessage()->text('packageSubmitted', $args)->exec();
+        $this->api->chat($userId)->sendMessage()->text('packageSubmitted', $args)->exec();
 
         $user->packages()->find($id)->update([
             'message_id' => $result->message_id
