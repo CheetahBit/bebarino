@@ -75,6 +75,12 @@ class MyAddressBot
     public function create($callback)
     {
         $userId = $callback->from->id;
+        $messageId = $callback->message->id;
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function($m){
+            $m->button('backward', 'data', 'MyAddress.backward');
+        })->exec();
+
         $flow = new FlowBot();
         $flow->start($userId, 'address', 'Address', 'store', 'index');
     }
@@ -103,6 +109,15 @@ class MyAddressBot
         $id = $callback->data;
         User::find($userId)->addresses()->find($id)->delete();
 
+        $this->index($callback);
+    }
+
+    public function backward($callback)
+    {
+        $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
         $this->index($callback);
     }
 }
