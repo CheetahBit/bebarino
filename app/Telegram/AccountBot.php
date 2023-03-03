@@ -36,6 +36,9 @@ class AccountBot
         $userId = $message->from->id;
         $this->api->deleteCache($userId);
 
+        if (isset($message->message))
+            $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
+
         $cache = $message->cache;
         $key = $cache->key ?? str_replace('Info', '', array_search($message->text, (array) $this->config->keywords));
         $user = User::find($userId);

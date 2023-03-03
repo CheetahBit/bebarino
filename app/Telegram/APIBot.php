@@ -48,6 +48,7 @@ class APIBot
 
     public function chat($id)
     {
+        $this->data = new stdClass;
         $this->data->chat_id = $id;
         return $this;
     }
