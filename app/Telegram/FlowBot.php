@@ -84,7 +84,7 @@ class FlowBot
 
         if ($step == 'contact') {
             if (!isset($message->contact)) $error = 'errorInvalidContact';
-            else if ($message->contact->user_id == $userId) $error = 'errorAnotherContact';
+            else if ($message->contact->user_id != $userId) $error = 'errorAnotherContact';
         } else if ($step == 'phone' && $type != 'phone_number') $error = 'errorInvalidPhone';
         else if ($step == 'email' && $type != 'email')  $error = 'errorInvalidEmail';
         else if (($step == 'passport' || $step == 'ticket') && !isset($message->photo))  $error = 'errorInvalidPhoto';
