@@ -97,10 +97,11 @@ class PackageBot
         $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
     }
 
-    public function submit($data)
+    public function submit($result)
     {
         $channel = config('telegram')->channel;
-        $userId = $data->userId;
+        $userId = $result->userId;
+        $data = $result->data;
 
         $user = User::find($userId);
         $data->fromAddress = $user->addresses()->find($data->formAddress)->get()->join(" , ");
