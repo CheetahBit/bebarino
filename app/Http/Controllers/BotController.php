@@ -37,7 +37,6 @@ class BotController extends Controller
         $config = (object) config('telegram');
         $message->cache = json_decode(Cache::store('database')->get($message->from->id, '{}'));
 
-        
         $action = new stdClass;
         if (isset($message->text)) {
             $text = $message->text;
