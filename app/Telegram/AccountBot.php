@@ -72,6 +72,7 @@ class AccountBot
         $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->exec();
 
         $message = new stdClass;
+        $message->from = new stdClass;
         $message->from->id = $userId;
         $message->cache = $cache;
 
