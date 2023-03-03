@@ -72,6 +72,8 @@ return json_decode(json_encode([
         "support" => "متن پشتیبانی",
         "accountInfo" => "حساب کاربری",
 
+        "identityInfo" => "اطلاعات هویتی\n\nنام کاربری : :username\nنام : :firstname\nنام خانوادگی : :lastname\nنصویر پاسپورت : :passport",
+
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
 
