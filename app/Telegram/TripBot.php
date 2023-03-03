@@ -31,6 +31,8 @@ class TripBot
             // $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
+
+        $this->api->putCache($userId, 'trip', $id);
     }
 
     public function edit($callback)
