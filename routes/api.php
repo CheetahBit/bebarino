@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::post('/bot', TelegramBotController::class);
-Route::get('/files/{folder}/{name}', [TelegramBotController::class, 'download']);
+Route::post('/bot', BotController::class);
+Route::get('/files/{folder}/{name}', [BotController::class, 'download']);
