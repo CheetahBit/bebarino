@@ -49,9 +49,19 @@ return json_decode(json_encode([
         "flow" => ["class" => "Flow", "method" => "input"],
     ],
     "keywords" => [
-        "beginning" => "شروع (عضویت در ربات)"
+        "beginning" => "شروع (عضویت در ربات)",
+        "account" => "حساب کاربری",
+        "aboutUs" => "درباره ما",
+        "support" => "پشتیبانی",
+        "submitTravel" => "ثبت سفر",
+        "submitPackage" => "ثبت بسته",
+        "myRequests" => "درخواست‌های من",
+        "myAddresses" => "آدرس‌های من",
+        
+
     ],
     "messages" => [
-        "guestMenu" => "منوی میهمان"
+        "guestMenu" => "منوی میهمان",
+        "mainMenu" => "",
     ]
 ]));
