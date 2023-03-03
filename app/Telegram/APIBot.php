@@ -127,7 +127,7 @@ class APIBot
     public function key($title, $key = null, $value = null)
     {
         $keywords = $this->config->keywords;
-        $text = $keywords->{$title} ?: $title;
+        $text = $keywords->{$title} ?? $title;
         $temp = new stdClass;
         $temp->text = $text;
         if (isset($key)) $temp->{$key} = $value;
