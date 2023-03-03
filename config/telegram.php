@@ -83,6 +83,7 @@ return json_decode(json_encode([
 
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
         "saveSuccessfully" => "باموفقیت ذخیره شد !",
+        "cancelEdit" => "ویرایش اطلاعات لعو شد",
 
         "errorInvalidContact" => 'خطای شماره موبایل',
         "errorAnotherContact" => 'خطای شماره متعلق به شما نیست',

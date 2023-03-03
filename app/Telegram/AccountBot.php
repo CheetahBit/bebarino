@@ -36,9 +36,6 @@ class AccountBot
         $userId = $message->from->id;
         $this->api->deleteCache($userId);
 
-        if (isset($message->message))
-            $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
-
         $cache = $message->cache;
         $key = $cache->key ?? str_replace('Info', '', array_search($message->text, (array) $this->config->keywords));
         $user = User::find($userId);
@@ -59,7 +56,7 @@ class AccountBot
         $messageId = $callback->message->message_id;
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('backward', 'data', 'Account.show');
+            $m->button('backward', 'data', 'Account.backward');
         })->exec();
 
         $flow = new FlowBot();
@@ -89,5 +86,22 @@ class AccountBot
         $message->from->id = $userId;
         $message->cache = $cache;
         $this->show($message);
+    }
+
+    public function backward($callback)
+    {
+        $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
+        
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        $this->api->chat($userId)->sendMessage()->text('cancelEdit')->keyboard()->rowKeys(function ($m) {
+            $m->key('contactInfo');
+            $m->key('identityInfo');
+        })->rowKeys(function ($m) {
+            $m->key('bankInfo');
+            $m->key('backward');
+        })->exec();
+
+        $this->show($callback);
     }
 }
