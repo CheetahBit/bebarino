@@ -58,7 +58,7 @@ class FlowBot
                 }
             } else if (str_contains($step, 'Address')) {
                 $temp->text('select' . ucfirst($step))->inlineKeyboard()->rowButtons(function ($m) {
-                    $m->button('createAddress', 'data', 'MyAddress.create');
+                    // $m->button('createAddress', 'data', 'MyAddress.create');
                     $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 });
             } else $temp->text('input' . ucfirst($step))->removeKeyboard();
