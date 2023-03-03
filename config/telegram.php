@@ -90,6 +90,8 @@ return json_decode(json_encode([
         "deleted" => "حذف شد",
         "removeKeyboard" => ".",
 
+        "channelPackage" => "بسته جدید\n\nاز مبدا : :fromCC\nبه مقصد : :toCC\n\nتوضیحات : :desc",
+
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",
         "inputFirstname" => "نام خود را وارد کنید",
