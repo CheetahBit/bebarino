@@ -2,6 +2,7 @@
 
 namespace App\Telegram;
 
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -228,6 +229,9 @@ class APIBot
             ->post('https://api.telegram.org/bot' . $token . '/');
         Log::info($response);
         //$this->result = json_decode($response, true)['result'];
-        return json_decode($response)->result;
+
+
+        $response = json_decode($response);
+        if ($response->ok) return $response->result;
     }
 }
