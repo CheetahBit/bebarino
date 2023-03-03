@@ -172,6 +172,11 @@ class APIBot
         return $this;
     }
 
+    public function inlineMode($mode)
+    {
+        $this->putCache($this->data->chat_id, 'inline', $mode);
+    }
+
     public function sendMediaGroup()
     {
         $this->data = 'sendMediaGroup';
