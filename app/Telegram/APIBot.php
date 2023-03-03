@@ -101,7 +101,7 @@ class APIBot
         if (!isset($this->data->reply_markup->keyboard)) {
             $temp = new stdClass;
             $temp->keyboard = [];
-            $temp->one_time_keyboar = false;
+            $temp->one_time_keyboard = false;
             $temp->resize_keyboard = true;
             $this->data->reply_markup = $temp;
         }

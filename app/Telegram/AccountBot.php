@@ -33,9 +33,11 @@ class AccountBot
 
     public function show($message)
     {
+        $userId = $message->from->id;
+        $this->api->deleteCache($userId);
+        
         $cache = $message->cache;
         $key = $cache->key ?? str_replace('Info', '', array_search($message->text, (array) $this->config->keywords));
-        $userId = $message->from->id;
         $user = User::find($userId);
         $data = $user->{$key};
 
@@ -82,7 +84,5 @@ class AccountBot
         $message->from->id = $userId;
         $message->cache = $cache;
         $this->show($message);
-        
-        $this->api->deleteCache($userId);
     }
 }
