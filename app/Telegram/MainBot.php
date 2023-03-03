@@ -28,13 +28,13 @@ class MainBot
             $m->key($isLogged ? 'account' : 'beginning');
         })->rowKeys(function (APIBot $m) use ($isLogged) {
             if ($isLogged) {
-                $m->key('myAddresses');
-                $m->key('myRequests');
+                $m->key('submitTravel');
+                $m->key('submitPackage');
             }
         })->rowKeys(function (APIBot $m) use ($isLogged) {
             if ($isLogged) {
-                $m->key('submitTravel');
-                $m->key('submitPackage');
+                $m->key('myAddresses');
+                $m->key('myRequests');
             }
         })->rowKeys(function (APIBot $m) {
             $m->key('support');
