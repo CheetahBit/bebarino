@@ -57,7 +57,7 @@ class BotController extends Controller
     {
         $callback->cache = json_decode(Cache::store('database')->get($callback->from->id, '{}'));
         $data = explode('.', $callback->data);
-        $callback->data = $data[3];
+        $callback->data = $data[3] ?? '';
 
         $class = new ("App\Telegram\\" . $data[0] . "Bot")();
         $class->{$data[1]}($callback);
