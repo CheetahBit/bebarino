@@ -38,9 +38,9 @@ class MyAddressBot
         $userId = $message->from->id;
         $id = $message->text ?? $message->cache->address;
 
-        if (isset($message->message_id)) {
-            $messageId = $message->message_id - 1;
-            $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        $messageId = $message->message_id ?? $message->message->message_id ?? 0;
+        if ($messageId > 0) {
+            $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
         }
 
         $address = User::find($userId)->addresses()->find($id);
@@ -65,7 +65,6 @@ class MyAddressBot
 
         $flow = new FlowBot();
         $flow->start($userId, 'address', 'MyAddress', 'update', 'index');
-
     }
 
     public function update($result)
@@ -118,9 +117,9 @@ class MyAddressBot
         $id = $callback->cache->address;
         $messageId = $callback->message->message_id;
         $text = $callback->message->text;
-        $text .= "\n\n".config('telegram')->messages->deleted;
+        $text .= "\n\n" . config('telegram')->messages->deleted;
 
-        $this->api->chat($userId)->updateMessage()->text(plain:$text)->messageId($messageId)->exec();
+        $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
 
         User::find($userId)->addresses()->find($id)->delete();
 
