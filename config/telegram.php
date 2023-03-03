@@ -74,7 +74,7 @@ return json_decode(json_encode([
         "accountInfo" => "حساب کاربری",
 
         "identityInfo" => "اطلاعات هویتی\n\nنام کاربری : :username\nنام : :firstname\nنام خانوادگی : :lastname\nنصویر پاسپورت : :passport",
-        "contactInfo" => "اطلاعات تماس\n\nشماره تماس : :phone\nایمیل : :email\nکشور : :country\nشهر : :city\nنشانی : :address",
+        "contactInfo" => "اطلاعات تماس\n\nایمیل : :email\nشماره تماس : :phone\nکشور : :country\nشهر : :city\nنشانی : :address",
         "bankInfo" => "اطلاعات بانکی\n\nکشور : :country\nنام صاحب حساب: :accountName\nشماره جساب : :accountNumber",
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
