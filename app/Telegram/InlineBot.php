@@ -26,10 +26,26 @@ class InlineBot
                 foreach ($user->addresses()->get()->reverse()->values() as $address) {
                     $results[] = [
                         'type' => 'article',
-                        'title' => $address->country. " , ". $address->city,
+                        'title' => $address->country . " , " . $address->city,
                         'description' => $address->address,
                         'input_message_content' => ['message_text' => $address->id],
                         'id' => $address->id,
+                    ];
+                }
+                break;
+
+            case 'requests':
+                $packages = $user->packages;
+                $trips = $user->trips;
+                $requests = $trips->merge($packages)->sortByDesc('updated_at');
+                foreach ($requests as $request) {
+                    $request->cc();
+                    $results[] = [
+                        'type' => 'article',
+                        'title' => $request->fromAddress . " > " . $request->toAddress,
+                        'description' => $request->date ?? $request->desc,
+                        'input_message_content' => ['message_text' => (isset($request->date) ? 'trip' : 'package') . "-" . $request->id],
+                        'id' => $request->id,
                     ];
                 }
                 break;
