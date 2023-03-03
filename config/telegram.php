@@ -73,7 +73,8 @@ return json_decode(json_encode([
         "selectAddress" => "📍 انتخاب آدرس",
         "indexRequest" => "نمایش درخواست‌ها",
         "sendFormRequest" => "📨 ارسال درخواست",
-
+        "package" => "بسته",
+        "trip" => "سفر",
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
