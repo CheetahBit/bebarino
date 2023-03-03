@@ -47,11 +47,11 @@ class AccountBot
         $this->api->setCache($userId, $cache);
     }
 
-    public function edit($message)
+    public function edit($callback)
     {
-        $key = $message->cache->key;
-        $userId = $message->from->id;
-        $messageId = $message->message_id;
+        $key = $callback->cache->key;
+        $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
 
