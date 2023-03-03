@@ -97,16 +97,23 @@ class TripBot
         $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
     }
 
-    public function submit($data)
+    public function submit($result)
     {
         $channel = config('telegram')->channel;
-        $userId = $data->userId;
+        $userId = $result->userId;
+        $data = $result->data;
 
         $user = User::find($userId);
+        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
+        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
+        $data->fromAddress = collect($fromAddress)->join(" , ");
+        $data->toAddress = collect($toAddress)->join(" , ");
+
         $trip = $user->trips()->create((array) $data);
         $id = $trip->id;
         $trip->save();
         $trip = $user->trips()->find($id);
+        $trip->cc();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)
             ->inlineKeyboard()->rowButtons(function ($m) use ($id) {
@@ -122,6 +129,11 @@ class TripBot
         $user->trips()->find($id)->update([
             'message_id' => $result->message_id
         ]);
+
+        $message = new stdClass;
+        $message->from = (object)['id' => $userId];
+        $main = new MainBot();
+        $main->menu($message);
     }
 
     public function form($callback)

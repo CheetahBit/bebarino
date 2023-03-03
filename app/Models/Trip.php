@@ -23,4 +23,10 @@ class Trip extends Model
     {
         return $this->belongsTo(User::class,'userId');
     }
+
+    public function cc()
+    {
+        $this->fromAddress = implode(",", array_slice(explode(",", $this->fromAddress), 0, 2));
+        $this->toAddress = implode(",", array_slice(explode(",", $this->toAddress), 0, 2));
+    }
 }
