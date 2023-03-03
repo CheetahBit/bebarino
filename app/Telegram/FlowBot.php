@@ -76,7 +76,7 @@ class FlowBot
     public function input($message)
     {
         $config = config('telegram');
-        $userId = $message->from->id;
+        $this->userId = $message->from->id;
         $cache = $message->cache->flow;
         $flow = $config->flows->{$cache->name};
         $step = $flow[$cache->cursor];
@@ -85,16 +85,16 @@ class FlowBot
 
         if ($step == 'contact') {
             if (!isset($message->contact)) $error = 'errorInvalidContact';
-            else if ($message->contact->user_id != $userId) $error = 'errorAnotherContact';
+            else if ($message->contact->user_id != $this->userId) $error = 'errorAnotherContact';
             else $message->text = $message->contact->phone_number;
         } else if ($step == 'phone' && $type != 'phone_number') $error = 'errorInvalidPhone';
         else if ($step == 'email' && $type != 'email')  $error = 'errorInvalidEmail';
         else if (($step == 'passport' || $step == 'ticket') && !isset($message->photo))  $error = 'errorInvalidPhoto';
 
-        if (isset($error)) $this->api->chat($userId)->sendMessage()->text($error)->exec();
+        if (isset($error)) $this->api->chat($this->userId)->sendMessage()->text($error)->exec();
         else $cache->data->{$step} = $message->text ?: $this->download($message->photo, $step);
 
-        $this->api->putCache($userId, 'flow', $cache);
+        $this->api->putCache($this->userId, 'flow', $cache);
         $this->next();
     }
 
