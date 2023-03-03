@@ -36,7 +36,7 @@ class MyAddressBot
     public function show($message)
     {
         $userId = $message->from->id;
-        $id = $message->text;
+        $id = $message->text ?? $message->cache->address;
 
         if (isset($message->message_id)) {
             $messageId = $message->message_id - 1;
@@ -57,13 +57,15 @@ class MyAddressBot
     public function edit($callback)
     {
         $userId = $callback->from->id;
-        $cache = $callback->cache;
-        $cache->id = $callback->data;
+        $messageId = $callback->message->message_id;
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('backward', 'data', 'MyAddress.show');
+        })->exec();
 
         $flow = new FlowBot();
-        $flow->start($userId, 'address', 'Address', 'update', 'main');
+        $flow->start($userId, 'address', 'MyAddress', 'store', 'index');
 
-        $this->api->setCache($userId, $cache);
     }
 
     public function update($data)
