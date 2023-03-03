@@ -32,7 +32,6 @@ class MyAddressBot
     public function show($message)
     {
         $userId = $message->from->id;
-        $cache = $message->cache;
         $id = $message->text;
 
         $address = User::find($userId)->addresses()->find($id);
@@ -43,8 +42,7 @@ class MyAddressBot
             $m->button('backward', 'data', 'Address.main');
         })->exec();
 
-        $cache->id = $id;
-        $this->api->setCache($userId, $cache);
+        $this->api->putCache($userId,'address', $id);
     }
 
     public function edit($callback)
@@ -97,9 +95,9 @@ class MyAddressBot
         $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->exec();
 
         $message = new stdClass;
+        $message->form = new stdClass;
         $message->form->id = $userId;
         $message->text = $id;
-        $message->cache = $this->api->getCache($userId);
         $this->show($message);
     }
 
