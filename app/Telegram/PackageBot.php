@@ -104,10 +104,10 @@ class PackageBot
         $data = $result->data;
 
         $user = User::find($userId);
-        $fromAddress = $user->addresses()->find($data->fromAddress)->get()->toArray();
-        $toAddress = $user->addresses()->find($data->toAddress)->get()->toArray();
-        $data->fromAddress = implode(" , ", $fromAddress);
-        $data->toAddress = implode(" , ", $toAddress);
+        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
+        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
+        $data->fromAddress = collect($fromAddress)->join(" , ");
+        $data->toAddress = collect($toAddress)->join(" , ");
 
         $package = $user->packages()->create((array) $data);
         $id = $package->id;
