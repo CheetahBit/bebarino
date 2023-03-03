@@ -66,6 +66,7 @@ return json_decode(json_encode([
         "mainMenu" => "منوی اصلی",
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
+        "loginSuccessfully " => "باموفقیت وارد شدبد!",
 
         "errorInvalidContact" => 'خطای شماره موبایل',
         "errorAnotherContact" => 'خطای شماره متعلق به شما نیست',
