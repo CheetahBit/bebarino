@@ -21,15 +21,16 @@ class FlowBot
         $config = config('telegram');
         $this->userId = $userId;
 
-        $data = new stdClass;
-        $data->userId = $userId;
-        $data->name = $name;
-        $data->class = $class;
-        $data->method = $method;
-        $data->backward = $backward;
-        $data->cursor = -1;
+        $flow = new stdClass;
+        $flow->userId = $userId;
+        $flow->name = $name;
+        $flow->class = $class;
+        $flow->method = $method;
+        $flow->backward = $backward;
+        $flow->cursor = -1;
+        $flow->data = new stdClass;
 
-        $this->api->putCache($userId, 'flow', $data);
+        $this->api->putCache($userId, 'flow', $flow);
         $this->api->putCache($userId, 'action', $config->actions->flow);
         $this->next();
     }
