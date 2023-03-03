@@ -206,6 +206,16 @@ class APIBot
         return $this;
     }
 
+    public function answerInline($id, $results)
+    {
+        $this->data->method = 'answerInlineQuery';
+        $this->data->inline_query_id = $id;
+        $this->data->results = $results;
+
+        return $this;
+    }
+
+    
     public function download($file, $folder)
     {
         $token = config('telegram')->token;

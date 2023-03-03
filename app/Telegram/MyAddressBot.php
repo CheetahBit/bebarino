@@ -39,7 +39,7 @@ class MyAddressBot
         $this->api->chat($userId)->sendMessage()->text('addressInfo', $address)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('delete', 'data', 'MyAddress.delete');
             $m->button('edit', 'data', 'MyAddress.edit');
-            $m->button('backward', 'data', 'MyAddress.index');
+            $m->button('backward', 'data', 'MyAddress.backward');
         })->exec();
 
         $this->api->putCache($userId,'address', $id);
