@@ -197,15 +197,15 @@ class APIBot
 
     function exec()
     {
-        $token = config('telegrambot')['token'];
-        Log::info(json_encode(static::$data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        Log::info(json_encode(Cache::store('database')->get(static::$data['chat_id'] ?? ''), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        $token = config('telegram.token');
+        Log::info(json_encode($this->data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        Log::info(json_encode(Cache::store('database')->get($this->data->chat_id ?? ''), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         $response = Http::connectTimeout(10)
             // ->withOptions(['proxy' => '192.168.48.164:10809'])
-            ->withBody(json_encode(static::$data), 'application/json')
+            ->withBody(json_encode($this->data), 'application/json')
             ->post('https://api.telegram.org/bot' . $token . '/');
         Log::info($response);
-        //static::$result = json_decode($response, true)['result'];
+        //$this->result = json_decode($response, true)['result'];
         return json_decode($response)->result;
     }
 }
