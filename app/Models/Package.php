@@ -23,11 +23,15 @@ class Package extends Model
 
     public function fromCC()
     {
-        return implode(",", array_slice(explode(",", $this->fromAddress),0,2));
+        return Attribute::make(
+            get: fn () => implode(",", array_slice(explode(",", $this->fromAddress),0,2))
+        );
     }
 
     public function toCC()
     {
-        return implode(",", array_slice(explode(",", $this->toAddress),0,2));
+        return Attribute::make(
+            get: fn () => implode(",", array_slice(explode(",", $this->toAddress),0,2))
+        );
     }
 }
