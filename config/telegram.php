@@ -70,6 +70,8 @@ return json_decode(json_encode([
         "createAddress" => "➕ افزودن آدرس",
         "indexAddress" => "📍 نمایش آدرس‌ها",
         "selectAddress" => "📍 انتخاب آدرس",
+        "sendFormRequest" => "📨 ارسال درخواست",
+
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
