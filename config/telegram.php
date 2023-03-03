@@ -52,6 +52,6 @@ return json_decode(json_encode([
 
     ],
     "messages" => [
-        
+        "guestMenu" => "منوی میهمان"
     ]
 ]));
