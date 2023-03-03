@@ -61,7 +61,7 @@ class FlowBot
                 $temp->text('selectAddress')->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectPackage', 'query', time())->inlineMode('selectPackage');
                 });
-            } else $temp->text('input' . ucfirst($step));
+            } else $temp->text('input' . ucfirst($step))->removeKeyboard();
             $temp->exec();
             $this->api->putCache($cache->userId, 'flow', $cache);
         } else $this->output($cache);

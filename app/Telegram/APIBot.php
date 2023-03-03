@@ -96,6 +96,13 @@ class APIBot
         return $this;
     }
 
+    public function removeKeyboard()
+    {
+        $temp = new stdClass;
+        $temp->remove_keyboard = true;
+        $this->data->reply_markup = $temp;
+    }
+
     public function keyboard()
     {
         if (!isset($this->data->reply_markup->keyboard)) {
