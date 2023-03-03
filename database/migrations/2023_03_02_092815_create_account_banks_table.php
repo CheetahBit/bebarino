@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('account_banks', function (Blueprint $table) {
             $table->foreignId('userId');
-            $table->foreignId('country')->nullable();
+            $table->string('country')->nullable();
             $table->string('accountNumber')->nullable();
             $table->string('accountName')->nullable();
             $table->timestamps();

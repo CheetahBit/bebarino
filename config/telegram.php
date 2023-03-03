@@ -15,7 +15,7 @@ return json_decode(json_encode([
             "email", "phone", "country", "city", "address"
         ],
         "bank" => [
-            "country", "accountNumber", "accountName"
+            "country", "accountName", "accountNumber",
         ],
         "address" => [
             "country", "city", "address"
@@ -82,7 +82,7 @@ return json_decode(json_encode([
         "inputFirstname" => "نام خود را وارد کنید",
         "inputLastname" => "نام خانوادگی خود را وارد کنید",
         "inputPassport" => "تصویر پاسپورت خود را وارد کنید",
-        
+
         "inputPhone" => "شماره موبایل را وارد کنید",
         "inputEmail" => "ایمیل را وارد کنید",
         "inputCountry" => "کشور را انتخاب یا وارد کنید",
