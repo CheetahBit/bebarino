@@ -78,7 +78,7 @@ class FlowBot
         $userId = $message->from->id;
         $cache = $message->cache->flow;
         $flow = $config->flows->{$cache->name};
-        $step = $flow->{$cache->cursor};
+        $step = $flow[$cache->cursor];
         $type = $message->entities[0]->type ?? null;
         $error = null;
 
