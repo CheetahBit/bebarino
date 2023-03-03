@@ -23,8 +23,8 @@ class AccountBank extends Model
 
     protected $casts = [
         'country' => NotEntered::class,
-        'accountName' => PassportImg::class,
-        'accountNumber' => PassportImg::class,
+        'accountName' => NotEntered::class,
+        'accountNumber' => NotEntered::class,
     ];
 
     public function user()
