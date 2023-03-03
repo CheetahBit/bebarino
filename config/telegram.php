@@ -83,7 +83,7 @@ return json_decode(json_encode([
         "identityInfo" => "اطلاعات هویتی\n\nنام کاربری : :username\nنام : :firstname\nنام خانوادگی : :lastname\nنصویر پاسپورت : :passport",
         "contactInfo" => "اطلاعات تماس\n\nایمیل : :email\nشماره تماس : :phone\nکشور : :country\nشهر : :city\nنشانی : :address",
         "bankInfo" => "اطلاعات بانکی\n\nکشور : :country\nنام صاحب حساب: :accountName\nشماره جساب : :accountNumber",
-        
+
         "myAddresses" => "آدرس‌های من",
         "addressInfo" => "آدرس\n\nکشور : :country\nشهر : :city\nنشانی : :address",
 
@@ -94,6 +94,8 @@ return json_decode(json_encode([
         "removeKeyboard" => ".",
 
         "channelPackage" => "بسته جدید\n\nاز مبدا : :fromAddress\nبه مقصد : :toAddress\n\nتوضیحات : :desc",
+        "channelTrip" => "سفر جدید\n\nاز مبدا : :fromAddress\nبه مقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
+
         "packageSubmitted" => "بسته شما ثبت شد\n\nt.me/:channel/:post",
         "tripSubmitted" => "سفر شما ثبت شد\n\nt.me/:channel/:post",
 

@@ -21,12 +21,29 @@ class Trip extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class,'userId');
+        return $this->belongsTo(User::class, 'userId');
     }
 
     public function cc()
     {
         $this->fromAddress = implode(",", array_slice(explode(",", $this->fromAddress), 0, 2));
         $this->toAddress = implode(",", array_slice(explode(",", $this->toAddress), 0, 2));
+
+        return $this;
+    }
+
+    public function hasTicket()
+    {
+        $this->hasTicket = isset($this->ticket) ? "✅" : "❌";
+    }
+
+    public function hasPassport()
+    {
+        $this->hasPassport = isset($this->user->identity->passport) ? "✅" : "❌";
+    }
+
+    public function hasContact()
+    {
+        $this->hasPassport = $this->user->contact->isFullFill() ? "✅" : "❌";
     }
 }

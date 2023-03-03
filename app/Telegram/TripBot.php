@@ -113,7 +113,8 @@ class TripBot
         $id = $trip->id;
         $trip->save();
         $trip = $user->trips()->find($id);
-        $trip->cc();
+        $trip->cc()->hasTicket()->hasPassport()->hasContact();
+
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)
             ->inlineKeyboard()->rowButtons(function ($m) use ($id) {
