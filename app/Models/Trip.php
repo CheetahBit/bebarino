@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\TicketImg;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,10 @@ class Trip extends Model
         "price",
         "desc",
         "message_id",
+    ];
+
+    protected $casts = [
+        'ticket' => TicketImg::class,
     ];
 
     public function user()
