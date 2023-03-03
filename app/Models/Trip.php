@@ -46,7 +46,7 @@ class Trip extends Model
 
     public function hasContact()
     {
-        $this->hasPassport = $this->user->contact->isFullFill() ? "✅" : "❌";
+        $this->hasContact = $this->user->contact->isFullFill() ? "✅" : "❌";
         return $this;
     }
 }
