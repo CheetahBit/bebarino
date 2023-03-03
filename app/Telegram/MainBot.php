@@ -61,7 +61,7 @@ class MainBot
 
         $user = User::find($userId);
         $user->update(['phone' => $data->contact]);
-        $user->identity()->update(['phone' => $data->contact]);
+        $user->contact()->update(['phone' => $data->contact]);
 
         $this->api->chat($userId)->sendMessage()->text('loginSuccessfully')->exec();
         
