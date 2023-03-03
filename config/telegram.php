@@ -93,6 +93,8 @@ return json_decode(json_encode([
         "removeKeyboard" => ".",
 
         "channelPackage" => "بسته جدید\n\nاز مبدا : :fromAddress\nبه مقصد : :toAddress\n\nتوضیحات : :desc",
+        "packageSubmitted" => "بسته شما ثبت شد\n\nt.me/:channel/:post",
+
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",
