@@ -103,6 +103,8 @@ class APIBot
         $temp = new stdClass;
         $temp->remove_keyboard = true;
         $this->data->reply_markup = $temp;
+
+        return $this;
     }
 
     public function keyboard()
