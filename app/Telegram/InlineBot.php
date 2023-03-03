@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Telegram;
+namespace App\Telegram;
 
 use App\Models\User;
 use App\Telegram\APIBot;
