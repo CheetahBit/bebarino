@@ -45,7 +45,7 @@ class BotController extends Controller
             if (array_key_exists($text, (array) $config->actions))
                 $action = $config->actions->{$text};
         }
-        if (!isset($action)) $action = $message->cache->action;
+        if (!isset($action->class)) $action = $message->cache->action;
 
 
         $class = new ("App\Telegram\\" . $action->class . "Bot")();
