@@ -23,7 +23,7 @@ class InlineBot
         $results = [];
         switch ($cache->inline) {
             case 'addresses':
-                foreach ($user->addresses()->latest() as $address) {
+                foreach ($user->addresses()->reverse() as $address) {
                     $results[] = [
                         'type' => 'article',
                         'title' => $address->country. " , ". $address->city,
