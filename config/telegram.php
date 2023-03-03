@@ -67,5 +67,10 @@ return json_decode(json_encode([
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
 
+        "errorInvalidContact" => 'خطای شماره موبایل',
+        "errorAnotherContact" => 'خطای شماره متعلق به شما نیست',
+        "errorInvalidPhone" => 'خطای شماره تلفن',
+        "errorInvalidEmail" => 'خطای ایمیل',
+        "errorInvalidPhoto" => 'خطای عکس',
     ]
 ]));

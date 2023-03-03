@@ -83,11 +83,11 @@ class FlowBot
         $error = null;
 
         if ($step == 'contact') {
-            if (!isset($message->contact)) $error = '';
-            else if ($message->contact->user_id == $userId) $error = '';
-        } else if ($step == 'phone' && $type != 'phone_number') $error = '';
-        else if ($step == 'email' && $type != 'email')  $error = '';
-        else if (($step == 'passport' || $step == 'ticket') && !isset($message->photo))  $error = '';
+            if (!isset($message->contact)) $error = 'errorInvalidContact';
+            else if ($message->contact->user_id == $userId) $error = 'errorAnotherContact';
+        } else if ($step == 'phone' && $type != 'phone_number') $error = 'errorInvalidPhone';
+        else if ($step == 'email' && $type != 'email')  $error = 'errorInvalidEmail';
+        else if (($step == 'passport' || $step == 'ticket') && !isset($message->photo))  $error = 'errorInvalidPhoto';
 
         if (isset($error)) $this->api->chat($userId)->sendMessage()->text($error)->exec();
         else $cache->data->{$step} = $message->text ?: $this->download($message->photo, $step);
