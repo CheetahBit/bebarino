@@ -56,9 +56,8 @@ class FlowBot
                         foreach ($keys as $key) $m->key($key->fullTitle());
                     });
                 }
-                
             } else if (str_contains($step, 'Address')) {
-                $temp->text('selectAddress')->inlineKeyboard()->rowButtons(function ($m) {
+                $temp->text('select' . ucfirst($step))->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectPackage', 'query', time())->inlineMode('selectPackage');
                 });
             } else $temp->text('input' . ucfirst($step))->removeKeyboard();
