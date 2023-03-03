@@ -71,12 +71,14 @@ class FlowBot
     {
         $config = config('telegram');
         $this->userId = $message->from->id;
+        $messageId = $message->message_id;
         $cache = $message->cache->flow;
         $flow = $config->flows->{$cache->name};
         $step = $flow[$cache->cursor];
         $type = $message->entities[0]->type ?? null;
         $error = null;
 
+        $this->api->chat($this->userId)->updateButton()->messageId($messageId - 1)->exec();
         if ($step == 'contact') {
             if (!isset($message->contact)) $error = 'errorInvalidContact';
             else if ($message->contact->user_id != $this->userId) $error = 'errorAnotherContact';
