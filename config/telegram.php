@@ -76,12 +76,17 @@ return json_decode(json_encode([
         "identityInfo" => "اطلاعات هویتی\n\nنام کاربری : :username\nنام : :firstname\nنام خانوادگی : :lastname\nنصویر پاسپورت : :passport",
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
+        "inputUsername" => "نام کاربری خود را وارد کنید",
+        "inputFirstname" => "نام خود را وارد کنید",
+        "inputLastname" => "نام خانوادگی خود را وارد کنید",
+        "inputPassport" => "تصویر پاسپورت خود را وارد کنید",
+
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
 
         "errorInvalidContact" => 'خطای شماره موبایل',
         "errorAnotherContact" => 'خطای شماره متعلق به شما نیست',
         "errorInvalidPhone" => 'خطای شماره تلفن',
         "errorInvalidEmail" => 'خطای ایمیل',
-        "errorInvalidPhoto" => 'خطای عکس',
+        "errorInvalidPhoto" => 'خطای نثویر',
     ]
 ]));
