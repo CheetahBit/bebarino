@@ -66,6 +66,10 @@ return json_decode(json_encode([
         "backward" => "➡️ بازگشت",
         "notEntered" => "وارد نشده",
         "edit" => "✍️ ویرایش",
+
+        "createAddress" => "➕ افزودن آدرس",
+        "indexAddress" => "📍 نمایش آدرس‌ها",
+        "selectAddress" => "📍 انتخاب آدرس",
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",

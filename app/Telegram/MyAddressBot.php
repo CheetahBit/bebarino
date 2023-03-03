@@ -21,7 +21,7 @@ class MyAddressBot
         $cache = $message->cache;
 
         $this->api->chat($userId)->sendMessage()->text('myAddresses')->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('selectAddress', 'query', time())->inlineMode('addresses');
+            $m->button('indexAddress', 'query', time())->inlineMode('addresses');
         })->rowButtons(function ($m) {
             $m->button('createAddress', 'data', 'Address.create');
             $m->button('backward', 'data', 'Main.menu');
