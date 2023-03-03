@@ -98,7 +98,9 @@ class MainBot
     {
         $userId = $message->from->id;
         if ($this->checkLogin($userId)) {
-            $this->api->chat($userId)->sendMessage()->text('submitPackage')->removeKeyboard()->exec();
+            $this->api->chat($userId)->sendMessage()->text('submitPackage')->keyboard()->rowKeys(function($m){
+                $m->key('backward');
+            })->exec();
             $flow = new FlowBot();
             $flow->start($userId, 'package', 'Package', 'submit', 'menu');
         } else $this->needLogin($userId);
