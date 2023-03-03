@@ -34,7 +34,7 @@ class MyRequestBot
     {
         $text = $message->text;
         $data = explode('-', $text);
-        
+        $message->text = $data[1];
         match($data[0]){
             "package" => (new PackageBot())->show($message),
             "trip" => (new TripBot())->show($message)
