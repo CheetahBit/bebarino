@@ -88,6 +88,7 @@ return json_decode(json_encode([
         "submitPackage" => "ثبت بسته \n\nلطفا اطلاعات زیر را وارد نمایید",
 
         "deleted" => "حذف شد",
+        "removeKeyboard" => ".",
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",
