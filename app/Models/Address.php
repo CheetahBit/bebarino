@@ -17,7 +17,7 @@ class Address extends Model
 
     public $hidden = [
         'id',
-        'user_id',
+        'userId',
         'created_at',
         'updated_at'
     ];
