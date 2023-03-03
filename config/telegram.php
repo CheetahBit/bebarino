@@ -100,6 +100,14 @@ return json_decode(json_encode([
         "inputAddress" => "نشانی را وارد کنید",
         "inputAccountName" => "نام صاحب حساب را وارد کنید",
         "inputAccountNumber" => "شماره حساب را وارد کنید",
+        "inputDesc" => "توضیحات را وارد کنید",
+        "inputDate" => "تاریخ سفر را وارد کنید",
+        "inputTicket" => "تصویر بلیط را وارد کنید",
+        "inputWeight" => "حداکثر وزن را وارد کنید",
+        "inputPrice" => "قیمت پیشنهادی را وارد کنید",
+
+        "selectFromAddress" => "آدرس مبدا را انتخاب کنید",
+        "selectToAddress" => "آدرس مقصد را انتخاب کنید",
 
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
         "saveSuccessfully" => "باموفقیت ذخیره شد !",
