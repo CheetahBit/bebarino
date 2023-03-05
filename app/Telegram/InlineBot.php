@@ -52,7 +52,7 @@ class InlineBot
                 }
                 $results[] = [
                     'type' => 'article',
-                    'title' => $keywords->reateAddress,
+                    'title' => $keywords->createAddress,
                     'input_message_content' => ['message_text' => 'createAddress'],
                     'id' => 'createAddress',
                 ];
