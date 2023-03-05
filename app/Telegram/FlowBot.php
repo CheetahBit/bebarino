@@ -90,7 +90,7 @@ class FlowBot
         else if ($step == 'email' && $type != 'email')  $error = 'errorInvalidEmail';
         else if (
             ($step == 'passport' ||
-                ($step == 'ticket' && $message->text != $config->keywords->desire)) &&
+                ($step == 'ticket' && ($message->text ?? null) != $config->keywords->desire)) &&
             !isset($message->photo)
         )  $error = 'errorInvalidPhoto';
 
