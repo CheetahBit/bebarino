@@ -50,6 +50,12 @@ class InlineBot
                         'id' => $request->id,
                     ];
                 }
+                $results[] = [
+                    'type' => 'article',
+                    'title' => $keywords->reateAddress,
+                    'input_message_content' => ['message_text' => 'createAddress'],
+                    'id' => 'createAddress',
+                ];
                 break;
             default:
                 break;
