@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Telegram\APIBot;
 use App\Telegram\InlineBot;
 use ErrorException;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class BotController extends Controller
             elseif (isset($update->callback_query)) $this->callbackHandler($update->callback_query);
             elseif (isset($update->inline_query)) $this->inlineHandler($update->inline_query);
         } catch (ErrorException $th) {
-            Log::alert($th->getLine() . $th->getMessage());
+            (new APIBot)->chat(130912163)->sendMessage()->text(plain: $th->getLine() . '  ' . $th->getMessage())->exec();
             Log::alert($th->getTraceAsString());
         }
         return response('ok', 200);
