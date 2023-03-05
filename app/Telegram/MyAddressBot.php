@@ -82,11 +82,14 @@ class MyAddressBot
     public function create($callback)
     {
         $userId = $callback->from->id;
+        $cache = $callback->cache;
         $messageId = $callback->message_id ?? $callback->message->message_id;
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'MyAddress.backward');
         })->exec();
+
+        if(isset($cache->flow)) $this->api->putCache($userId, 'history', $cache->flow);
 
         $flow = new FlowBot();
         $flow->start($userId, 'address', 'MyAddress', 'store', 'index');
