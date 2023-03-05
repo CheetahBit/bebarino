@@ -82,7 +82,7 @@ class MyAddressBot
     public function create($callback)
     {
         $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
+        $messageId = $callback->message_id ?? $callback->message->message_id;
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'MyAddress.backward');
