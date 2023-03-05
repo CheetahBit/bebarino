@@ -32,6 +32,12 @@ class InlineBot
                         'id' => $address->id,
                     ];
                 }
+                $results[] = [
+                    'type' => 'article',
+                    'title' => $keywords->createAddress,
+                    'input_message_content' => ['message_text' => 'createAddress'],
+                    'id' => 'createAddress',
+                ];
                 break;
 
             case 'requests':
@@ -50,12 +56,6 @@ class InlineBot
                         'id' => $request->id,
                     ];
                 }
-                $results[] = [
-                    'type' => 'article',
-                    'title' => $keywords->createAddress,
-                    'input_message_content' => ['message_text' => 'createAddress'],
-                    'id' => 'createAddress',
-                ];
                 break;
             default:
                 break;
