@@ -18,7 +18,7 @@ class Trip extends Model
         "weight",
         "price",
         "desc",
-        "message_id",
+        "messageId",
     ];
 
     protected $casts = [
