@@ -43,7 +43,9 @@ return json_decode(json_encode([
         "submitPackage" => ["class" => "Main", "method" => "submitPackage"],
 
         "myAddresses" => ["class" => "MyAddress", "method" => "index"],
-        "myAddressesShow" => ["class" => "MyAddress", "method" => "Show"],
+        "myAddressesShow" => ["class" => "MyAddress", "method" => "show"],
+        "createAddress" => ["class" => "MyAddress", "method" => "create"],
+
         "myRequests" => ["class" => "MyRequest", "method" => "index"],
         "myRequestShow" => ["class" => "MyRequest", "method" => "show"],
 
