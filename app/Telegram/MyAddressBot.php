@@ -114,6 +114,7 @@ class MyAddressBot
             $message->text = $id;
             $cache->flow = $cache->history;
             $message->cache = $cache;
+            (new FlowBot)->input($message);
         } else {
             $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->exec();
             $message = new stdClass;
