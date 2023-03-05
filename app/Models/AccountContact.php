@@ -39,7 +39,7 @@ class AccountContact extends Model
     public function isFullFill()
     {
         foreach ($this->fillable as $column) {
-            if ($this->getOriginal($column) == null) {
+            if ($this->getRawOriginal($column) == null) {
                 return false;
             }
         }
