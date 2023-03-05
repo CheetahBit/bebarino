@@ -38,9 +38,10 @@ class Trip extends Model
 
     public function checkRequirment()
     {
-        $this->hasTicket = isset($this->ticket) ? "✅" : "❌";
+        $ticket = $this->getOriginal('ticket');
+        $this->hasTicket = $ticket !== null ? "✅" : "❌";
         $passport = $this->user->identity->getOriginal('passport');
-        $this->hasPassport = isset($passport) ? "✅" : "❌";
+        $this->hasPassport =  $passport !== null ? "✅" : "❌";
         $this->hasContact = $this->user->contact->isFullFill() ? "✅" : "❌";
     }
 }
