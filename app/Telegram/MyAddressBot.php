@@ -89,7 +89,7 @@ class MyAddressBot
             $m->button('backward', 'data', 'MyAddress.backward');
         })->exec();
 
-        if(isset($cache->flow)) $this->api->putCache($userId, 'history', $cache->flow);
+        if (isset($cache->flow)) $this->api->putCache($userId, 'history', $cache->flow);
 
         $flow = new FlowBot();
         $flow->start($userId, 'address', 'MyAddress', 'store', 'index');
@@ -104,13 +104,24 @@ class MyAddressBot
         $id = $address->id;
         $address->save();
 
-        $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->exec();
-
-        $message = new stdClass;
-        $message->from = new stdClass;
-        $message->from->id = $userId;
-        $message->text = $id;
-        $this->show($message);
+        $cache = $this->api->getCache($userId);
+        if (isset($cache->history)) {
+            $this->api->putCache($userId, 'flow', $cache->history);
+            $message = new stdClass;
+            $message->from = new stdClass;
+            $message->from->id = $userId;
+            $message->message_id = 0;
+            $message->text = $id;
+            $cache->flow = $cache->history;
+            $message->cache = $cache;
+        } else {
+            $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->exec();
+            $message = new stdClass;
+            $message->from = new stdClass;
+            $message->from->id = $userId;
+            $message->text = $id;
+            $this->show($message);
+        }
     }
 
     public function delete($callback)
