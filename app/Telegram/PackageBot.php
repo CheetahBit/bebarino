@@ -302,10 +302,7 @@ class PackageBot
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
 
             $trip->checkRequirment();
-            $trip->tripDesc = $trip->desc;
-            $package->packageDesc = $package->desc;
-
-            foreach ($package->toArray() as $key => $value) $trip->{$key} = $value;
+            foreach ($package->toArray() as $key => $value) $trip->{'package'.ucfirst($key)} = $value;
 
             foreach ($config->admins as $admin)
                 $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
