@@ -67,9 +67,10 @@ class PackageBot
         })->exec();
     }
 
-    public function store($data)
+    public function store($result)
     {
-        $userId = $data->userId;
+        $userId = $result->userId;
+        $data = $result->data;
         $user = User::find($userId);
         $package = $user->packages()->create((array)$data);
         $id = $package->id;
@@ -78,7 +79,7 @@ class PackageBot
         $temp = new stdClass;
         $temp->userId = $userId;
         $temp->package = $id;
-        $temp->trip = $data->trip;
+        $temp->trip = $this->api->getCache($userId)->trip;
 
         $this->request($temp);
     }
