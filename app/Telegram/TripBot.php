@@ -59,11 +59,17 @@ class TripBot
         $user = User::find($userId);
         $trip = $user->trips()->find($trip);
         $messageId = $trip->messageId;
-        
+
+        $message = (object)[
+            "from" => (object)["id" => $userId],
+            "text" => $trip->id
+        ];
+        $this->show($message);
+
         $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
             $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
         })->exec();
-        
+
         if (!isset($result)) {
             $result = $this->api->sendMessage()->exec();
             $this->api->deleteMessage()->messageId($messageId)->exec();
@@ -74,7 +80,7 @@ class TripBot
         $toAddress = $user->addresses()->find($data->toAddress)->toArray();
         $data->fromAddress = collect($fromAddress)->join(" , ");
         $data->toAddress = collect($toAddress)->join(" , ");
-        
+
         $trip->update((array)$data);
     }
 
