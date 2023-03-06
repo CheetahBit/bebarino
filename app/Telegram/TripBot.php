@@ -177,7 +177,7 @@ class TripBot
                         $m->button('createTrip', 'data', 'Trip.create.' . $package);
                         $m->button('selectTrip', 'query', time())->inlineMode('trips');
                     })->exec();
-                $action = $config->actions->selectPackage;
+                $action = $config->actions->selectTrip;
                 $this->api->putCache($userId, 'action', $action);
                 $this->api->putCache($userId, 'package', $package);
             }

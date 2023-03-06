@@ -53,6 +53,9 @@ return json_decode(json_encode([
 
         "selectPackage" => ["class" => "Package", "method" => "select"],
         "createPackage" => ["class" => "Package", "method" => "create"],
+
+        "selectTrip" => ["class" => "Trip", "method" => "select"],
+        "createTrip" => ["class" => "Trip", "method" => "create"],
     ],
     "keywords" => [
         "beginning" => "شروع (عضویت در ربات)",
