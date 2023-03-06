@@ -215,7 +215,7 @@ class PackageBot
             'package' => $data->package,
             'trip' => $data->package,
             'type' => 'packageToTrip',
-            'status' => 'pendingTriper'
+            'status' => 'pendingTripper'
         ])->save();
     }
 
@@ -241,7 +241,7 @@ class PackageBot
             $text .= "\n\n" . $reject;
             $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
-            Transfer::where(['package' => $package->id, 'trip' => $trip->id])->update(['status' => 'userRejected']);
+            Transfer::where(['package' => $package->id, 'trip' => $trip->id])->update(['status' => 'tripperRejected']);
         }
     }
 
