@@ -72,6 +72,12 @@ class PackageBot
         $userId = $result->userId;
         $data = $result->data;
         $user = User::find($userId);
+        
+        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
+        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
+        $data->fromAddress = collect($fromAddress)->join(" , ");
+        $data->toAddress = collect($toAddress)->join(" , ");
+
         $package = $user->packages()->create((array)$data);
         $id = $package->id;
         $package->save();
