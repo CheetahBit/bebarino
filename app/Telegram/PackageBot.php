@@ -184,7 +184,10 @@ class PackageBot
     public function select($message)
     {
         $userId = $message->from->id;
+        $messageId = $message->message_id;
         $id = $message->text;
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
 
         $data = new stdClass;
         $data->userId = $userId;
