@@ -140,7 +140,7 @@ return json_decode(json_encode([
         "requestPackageAdmin" => "سفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\n\nقیمت پیشنهادی : :price\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :tripDesc\n\n\nبسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :packageDsc",
         "requestTripAdmin" => "بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nنوضیحات: :tripDesc",
 
-
+        "noDocs" => "مدرکی جهت نمایش وجود ندارد",
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",

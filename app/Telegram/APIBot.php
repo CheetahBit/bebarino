@@ -202,7 +202,7 @@ class APIBot
     {
         $temp = new stdClass;
         $temp->type = 'photo';
-        $temp->media = Request::getHttpHost() . "/api/files/" . $path;
+        $temp->media = 'https://'.Request::getHttpHost() . "/api/files/" . $path;
         $this->media[] = $temp;
         return $this;
     }
