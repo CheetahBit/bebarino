@@ -144,7 +144,7 @@ class PackageBot
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
             $text = $callback->message->text;
-            $messageId = $callback->message_id;
+            $messageId = $callback->message->message_id;
             $trip = $callback->data;
 
             $transfer = Transfer::where(['trip' => $trip, 'status' => 'done']);
