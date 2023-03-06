@@ -76,6 +76,8 @@ return json_decode(json_encode([
         "createAddress" => "➕ افزودن آدرس",
         "indexAddress" => "📍 نمایش آدرس‌ها",
         "selectAddress" => "📍 انتخاب آدرس",
+        "selectPackage" => "📦 انتخاب بسته",
+        "createPackage" => "➕ افزودن بسته",
         "indexRequest" => "نمایش درخواست‌ها",
         "sendFormRequest" => "📨 ارسال درخواست",
         "package" => "بسته",
