@@ -3,7 +3,7 @@
 return json_decode(json_encode([
     "token" => env("BOT_TOKEN"),
     "channel" => "bebarinoTest",
-    "admins" => [130912163],
+    "admins" => [1645621910],
     "flows" => [
         "beginning" => [
             "contact"

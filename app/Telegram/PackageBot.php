@@ -263,12 +263,12 @@ class PackageBot
         $pending = $config->messages->pendingAdmin;
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
-
         if (in_array($userId, $config->admins)) {
             $user = User::find($trip->userId);
-            $ticket = $trip->ticket;
-            $passport = $user->identity()->passport;
-            $contact = $user->contact()->isCompelete();
+            $ticket = $trip->getRawOriginal('ticket');
+            $passport = $user->identity->getRawOriginal('passport');
+            $contact = $user->contact->isFullFill();
+            
             if (!isset($ticket)) $this->api->showAlert($id, true)->text('noTicket')->exec();
             else if (!isset($passport)) $this->api->showAlert($id, true)->text('noPassport')->exec();
             else if (!$contact) $this->api->showAlert($id, true)->text('noContact')->exec();
