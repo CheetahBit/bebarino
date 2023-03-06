@@ -330,7 +330,7 @@ class PackageBot
 
         $paths = new stdClass;
         if (isset($ticket)) $paths->ticket = "tickets/" . $ticket;
-        if (isset($passports)) $paths->passports = "passports/" . $passport;
+        if (isset($passport)) $paths->passport = "passports/" . $passport;
 
         if (count((array)$paths) > 0) {
             $this->api->showAlert($callback->id)->text('sentDocs')->exec();
