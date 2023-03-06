@@ -153,13 +153,14 @@ class PackageBot
     {
         $config = config('telegram');
         $userId = $callback->from->id;
+        $trip = $callback->data;
+
         $main = new MainBot();
         $main->api->deleteCache($userId);
 
         if ($main->checkLogin($userId)) {
             $text = $callback->message->text;
             $messageId = $callback->message->message_id;
-            $trip = $callback->data;
             $transfer = Transfer::where(['trip' => $trip, 'status' => 'done']);
 
             if (Trip::find($trip)->user->id == $userId)
@@ -182,6 +183,16 @@ class PackageBot
                 $this->api->putCache($userId, 'trip', $trip);
             }
         } else $main->needLogin($userId);
+
+        $trip = Trip::find($trip);
+        $trip->checkRequirment();
+        $trip->cc();
+
+        $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $channel) {
+            $transfer = Transfer::where(['trip' => $trip->id, 'status' => 'verified']);
+            if ($transfer->exists()) $m->button('requestDone', 'url', 't.me/' . $channel);
+            else $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
+        })->exec();
     }
 
     public function select($message)
