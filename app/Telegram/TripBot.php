@@ -24,7 +24,7 @@ class TripBot
         $userId = $message->from->id;
         $id = $message->text ?? $message->cache->trip;
 
-        if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->messageId)->exec();
+        if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
         $trip = User::find($userId)->trips()->find($id);
         $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) {
