@@ -58,7 +58,7 @@ class PackageBot
     {
         $userId = $callback->from->id;
         $messageId = $callback->message_id ?? $callback->message->message_id;
- 
+
         $flow = new FlowBot();
         $flow->start($userId, 'package', 'Package', 'store', 'form');
 
@@ -72,7 +72,7 @@ class PackageBot
         $userId = $result->userId;
         $data = $result->data;
         $user = User::find($userId);
-        
+
         $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
         $toAddress = $user->addresses()->find($data->toAddress)->toArray();
         $data->fromAddress = collect($fromAddress)->join(" , ");
@@ -201,14 +201,14 @@ class PackageBot
         $package = $user->packages()->find($data->package);
         $trip = Trip::find($data->trip);
 
+        $pending = config('telegram')->messages->pending;
+        $this->api->chat($userId)->sendMessage()->text('requestTripSent', $package, $pending)->exec();
+
         $this->api->chat($trip->user->id)->sendMessage()->text('requestTrip', $package)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
             $data = $data->trip . ',' . $data->package;
             $m->button('acceptRequest', 'data', 'Package.accept.' . $data);
             $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
         })->exec();
-
-        $pending = config('telegram')->messages->pending;
-        $this->api->chat($userId)->sendMessage()->text('requestTripSent', $package, $pending)->exec();
 
         $user->transfers->create([
             'package' => $data->package,
