@@ -194,7 +194,7 @@ class APIBot
     {
         $this->media = [];
         $callback($this);
-        $this->data->media[] = $this->keys;
+        $this->data->media[] = $this->media;
         return $this;
     }
 
