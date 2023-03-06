@@ -51,7 +51,7 @@ class TripBot
     public function update($result)
     {
         $config = config('telegram');
-        $channel = $config;
+        $channel = $config->channel;
         $userId = $result->userId;
         $data = $result->data;
         $trip = $this->api->getCache($userId)->trip;
