@@ -195,7 +195,7 @@ class PackageBot
         $package = $user->packages()->find($data->package);
         $trip = $user->trips()->find($data->trip);
 
-        $this->api->chat($trip->user->id)->sendMessage()->text('requestTrip')->inlineKeyboard()->rowButtons(function ($m) use ($data) {
+        $this->api->chat($trip->user()->id)->sendMessage()->text('requestTrip')->inlineKeyboard()->rowButtons(function ($m) use ($data) {
             $data = $data->trip . ',' . $data->package;
             $m->button('acceptRequest', 'data', 'Package.accept.' . $data);
             $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
