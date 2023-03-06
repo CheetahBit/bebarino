@@ -82,6 +82,8 @@ return json_decode(json_encode([
         "sendFormRequest" => "📨 ارسال درخواست",
         "package" => "بسته",
         "trip" => "سفر",
+        "acceptRequest" => "✅ پذیرش درخواست",
+        "rejectRequest" => "🚫 رد درخواست",
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
