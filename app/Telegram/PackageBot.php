@@ -57,6 +57,10 @@ class PackageBot
     public function create($callback)
     {
         $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function($m){
+            $m->button('selectAddress', 'query', time())->inlineMode('addresses');
+        })->exec();
 
         $flow = new FlowBot();
         $flow->start($userId, 'package', 'Package', 'store', 'form');
