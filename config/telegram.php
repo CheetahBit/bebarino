@@ -84,6 +84,8 @@ return json_decode(json_encode([
         "trip" => "سفر",
         "acceptRequest" => "✅ پذیرش درخواست",
         "rejectRequest" => "🚫 رد درخواست",
+        "contactTripper" => "✈️ مسافر",
+        "contactPacker" => "📦 صاحب بسته"
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
