@@ -328,7 +328,7 @@ class PackageBot
 
         $trip = Trip::find($callback->data);
         $ticket = $trip->getRawOriginal('ticket');
-        $passport = $trip->user->identity()->getRawOriginal('passport');
+        $passport = $trip->user->identity->getRawOriginal('passport');
         $paths = [
             "passports/" . $passport,
             "tickets/" . $ticket,
