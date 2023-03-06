@@ -6,8 +6,6 @@ use App\Models\Package;
 use App\Models\Transfer;
 use App\Models\Trip;
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use stdClass;
 
 class PackageBot
@@ -256,15 +254,17 @@ class PackageBot
     {
         $config = config('telegram');
         $userId = $callback->from->id;
-        $data = explode(',', $callback->data);
-        $trip = Trip::find($data[0]);
-
-        $package = Package::find($data[1]);
         $messageId = $callback->message->message_id;
         $id = $callback->id;
         $text = $callback->message->text;
         $accept = $config->messages->acceptRequest;
         $pending = $config->messages->pendingAdmin;
+
+        $data = explode(',', $callback->data);
+
+        $trip = Trip::find($data[0]);
+        $package = Package::find($data[1]);
+        
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
         if (in_array($userId, $config->admins)) {
@@ -290,10 +290,10 @@ class PackageBot
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->exec();
 
-                // $channel = $config->channel;
-                // $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
-                //     $m->button('requestDone', 'url', 't.me/' . $channel);
-                // })->messageId($trip->messageId)->exec();
+                $channel = $config->channel;
+                $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
+                    $m->button('requestDone', 'url', 't.me/' . $channel);
+                })->messageId($trip->messageId)->exec();
             }
         } else {
             $transfer->update(['status' => 'pendingAdmin']);
