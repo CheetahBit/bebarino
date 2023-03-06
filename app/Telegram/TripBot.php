@@ -26,10 +26,12 @@ class TripBot
 
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
+        $transfer = Transfer::where(['trip' => $id]);
+
         $trip = User::find($userId)->trips()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) {
+        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($transfer) {
             $m->button('delete', 'data', 'Trip.delete');
-            $m->button('edit', 'data', 'Trip.edit');
+            if ($transfer->exists) $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
 
@@ -69,23 +71,24 @@ class TripBot
         $trip->update((array)$data);
 
         $trip = $user->trips()->find($id);
-        $messageId = $trip->messageId;
         $message = (object)[
             "from" => (object)["id" => $userId],
             "text" => $trip->id
         ];
         $this->show($message);
 
-        $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-            $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
-        })->exec();
+        $messageId = $trip->messageId;
+        if (isset($messageId)) {
+            $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+                $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
+            })->exec();
 
-        if (!isset($result)) {
-            $result = $this->api->sendMessage()->exec();
-            $this->api->deleteMessage()->messageId($messageId)->exec();
-            $trip->update(['messageId' => $result->message_id]);
+            if (!isset($result)) {
+                $result = $this->api->sendMessage()->exec();
+                $this->api->deleteMessage()->messageId($messageId)->exec();
+                $trip->update(['messageId' => $result->message_id]);
+            }
         }
-
     }
 
     public function create($callback)
