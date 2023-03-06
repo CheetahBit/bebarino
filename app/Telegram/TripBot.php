@@ -164,7 +164,7 @@ class TripBot
                 })->messageId($messageId);
             } else {
                 $main->api->showAlert($callback->id, true)->text('requestFormSent')->exec();
-                $main->api->chat($userId)->sendMessage()->text(key: 'requestTrip', plain: $text)
+                $main->api->chat($userId)->sendMessage()->text(key: 'requestPackageForm', plain: $text)
                     ->inlineKeyboard()->rowButtons(function ($m) use ($package) {
                         $m->button('selectTrip', 'query', time())->inlineMode('selectTrip');
                         $m->button('createTrip', 'data', 'Trip.create.' . $package);
