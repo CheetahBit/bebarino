@@ -302,7 +302,7 @@ class PackageBot
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
 
             $trip->checkRequirment();
-            foreach ($package->toArray() as $key => $value) $trip->{'package'.ucfirst($key)} = $value;
+            foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
 
             foreach ($config->admins as $admin)
                 $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
@@ -326,6 +326,7 @@ class PackageBot
         $trip = Trip::find($callback->data);
         $ticket = $trip->getRawOriginal('ticket');
         $passport = $trip->user->identity->getRawOriginal('passport');
+        $contact = $trip->user->contact;
 
         $paths = new stdClass;
         if (isset($ticket)) $paths->ticket = "tickets/" . $ticket;
@@ -333,8 +334,8 @@ class PackageBot
 
         if (count((array)$paths) > 0) {
             $this->api->showAlert($callback->id)->text('sentDocs')->exec();
-            $this->api->chat($userId)->sendMediaGroup()->media(function ($m) use ($paths) {
-                foreach ($paths as $path) $m->photo($path);
+            $this->api->chat($userId)->sendMediaGroup()->media(function ($m) use ($paths, $contact) {
+                foreach ($paths as $path) $m->photo($path, 'contactInfo', $contact);
             })->reply($messageId)->exec();
         } else $this->api->showAlert($callback->id, true)->text('noDocs')->exec();
     }

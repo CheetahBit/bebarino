@@ -198,11 +198,19 @@ class APIBot
         return $this;
     }
 
-    public function photo($path)
+    public function photo($path, $caption = null, $args = [])
     {
         $temp = new stdClass;
         $temp->type = 'photo';
-        $temp->media = 'https://'.Request::getHttpHost() . "/api/files/" . $path;
+        $temp->media = 'https://' . Request::getHttpHost() . "/api/files/" . $path;
+
+        if (isset($caption)) {
+            $text = $this->config->messages->{$caption};
+            preg_match_all('/(?<=:)[a-zA-Z0-9_]*/', $text, $keywords);
+            $keywords = array_filter($keywords[0], fn ($item) => strlen($item) > 0);
+            foreach ($keywords as $value) $text = str_replace(':' . $value, ($args[$value] ?? ''), $text);
+            $temp->caption = $text;
+        }
         $this->media[] = $temp;
         return $this;
     }
@@ -222,7 +230,7 @@ class APIBot
         return $this;
     }
 
-    
+
     public function download($file, $folder)
     {
         $token = config('telegram')->token;
@@ -249,7 +257,7 @@ class APIBot
             // ->withOptions(['proxy' => '192.168.48.164:10809'])
             ->withBody(json_encode($this->data), 'application/json')
             ->post('https://api.telegram.org/bot' . $token . '/');
-        Log::info(json_encode(json_decode($response),JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        Log::info(json_encode(json_decode($response), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
 
         $response = json_decode($response);
