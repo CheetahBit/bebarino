@@ -265,8 +265,8 @@ class TripBot
 
         $data = explode(',', $callback->data);
 
-        $package = Package::find($data[1]);
         $trip = Trip::find($data[0]);
+        $package = Package::find($data[1]);
 
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
@@ -301,8 +301,8 @@ class TripBot
         } else {
             $transfer->update(['status' => 'pendingAdmin']);
             $text .= "\n\n" . $accept . "\n\n" . $pending;
-            $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
-            $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
+            $this->api->chat($package->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
+            $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
 
             $trip->checkRequirment();
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
