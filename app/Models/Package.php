@@ -14,7 +14,7 @@ class Package extends Model
         "fromAddress",
         "toAddress",
         "desc",
-        "message_id",
+        "messageId",
     ];
 
     public function user()
