@@ -22,7 +22,6 @@ class PackageBot
     {
         $userId = $message->from->id;
         $id = $message->text ?? $message->cache->package;
-        // $id = str_replace('package-','',$id);
 
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
