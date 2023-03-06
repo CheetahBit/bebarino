@@ -310,13 +310,13 @@ class TripBot
             foreach ($config->admins as $admin)
                 $this->api->chat($admin)->sendMessage()->text('requestTripAdmin', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
                     $data = implode(',', $data);
-                    $m->button('acceptRequest', 'data', 'Package.accept.' . $data);
-                    $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
+                    $m->button('acceptRequest', 'data', 'Trip.accept.' . $data);
+                    $m->button('rejectRequest', 'data', 'Trip.reject.' . $data);
                 })->rowButtons(function ($m)   use ($package, $trip) {
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->rowButtons(function ($m) use ($trip) {
-                    $m->button('contactAndImageDocs', 'data', 'Package.contactAndImageDocs.' . $trip->id);
+                    $m->button('contactAndImageDocs', 'data', 'Trip.contactAndImageDocs.' . $trip->id);
                 })->exec();
         }
     }
