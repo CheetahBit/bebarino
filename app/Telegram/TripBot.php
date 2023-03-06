@@ -57,18 +57,20 @@ class TripBot
         $trip = $this->api->getCache($userId)->trip;
 
         $user = User::find($userId);
-        $trip = $user->trips()->find($trip)->update((array)$data);
+        $trip = $user->trips()->find($trip);
         $messageId = $trip->messageId;
-
+        
         $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
             $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
         })->exec();
-
+        
         if (!isset($result)) {
             $result = $this->api->sendMessage()->exec();
             $this->api->deleteMessage()->messageId($messageId)->exec();
-            $trip->update(['messageId' => $result->message_id]);
+            $data->messageId = $result->message_id;
         }
+        
+        $trip->update((array)$data);
     }
 
     public function create($callback)
