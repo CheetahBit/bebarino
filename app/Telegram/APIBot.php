@@ -224,11 +224,17 @@ class APIBot
         return $this;
     }
 
-    
+
 
     public function reply($message_id)
     {
         $this->data->reply_to_message_id = $message_id;
+        return $this;
+    }
+
+    public function noreply()
+    {
+        unset($this->data->reply_to_message_id);
         return $this;
     }
 

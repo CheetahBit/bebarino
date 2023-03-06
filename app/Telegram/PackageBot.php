@@ -339,7 +339,7 @@ class PackageBot
             foreach ($paths as $path) {
                 $api = $this->api->chat($userId)->sendPhoto()->photo($path);
                 if ($i == 0) $api->reply($messageId);
-                if ($i == $count - 1) $api->caption('contactInfo', $contact);
+                if ($i == $count - 1) $api->noreply()->caption('contactInfo', $contact);
                 $api->exec();
             };
         } else $this->api->showAlert($callback->id, true)->text('noDocs')->exec();
