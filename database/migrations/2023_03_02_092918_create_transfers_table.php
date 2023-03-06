@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('transfers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('userId');
             $table->foreignId('package');
             $table->foreignId('trip');
+            $table->string('type');
+            $table->string('status');
             $table->timestamps();
         });
     }

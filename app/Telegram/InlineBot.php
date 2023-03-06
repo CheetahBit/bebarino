@@ -57,6 +57,27 @@ class InlineBot
                     ];
                 }
                 break;
+
+            case 'packages':
+                $packages = $user->packages->get()->reverse()->values();
+                foreach ($packages as $package) {
+                    $package->cc();
+
+                    $results[] = [
+                        'type' => 'article',
+                        'title' => $keywords->package.($package->fromAddress . " > " . $package->toAddress),
+                        'description' => $package->desc,
+                        'input_message_content' => ['message_text' =>  $package->id],
+                        'id' => $package->id,
+                    ];
+                }
+                $results[] = [
+                    'type' => 'article',
+                    'title' => $keywords->createPackage,
+                    'input_message_content' => ['message_text' => 'createPackage'],
+                    'id' => 'createPackage',
+                ];
+                break;
             default:
                 break;
         }

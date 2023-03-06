@@ -12,10 +12,17 @@ class Transfer extends Model
     protected $fillable = [
         "package",
         "trip",
+        "type",
+        "status",
     ];
 
-    public function user()
+    public function package()
     {
-        return $this->belongsTo(User::class,'userId');
+        return $this->belongsTo(Package::class,'package');
+    }
+
+    public function trip()
+    {
+        return $this->belongsTo(Trip::class,'trip');
     }
 }

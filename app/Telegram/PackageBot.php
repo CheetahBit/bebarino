@@ -3,6 +3,7 @@
 namespace App\Telegram;
 
 use App\Models\Package;
+use App\Models\Transfer;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
@@ -55,12 +56,10 @@ class PackageBot
 
     public function create($callback)
     {
-        $cache = $callback->cache;
         $userId = $callback->from->id;
-        $cache->trip = $callback->data;
+
         $flow = new FlowBot();
         $flow->start($userId, 'package', 'Package', 'store', 'form');
-        $this->api->setCache($userId, $cache);
     }
 
     public function store($data)
@@ -139,17 +138,33 @@ class PackageBot
 
     public function form($callback)
     {
+        $config = config('telegram');
         $userId = $callback->from->id;
         Cache::delete($userId);
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
             $text = $callback->message->text;
+            $messageId = $callback->message_id;
             $trip = $callback->data;
-            $main->api->chat($userId)->sendMessage()->text(key: 'requestPackage', plain: $text)
-                ->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-                    $m->button('selectPackage', 'query', time())->inlineMode('selectPackage');
-                    $m->button('createPackage', 'data', 'Package.create.' . $trip);
-                })->exec();
+
+            $transfer = Transfer::where(['trip' => $trip, 'status' => 'done']);
+            if ($transfer->exists()) {
+                $main->api->showAlert($callback->id, true)->text('requestIsDone')->exec();
+                $channel = $config->channel;
+                $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
+                    $m->button('requestDone', 'url', 't.me/' . $channel);
+                })->messageId($messageId);
+            } else {
+                $main->api->showAlert($callback->id, true)->text('requestFormSent')->exec();
+                $main->api->chat($userId)->sendMessage()->text(key: 'requestTripForm', plain: $text)
+                    ->inlineKeyboard()->rowButtons(function ($m) {
+                        $m->button('selectPackage', 'query', time())->inlineMode('packages');
+                        $m->button('createPackage', 'data', 'Package.create');
+                    })->exec();
+                $action = $config->actions->selectPackage;
+                $this->api->putCache($userId, 'action', $action);
+                $this->api->putCache($userId, 'trip', $trip);
+            }
         } else $main->needLogin($userId);
     }
 
@@ -173,26 +188,36 @@ class PackageBot
         $package = $user->packages()->find($data->package);
         $trip = $user->trips()->find($data->trip);
 
-        $this->api->chat($trip->user->id)->sendMessage()->text('requestTrip', $package)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
+        $this->api->chat($trip->user->id)->sendMessage()->text('requestTrip')->inlineKeyboard()->rowButtons(function ($m) use ($data) {
             $data = $data->trip . ',' . $data->package;
             $m->button('acceptRequest', 'data', 'Package.accept.' . $data);
             $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
         })->exec();
 
         $pending = config('telegram')->messages->pending;
-        $this->api->chat($userId)->sendMessage()->text('requestPackage', $package, $pending)->exec();
+        $this->api->chat($userId)->sendMessage()->text('requestTripSent', $package, $pending)->exec();
+
+        $user->transfers->create([
+            'package' => $data->package,
+            'trip' => $data->package,
+            'type' => 'packageToTrip',
+            'status' => 'pendingTriper'
+        ])->save();
     }
 
     public function reject($callback)
     {
         $config = config('telegram');
         $userId = $callback->from->id;
-        $data = explode(',', $callback->data);
-        $trip = Trip::find($data[0]);
-        $package = Package::find($data[1]);
         $messageId = $callback->message->message_id;
         $text = $callback->message->text;
         $reject = $config->messages->rejectRequest;
+
+        $data = explode(',', $callback->data);
+
+        $trip = Trip::find($data[0]);
+        $package = Package::find($data[1]);
+
 
         if (in_array($userId, $config->admins)) {
             $this->api->chat($userId)->updateMessage()->text(plain: $text . "\n\n" . $reject)->messageId($messageId)->exec();
@@ -237,6 +262,11 @@ class PackageBot
                 $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->rowButtons(function ($m)  use ($package) {
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->exec();
+
+                $channel = $config->channel;
+                $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
+                    $m->button('requestDone', 'url', 't.me/' . $channel);
+                })->messageId($trip->messageId);
             }
         } else {
             $text .= "\n\n" . $accept . "\n\n" . $pendding;
