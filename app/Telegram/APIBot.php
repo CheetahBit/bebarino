@@ -186,7 +186,7 @@ class APIBot
 
     public function sendMediaGroup()
     {
-        $this->data = 'sendMediaGroup';
+        $this->data->method = 'sendMediaGroup';
         return $this;
     }
 
