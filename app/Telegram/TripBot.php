@@ -37,8 +37,14 @@ class TripBot
     public function edit($callback)
     {
         $userId = $callback->from->id;
+        $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
+
         $flow = new FlowBot();
-        $flow->start($userId, 'trip', 'Trip', 'update', 'show');
+        $flow->start($userId, 'trip', 'Trip', 'update', 'form');
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('selectAddress', 'query', time())->inlineMode('addresses');
+        })->exec();
     }
 
     public function update($data)
