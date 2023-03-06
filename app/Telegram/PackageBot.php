@@ -341,6 +341,7 @@ class PackageBot
                 if ($i == 0) $api->reply($messageId);
                 if ($i == $count - 1) $api->noreply()->caption('contactInfo', $contact);
                 $api->exec();
+                $i++;
             };
         } else $this->api->showAlert($callback->id, true)->text('noDocs')->exec();
     }
