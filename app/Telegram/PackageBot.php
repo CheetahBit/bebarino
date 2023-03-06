@@ -154,6 +154,7 @@ class PackageBot
         $config = config('telegram');
         $channel = $config->channel;
         $userId = $callback->from->id;
+        $text = $callback->message->text;
         $messageId = $callback->message->message_id;
         $trip = $callback->data;
 
@@ -161,9 +162,7 @@ class PackageBot
         $main->api->deleteCache($userId);
 
         if ($main->checkLogin($userId)) {
-            $text = $callback->message->text;
-            $transfer = Transfer::where(['trip' => $trip, 'status' => 'done']);
-
+            $transfer = Transfer::where(['trip' => $trip, 'status' => 'verified']);
             if (Trip::find($trip)->user->id == $userId)
                 $main->api->showAlert($callback->id, true)->text('requestSelf')->exec();
             else if ($transfer->exists()) {
@@ -183,16 +182,6 @@ class PackageBot
                 $this->api->putCache($userId, 'trip', $trip);
             }
         } else $main->needLogin($userId);
-
-        $trip = Trip::find($trip);
-        $trip->checkRequirment();
-        $trip->cc();
-
-        $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $channel) {
-            $transfer = Transfer::where(['trip' => $trip->id, 'status' => 'verified']);
-            if ($transfer->exists()) $m->button('requestDone', 'url', 't.me/' . $channel);
-            else $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
-        })->exec();
     }
 
     public function select($message)
@@ -301,10 +290,10 @@ class PackageBot
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->exec();
 
-                $channel = $config->channel;
-                $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
-                    $m->button('requestDone', 'url', 't.me/' . $channel);
-                })->messageId($trip->messageId)->exec();
+                // $channel = $config->channel;
+                // $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
+                //     $m->button('requestDone', 'url', 't.me/' . $channel);
+                // })->messageId($trip->messageId)->exec();
             }
         } else {
             $transfer->update(['status' => 'pendingAdmin']);

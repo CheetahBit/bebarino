@@ -4,6 +4,7 @@ namespace App\Telegram;
 
 use App\Models\Address;
 use App\Models\Package;
+use App\Models\Transfer;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
@@ -110,12 +111,12 @@ class TripBot
         $toAddress = $user->addresses()->find($data->toAddress)->toArray();
         $data->fromAddress = collect($fromAddress)->join(" , ");
         $data->toAddress = collect($toAddress)->join(" , ");
-        if($config->keywords->desire == $data->ticket) $data->ticket = null;
-        
+        if ($config->keywords->desire == $data->ticket) $data->ticket = null;
+
         $trip = $user->trips()->create((array) $data);
         $id = $trip->id;
         $trip->save();
-        
+
         $trip = $user->trips()->find($id);
         $trip->checkRequirment();
         $trip->cc();
@@ -144,17 +145,34 @@ class TripBot
 
     public function form($callback)
     {
+        $config = config('telegram');
+        $channel = $config->channel;
         $userId = $callback->from->id;
-        Cache::delete($userId);
+        $text = $callback->message->text;
+        $messageId = $callback->message->message_id;
+        $package = $callback->data;
+
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
-            $text = $callback->message->text;
-            $package = $callback->data;
-            $main->api->chat($userId)->sendMessage()->text(key: 'requestTrip', plain: $text)
-                ->inlineKeyboard()->rowButtons(function ($m) use ($package) {
-                    $m->button('selectTrip', 'query', time())->inlineMode('selectTrip');
-                    $m->button('createTrip', 'data', 'Trip.create.' . $package);
-                })->exec();
+            $transfer = Transfer::where(['package' => $package, 'status' => 'verified']);
+            if (Package::find($package)->user->id == $userId)
+                $main->api->showAlert($callback->id, true)->text('requestSelf')->exec();
+            else if ($transfer->exists()) {
+                $main->api->showAlert($callback->id, true)->text('requestIsDone')->exec();
+                $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
+                    $m->button('requestDone', 'url', 't.me/' . $channel);
+                })->messageId($messageId);
+            } else {
+                $main->api->showAlert($callback->id, true)->text('requestFormSent')->exec();
+                $main->api->chat($userId)->sendMessage()->text(key: 'requestTrip', plain: $text)
+                    ->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+                        $m->button('selectTrip', 'query', time())->inlineMode('selectTrip');
+                        $m->button('createTrip', 'data', 'Trip.create.' . $package);
+                    })->exec();
+                $action = $config->actions->selectPackage;
+                $this->api->putCache($userId, 'action', $action);
+                $this->api->putCache($userId, 'package', $package);
+            }
         } else $main->needLogin($userId);
     }
 
