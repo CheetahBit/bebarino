@@ -240,7 +240,7 @@ class PackageBot
         } else {
             $text .= "\n\n" . $reject;
             $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
-            $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
+            $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
         }
     }
 
