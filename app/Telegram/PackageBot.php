@@ -156,10 +156,10 @@ class PackageBot
                 })->messageId($messageId);
             } else {
                 $main->api->showAlert($callback->id, true)->text('requestFormSent')->exec();
-                $main->api->chat($userId)->sendMessage()->text(key: 'requestTripForm', plain: $text)
+                $main->api->chat($userId)->sendMessage()->text(key: 'requestTripForm', plain: "\n\n".$text)
                     ->inlineKeyboard()->rowButtons(function ($m) {
-                        $m->button('selectPackage', 'query', time())->inlineMode('packages');
                         $m->button('createPackage', 'data', 'Package.create');
+                        $m->button('selectPackage', 'query', time())->inlineMode('packages');
                     })->exec();
                 $action = $config->actions->selectPackage;
                 $this->api->putCache($userId, 'action', $action);
