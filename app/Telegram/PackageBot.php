@@ -187,7 +187,7 @@ class PackageBot
         $messageId = $message->message_id;
         $id = $message->text;
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId-1)->exec();
+        $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
 
         $data = new stdClass;
         $data->userId = $userId;
@@ -206,7 +206,7 @@ class PackageBot
         $trip = Trip::find($data->trip);
 
         $pending = config('telegram')->messages->pending;
-        $this->api->chat($userId)->sendMessage()->text('requestTripSent', $package, "\n\n".$pending)->exec();
+        $this->api->chat($userId)->sendMessage()->text('requestTripSent', $package, "\n\n" . $pending)->exec();
 
         $this->api->chat($trip->user->id)->sendMessage()->text('requestTrip', $package)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
             $data = $data->trip . ',' . $data->package;
@@ -302,6 +302,7 @@ class PackageBot
                 })->rowButtons(function ($m) use ($trip) {
                     $m->button('imageDocs', 'data', 'Package.imageDocs.' . $trip);
                 })->exec();
+            Transfer::where(['package' => $package->id, 'trip' => $trip->id])->update(['status' => 'pendingAdmin']);
         }
     }
 
