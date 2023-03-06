@@ -61,8 +61,16 @@ class TripBot
 
         $user = User::find($userId);
         $trip = $user->trips()->find($trip);
-        $messageId = $trip->messageId;
 
+        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
+        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
+        $data->fromAddress = collect($fromAddress)->join(" , ");
+        $data->toAddress = collect($toAddress)->join(" , ");
+
+        $trip->update((array)$data);
+
+        $trip = $user->trips()->find($trip);
+        $messageId = $trip->messageId;
         $message = (object)[
             "from" => (object)["id" => $userId],
             "text" => $trip->id
@@ -76,15 +84,9 @@ class TripBot
         if (!isset($result)) {
             $result = $this->api->sendMessage()->exec();
             $this->api->deleteMessage()->messageId($messageId)->exec();
-            $data->messageId = $result->message_id;
+            $trip->update(['messageId' => $result->message_id]);
         }
 
-        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
-        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
-        $data->fromAddress = collect($fromAddress)->join(" , ");
-        $data->toAddress = collect($toAddress)->join(" , ");
-
-        $trip->update((array)$data);
     }
 
     public function create($callback)
