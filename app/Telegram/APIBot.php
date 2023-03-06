@@ -243,7 +243,7 @@ class APIBot
             // ->withOptions(['proxy' => '192.168.48.164:10809'])
             ->withBody(json_encode($this->data), 'application/json')
             ->post('https://api.telegram.org/bot' . $token . '/');
-        //Log::info($response);
+        Log::info(json_encode(json_decode($response), JSON_UNESCAPED_UNICODE));
 
 
         $response = json_decode($response);
