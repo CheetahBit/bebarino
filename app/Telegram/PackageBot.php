@@ -57,8 +57,8 @@ class PackageBot
     public function create($callback)
     {
         $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
-
+        $messageId = $callback->message_id ?? $callback->message->message_id;
+ 
         $flow = new FlowBot();
         $flow->start($userId, 'package', 'Package', 'store', 'form');
 
@@ -147,7 +147,7 @@ class PackageBot
         $userId = $callback->from->id;
         $main = new MainBot();
         $main->api->deleteCache($userId);
-        
+
         if ($main->checkLogin($userId)) {
             $text = $callback->message->text;
             $messageId = $callback->message->message_id;
