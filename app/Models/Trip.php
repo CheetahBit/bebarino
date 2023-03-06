@@ -21,6 +21,13 @@ class Trip extends Model
         "messageId",
     ];
 
+    public $hidden = [
+        'id',
+        'userId',
+        'created_at',
+        'updated_at'
+    ];
+
     protected $casts = [
         'ticket' => TicketImg::class,
     ];

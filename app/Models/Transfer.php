@@ -16,6 +16,12 @@ class Transfer extends Model
         "status",
     ];
 
+    public $hidden = [
+        'id',
+        'created_at',
+        'updated_at'
+    ];
+
     public function package()
     {
         return $this->belongsTo(Package::class,'package');

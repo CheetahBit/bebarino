@@ -17,6 +17,13 @@ class Package extends Model
         "messageId",
     ];
 
+    public $hidden = [
+        'id',
+        'userId',
+        'created_at',
+        'updated_at'
+    ];
+    
     public function user()
     {
         return $this->belongsTo(User::class, 'userId');
