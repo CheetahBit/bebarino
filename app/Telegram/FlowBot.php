@@ -39,7 +39,7 @@ class FlowBot
     {
         $config = config('telegram');
         $cache = $this->api->getCache($this->userId)->flow;
-        $cache->cursor++;
+        $cache->cursor = count((array)$cache->data);
         $flow = $config->flows->{$cache->name};
         if (count($flow) > $cache->cursor) {
             $step = $flow[$cache->cursor];
