@@ -289,8 +289,8 @@ class PackageBot
             }
         } else {
             $text .= "\n\n" . $accept . "\n\n" . $pending;
-            $this->api->chat($package->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
-            $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
+            $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
+            $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
             foreach ($config->admins as $admin)
                 $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', array_merge($trip, $package))->inlineKeyboard()->rowButtons(function ($m) use ($package, $trip) {
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
