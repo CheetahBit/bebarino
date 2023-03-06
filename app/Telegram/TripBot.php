@@ -205,8 +205,9 @@ class TripBot
         $userId = $data->userId;
         $user = User::find($userId);
         $trip = $user->trips()->find($data->trip);
+        $trip->cc();
+        $trip->checkRequirment();
         $package = Package::find($data->package);
-        $package->cc();
 
         $pending = config('telegram')->messages->pending;
         $this->api->chat($userId)->sendMessage()->text('requestPackageSent', $trip,  "\n\n" . $pending)->exec();
