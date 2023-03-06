@@ -334,12 +334,11 @@ class PackageBot
         if (isset($ticket)) $paths->ticket = "tickets/" . $ticket;
         if (isset($passports)) $paths->passports = "passports/" . $passport;
 
-        if(count((array)$paths) > 0){
+        if (count((array)$paths) > 0) {
+            $this->api->showAlert($callback->id)->text('sentDocs')->exec();
             $this->api->chat($userId)->sendMediaGroup()->media(function ($m) use ($paths) {
-            foreach ($paths as $path) $m->photo($path);
-        })->reply($messageId)->exec();
-        }else $this->api->showAlert($callback->id, true)->text('noDocs')->exec();
-
-        
+                foreach ($paths as $path) $m->photo($path);
+            })->reply($messageId)->exec();
+        } else $this->api->showAlert($callback->id, true)->text('noDocs')->exec();
     }
 }
