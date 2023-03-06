@@ -114,7 +114,7 @@ return json_decode(json_encode([
         "tripSubmitted" => "سفر شما ثبت شد\n\nt.me/:channel/:post",
 
         "packageInfo" => "بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc",
-        "tripInfo" => "بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc",
+        "tripInfo" => "سفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc",
 
         "requestFormSent" => "فرم درخواست برای شما از طریق ربات ارسال شد",
         "requestIsDone" => "این مورد قبلا انجام شده است!",
@@ -132,6 +132,10 @@ return json_decode(json_encode([
 
         "rejectRequest" => 'درخواست رد شد',
         "acceptRequest" => 'درخواست تایید شد',
+
+        "requestPackageAdmin" => "سفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc\n\n\nبسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc",
+        "requestTripAdmin" => "بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc",
+
 
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
