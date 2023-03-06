@@ -305,8 +305,10 @@ class PackageBot
             $trip->tripDesc = $trip->desc;
             $package->packageDesc = $package->desc;
 
+            foreach ($package->toArray() as $key => $value) $trip->{$key} = $value;
+            
             foreach ($config->admins as $admin)
-                $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', $trip->merge($package))->inlineKeyboard()->rowButtons(function ($m) use ($data) {
+                $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
                     $data = implode(',', $data);
                     $m->button('acceptRequest', 'data', 'Package.accept.' . $data);
                     $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
