@@ -187,7 +187,7 @@ class PackageBot
         $messageId = $message->message_id;
         $id = $message->text;
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+        $this->api->chat($userId)->updateButton()->messageId($messageId-1)->exec();
 
         $data = new stdClass;
         $data->userId = $userId;
