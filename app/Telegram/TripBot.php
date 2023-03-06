@@ -167,7 +167,7 @@ class TripBot
                 $main->api->chat($userId)->sendMessage()->text(key: 'requestPackageForm', plain: "\n\n" . $text)
                     ->inlineKeyboard()->rowButtons(function ($m) use ($package) {
                         $m->button('createTrip', 'data', 'Trip.create.' . $package);
-                        $m->button('selectTrip', 'query', time())->inlineMode('selectTrip');
+                        $m->button('selectTrip', 'query', time())->inlineMode('trips');
                     })->exec();
                 $action = $config->actions->selectPackage;
                 $this->api->putCache($userId, 'action', $action);
