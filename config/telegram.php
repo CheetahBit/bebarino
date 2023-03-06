@@ -137,8 +137,8 @@ return json_decode(json_encode([
         "rejectRequest" => 'درخواست رد شد',
         "acceptRequest" => 'درخواست تایید شد',
 
-        "requestPackageAdmin" => "سفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :tripDesc\n\n\nبسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :packageDsc",
-        "requestTripAdmin" => "بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :tripDesc",
+        "requestPackageAdmin" => "سفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nنوضیحات: :tripDesc\n\n\nبسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :packageDsc",
+        "requestTripAdmin" => "بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nنوضیحات: :tripDesc",
 
 
 

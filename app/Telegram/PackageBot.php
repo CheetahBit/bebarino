@@ -313,7 +313,7 @@ class PackageBot
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->rowButtons(function ($m) use ($trip) {
                     $m->button('imageDocs', 'data', 'Package.imageDocs.' . $trip->id);
-                })->preview(false)->exec();
+                })->exec();
         }
     }
 
