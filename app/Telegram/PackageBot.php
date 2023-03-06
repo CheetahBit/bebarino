@@ -235,6 +235,7 @@ class PackageBot
 
         $trip = Trip::find($data[0]);
         $package = Package::find($data[1]);
+        $package->cc();
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
         if (in_array($userId, $config->admins)) {
