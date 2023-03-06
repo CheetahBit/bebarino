@@ -325,13 +325,15 @@ class PackageBot
     {
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
+
         $trip = Trip::find($callback->data);
-        $ticket = $trip->ticket;
-        $passport = $trip->user->identity()->passport;
+        $ticket = $trip->getRawOriginal('ticket');
+        $passport = $trip->user->identity()->getRawOriginal('passport');
         $paths = [
             "passports/" . $passport,
             "tickets/" . $ticket,
         ];
+
         $this->api->chat($userId)->sendMediaGroup()->media(function ($m) use ($paths) {
             foreach ($paths as $path) $m->photo($path);
         })->reply($messageId)->exec();
