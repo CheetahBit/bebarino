@@ -69,6 +69,11 @@ class TripBot
             $this->api->deleteMessage()->messageId($messageId)->exec();
             $data->messageId = $result->message_id;
         }
+
+        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
+        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
+        $data->fromAddress = collect($fromAddress)->join(" , ");
+        $data->toAddress = collect($toAddress)->join(" , ");
         
         $trip->update((array)$data);
     }
