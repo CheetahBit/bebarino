@@ -159,9 +159,11 @@ class PackageBot
             $text = $callback->message->text;
             $messageId = $callback->message->message_id;
             $trip = $callback->data;
-
             $transfer = Transfer::where(['trip' => $trip, 'status' => 'done']);
-            if ($transfer->exists()) {
+
+            if (Trip::find($trip)->user->id == $userId)
+                $main->api->showAlert($callback->id, true)->text('requestSelf')->exec();
+            else if ($transfer->exists()) {
                 $main->api->showAlert($callback->id, true)->text('requestIsDone')->exec();
                 $channel = $config->channel;
                 $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
