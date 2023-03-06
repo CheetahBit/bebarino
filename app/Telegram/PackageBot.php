@@ -22,8 +22,8 @@ class PackageBot
     {
         $userId = $message->from->id;
         $id = $message->text ?? $message->cache->package;
-        $id = str_replace('package-','',$id);
-        
+        // $id = str_replace('package-','',$id);
+
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
         $transfer = Transfer::where(['package' => $id]);
@@ -31,7 +31,7 @@ class PackageBot
         $package = User::find($userId)->packages()->find($id);
         $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) use ($transfer) {
             $m->button('delete', 'data', 'Package.delete');
-            if ($transfer->exists()) $m->button('edit', 'data', 'Package.edit');
+            if (!$transfer->exists()) $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
 
