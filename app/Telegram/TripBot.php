@@ -22,10 +22,13 @@ class TripBot
     public function show($message)
     {
         $userId = $message->from->id;
+        $messageId = $message->message_id;
         $id = $message->text ?? $message->cache->trip;
 
+        if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+
         $trip = User::find($userId)->trips()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip->toArray())->inlineKeyboard()->rowButtons(function ($m) {
+        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('delete', 'data', 'Trip.delete');
             $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
