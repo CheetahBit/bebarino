@@ -152,6 +152,7 @@ class PackageBot
     public function form($callback)
     {
         $config = config('telegram');
+        $channel = $config->channel;
         $userId = $callback->from->id;
         $trip = $callback->data;
 
@@ -167,7 +168,6 @@ class PackageBot
                 $main->api->showAlert($callback->id, true)->text('requestSelf')->exec();
             else if ($transfer->exists()) {
                 $main->api->showAlert($callback->id, true)->text('requestIsDone')->exec();
-                $channel = $config->channel;
                 $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
                     $m->button('requestDone', 'url', 't.me/' . $channel);
                 })->messageId($messageId);
