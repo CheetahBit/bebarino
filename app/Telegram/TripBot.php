@@ -316,10 +316,10 @@ class TripBot
             $passport = $user->identity->getRawOriginal('passport');
             $contact = $user->contact->isFullFill();
 
-            if (!isset($ticket)) $this->api->showAlert($id, true)->text('noTicket')->exec();
-            else if (!isset($passport)) $this->api->showAlert($id, true)->text('noPassport')->exec();
-            else if (!$contact) $this->api->showAlert($id, true)->text('noContact')->exec();
-            else {
+            // if (!isset($ticket)) $this->api->showAlert($id, true)->text('noTicket')->exec();
+            // else if (!isset($passport)) $this->api->showAlert($id, true)->text('noPassport')->exec();
+            // else if (!$contact) $this->api->showAlert($id, true)->text('noContact')->exec();
+            // else {
                 $transfer->update(['status' => 'verified']);
                 $text .= "\n\n" . $accept;
                 $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m)  use ($package, $trip) {
@@ -337,7 +337,7 @@ class TripBot
                 $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
                     $m->button('requestDone', 'url', 't.me/' . $channel);
                 })->messageId($package->messageId)->exec();
-            }
+            // }
         } else {
             $transfer->update(['status' => 'pendingAdmin']);
             $text .= "\n\n" . $accept . "\n\n" . $pending;
