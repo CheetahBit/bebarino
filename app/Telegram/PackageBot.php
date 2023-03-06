@@ -216,7 +216,7 @@ class PackageBot
 
         Transfer::create([
             'package' => $data->package,
-            'trip' => $data->package,
+            'trip' => $data->trip,
             'type' => 'packageToTrip',
             'status' => 'pendingTripper'
         ])->save();
