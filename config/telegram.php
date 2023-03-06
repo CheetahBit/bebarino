@@ -137,7 +137,7 @@ return json_decode(json_encode([
         "rejectRequest" => 'درخواست رد شد',
         "acceptRequest" => 'درخواست تایید شد',
 
-        "requestPackageAdmin" => "سفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\n\nقیمت پیشنهادی : :price\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :tripDesc\n\n\nبسته\n\nمبدا : :PackageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc",
+        "requestPackageAdmin" => "سفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :tripDesc\n\n\nبسته\n\nمبدا : :PackageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc",
         "requestTripAdmin" => "بسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nنوضیحات: :desc",
 
         "noDocs" => "مدرکی جهت نمایش وجود ندارد",
