@@ -51,7 +51,7 @@ class InlineBot
                     $results[] = [
                         'type' => 'article',
                         'title' => $keywords->{$type},
-                        'description' => ($request->fromAddress . " > " . $request->toAddress) . $request->date ?? $request->desc,
+                        'description' => ($request->fromAddress . " > " . $request->toAddress) .( $request->date ?? $request->desc),
                         'input_message_content' => ['message_text' => $type . "-" . $request->id],
                         'id' => $request->id,
                     ];

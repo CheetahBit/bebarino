@@ -298,7 +298,7 @@ class TripBot
                 $channel = $config->channel;
                 $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
                     $m->button('requestDone', 'url', 't.me/' . $channel);
-                })->messageId($trip->messageId)->exec();
+                })->messageId($package->messageId)->exec();
             }
         } else {
             $transfer->update(['status' => 'pendingAdmin']);
