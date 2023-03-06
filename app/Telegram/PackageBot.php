@@ -234,17 +234,18 @@ class PackageBot
 
         $trip = Trip::find($data[0]);
         $package = Package::find($data[1]);
-
+        $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
         if (in_array($userId, $config->admins)) {
+            $transfer->update(['status' => 'adminRejected']);
             $this->api->chat($userId)->updateMessage()->text(plain: $text . "\n\n" . $reject)->messageId($messageId)->exec();
             $this->api->chat($package->userId)->sendMessage()->text('requestTrip', $package, "\n\n" . $reject)->exec();
             $this->api->chat($trip->userId)->sendMessage()->text('requestTrip', $package, "\n\n" . $reject)->exec();
         } else {
+            $transfer->update(['status' => 'tripperRejected']);
             $text .= "\n\n" . $reject;
             $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
-            Transfer::where(['package' => $package->id, 'trip' => $trip->id])->update(['status' => 'tripperRejected']);
         }
     }
 
@@ -260,6 +261,8 @@ class PackageBot
         $text = $callback->message->text;
         $accept = $config->messages->acceptRequest;
         $pending = $config->messages->pendingAdmin;
+        $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
+
 
         if (in_array($userId, $config->admins)) {
             $user = User::find($trip->userId);
@@ -270,6 +273,7 @@ class PackageBot
             else if (!isset($passport)) $this->api->showAlert($id, true)->text('noPassport')->exec();
             else if (!$contact) $this->api->showAlert($id, true)->text('noContact')->exec();
             else {
+                $transfer->update(['status' => 'verified']);
                 $text .= "\n\n" . $accept;
                 $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->rowButtons(function ($m)  use ($package, $trip) {
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
@@ -288,6 +292,7 @@ class PackageBot
                 })->messageId($trip->messageId);
             }
         } else {
+            $transfer->update(['status' => 'pendingAdmin']);
             $text .= "\n\n" . $accept . "\n\n" . $pending;
             $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
@@ -302,7 +307,6 @@ class PackageBot
                 })->rowButtons(function ($m) use ($trip) {
                     $m->button('imageDocs', 'data', 'Package.imageDocs.' . $trip);
                 })->exec();
-            Transfer::where(['package' => $package->id, 'trip' => $trip->id])->update(['status' => 'pendingAdmin']);
         }
     }
 
