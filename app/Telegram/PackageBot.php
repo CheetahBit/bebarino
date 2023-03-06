@@ -334,9 +334,13 @@ class PackageBot
 
         if (count((array)$paths) > 0) {
             $this->api->showAlert($callback->id)->text('sentDocs')->exec();
-            $this->api->chat($userId)->sendMediaGroup()->media(function ($m) use ($paths, $contact) {
-                foreach ($paths as $path) $m->photo($path, 'contactInfo', $contact);
-            })->reply($messageId)->exec();
+            $count = count((array)$paths);
+            foreach ($paths as $key => $path) {
+                $api = $this->api->chat($userId)->sendPhoto()->photo($path);
+                if ($key == 0) $api->reply($messageId);
+                if ($key == $count - 1) $api->caption('contactInfo', $contact);
+                $api->exec();
+            };
         } else $this->api->showAlert($callback->id, true)->text('noDocs')->exec();
     }
 }

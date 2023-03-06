@@ -61,6 +61,13 @@ class APIBot
         return $this;
     }
 
+    public function sendPhoto()
+    {
+        $this->data->method = "sendPhoto";
+        $this->data->parse_mode = "HTML";
+        return $this;
+    }
+
     public function updateMessage()
     {
         $this->data->method = 'editMessageText';
@@ -86,6 +93,19 @@ class APIBot
     }
 
     public function text($key = null, $args = [], $plain = '')
+    {
+        $text = '';
+        if (isset($key)) {
+            $text = $this->config->messages->{$key};
+            preg_match_all('/(?<=:)[a-zA-Z0-9_]*/', $text, $keywords);
+            $keywords = array_filter($keywords[0], fn ($item) => strlen($item) > 0);
+            foreach ($keywords as $value) $text = str_replace(':' . $value, ($args[$value] ?? ''), $text);
+        }
+        $this->data->text = $text . $plain;
+        return $this;
+    }
+
+    public function caption($key = null, $args = [], $plain = '')
     {
         $text = '';
         if (isset($key)) {
@@ -198,22 +218,13 @@ class APIBot
         return $this;
     }
 
-    public function photo($path, $caption = null, $args = [])
+    public function photo($path)
     {
-        $temp = new stdClass;
-        $temp->type = 'photo';
-        $temp->media = 'https://' . Request::getHttpHost() . "/api/files/" . $path;
-
-        if (isset($caption)) {
-            $text = $this->config->messages->{$caption};
-            preg_match_all('/(?<=:)[a-zA-Z0-9_]*/', $text, $keywords);
-            $keywords = array_filter($keywords[0], fn ($item) => strlen($item) > 0);
-            foreach ($keywords as $value) $text = str_replace(':' . $value, ($args[$value] ?? ''), $text);
-            $temp->caption = $text;
-        }
-        $this->media[] = $temp;
+        $this->data->photo = 'https://' . Request::getHttpHost() . "/api/files/" . $path;
         return $this;
     }
+
+    
 
     public function reply($message_id)
     {
