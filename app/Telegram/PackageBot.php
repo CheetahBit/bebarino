@@ -331,10 +331,10 @@ class PackageBot
         $paths = new stdClass;
         if (isset($ticket)) $paths->ticket = "tickets/" . $ticket;
         if (isset($passport)) $paths->passport = "passports/" . $passport;
-
-        if (count((array)$paths) > 0) {
+        $paths = (array)$paths;
+        if (count($paths) > 0) {
             $this->api->showAlert($callback->id)->text('sentDocs')->exec();
-            $count = count((array)$paths);
+            $count = count($paths);
             foreach ($paths as $key => $path) {
                 $api = $this->api->chat($userId)->sendPhoto()->photo($path);
                 if ($key == 0) $api->reply($messageId);
