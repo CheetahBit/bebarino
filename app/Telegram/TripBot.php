@@ -22,7 +22,7 @@ class TripBot
     public function show($message)
     {
         $userId = $message->from->id;
-        $id = $message->text;
+        $id = $message->text ?? $message->cache->trip;
 
         $trip = User::find($userId)->trips()->find($id);
         $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip->toArray())->inlineKeyboard()->rowButtons(function ($m) {
@@ -44,6 +44,7 @@ class TripBot
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('selectAddress', 'query', time())->inlineMode('addresses');
+            $m->button('backward', 'data', 'Trip.show');
         })->exec();
     }
 
