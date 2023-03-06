@@ -65,10 +65,30 @@ class InlineBot
 
                     $results[] = [
                         'type' => 'article',
-                        'title' => $keywords->package.($package->fromAddress . " > " . $package->toAddress),
+                        'title' => $keywords->package . ($package->fromAddress . " > " . $package->toAddress),
                         'description' => $package->desc,
                         'input_message_content' => ['message_text' =>  $package->id],
                         'id' => $package->id,
+                    ];
+                }
+                $results[] = [
+                    'type' => 'article',
+                    'title' => $keywords->createPackage,
+                    'input_message_content' => ['message_text' => 'createPackage'],
+                    'id' => 'createPackage',
+                ];
+                break;
+            case 'trips':
+                $trips = $user->trips()->get()->reverse()->values();
+                foreach ($trips as $trip) {
+                    $trip->cc();
+
+                    $results[] = [
+                        'type' => 'article',
+                        'title' => $keywords->trip . ($trip->fromAddress . " > " . $trip->toAddress),
+                        'description' => $trip->desc,
+                        'input_message_content' => ['message_text' =>  $trip->id],
+                        'id' => $trip->id,
                     ];
                 }
                 $results[] = [
