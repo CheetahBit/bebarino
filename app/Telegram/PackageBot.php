@@ -57,7 +57,7 @@ class PackageBot
     public function create($callback)
     {
         $userId = $callback->from->id;
-        $messageId = $callback->message_id ?? $callback->message->message_id;
+        $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
 
         $flow = new FlowBot();
         $flow->start($userId, 'package', 'Package', 'store', 'form');
@@ -268,7 +268,7 @@ class PackageBot
             $ticket = $trip->getRawOriginal('ticket');
             $passport = $user->identity->getRawOriginal('passport');
             $contact = $user->contact->isFullFill();
-            
+
             if (!isset($ticket)) $this->api->showAlert($id, true)->text('noTicket')->exec();
             else if (!isset($passport)) $this->api->showAlert($id, true)->text('noPassport')->exec();
             else if (!$contact) $this->api->showAlert($id, true)->text('noContact')->exec();
