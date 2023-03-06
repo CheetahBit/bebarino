@@ -308,7 +308,7 @@ class PackageBot
                     $m->button('acceptRequest', 'data', 'Package.accept.' . $data);
                     $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
                 })->rowButtons(function ($m) use ($trip) {
-                    $m->button('imageDocs', 'data', 'Package.imageDocs.' . $trip);
+                    $m->button('imageDocs', 'data', 'Package.imageDocs.' . $trip->id);
                 })->exec();
         }
     }
