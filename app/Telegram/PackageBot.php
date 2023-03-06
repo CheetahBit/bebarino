@@ -7,6 +7,7 @@ use App\Models\Transfer;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use stdClass;
 
 class PackageBot
@@ -299,7 +300,7 @@ class PackageBot
             $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
             foreach ($config->admins as $admin)
-                $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', array_merge($trip->toArray(), $package->toArray()))->inlineKeyboard()->rowButtons(function ($m) use ($package, $trip) {
+                Log::info($this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', array_merge($trip->toArray(), $package->toArray()))->inlineKeyboard()->rowButtons(function ($m) use ($package, $trip) {
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->rowButtons(function ($m) use ($data) {
@@ -308,7 +309,7 @@ class PackageBot
                     $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
                 })->rowButtons(function ($m) use ($trip) {
                     $m->button('imageDocs', 'data', 'Package.imageDocs.' . $trip);
-                })->exec();
+                })->exec());
         }
     }
 
