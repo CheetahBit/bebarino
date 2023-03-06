@@ -86,7 +86,7 @@ return json_decode(json_encode([
         "rejectRequest" => "🚫 رد درخواست",
         "contactTripper" => "✈️ مسافر",
         "contactPacker" => "📦 صاحب بسته",
-        "imageDocs" => "تصویر مدارک",
+        "contactAndImageDocs" => "اطلاعات تماس و تصویر مدارک",
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",

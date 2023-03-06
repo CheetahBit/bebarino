@@ -313,12 +313,12 @@ class PackageBot
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->rowButtons(function ($m) use ($trip) {
-                    $m->button('imageDocs', 'data', 'Package.imageDocs.' . $trip->id);
+                    $m->button('contactAndImageDocs', 'data', 'Package.contactAndImageDocs.' . $trip->id);
                 })->exec();
         }
     }
 
-    public function imageDocs($callback)
+    public function contactAndImageDocs($callback)
     {
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
@@ -338,7 +338,7 @@ class PackageBot
             $i = 0;
             foreach ($paths as $path) {
                 $api = $this->api->chat($userId)->sendPhoto()->photo($path);
-                // if ($i == 0) $api->reply($messageId);
+                if ($i == 0) $api->reply($messageId);
                 if ($i == $count - 1) $api->noreply()->caption('contactInfo', $contact);
                 $api->exec();
                 $i++;
