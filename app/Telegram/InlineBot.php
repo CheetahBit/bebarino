@@ -59,7 +59,7 @@ class InlineBot
                 break;
 
             case 'packages':
-                $packages = $user->packages->get()->reverse()->values();
+                $packages = $user->packages()->get()->reverse()->values();
                 foreach ($packages as $package) {
                     $package->cc();
 
