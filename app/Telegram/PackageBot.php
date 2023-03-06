@@ -210,7 +210,7 @@ class PackageBot
             $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
         })->exec();
 
-        $user->transfers->create([
+        Transfer::create([
             'package' => $data->package,
             'trip' => $data->package,
             'type' => 'packageToTrip',
