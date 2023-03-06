@@ -30,7 +30,7 @@ class PackageBot
         $package = User::find($userId)->packages()->find($id);
         $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) use ($transfer) {
             $m->button('delete', 'data', 'Package.delete');
-            if ($transfer->exists) $m->button('edit', 'data', 'Package.edit');
+            if ($transfer->exists()) $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
 

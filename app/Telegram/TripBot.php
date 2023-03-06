@@ -31,7 +31,7 @@ class TripBot
         $trip = User::find($userId)->trips()->find($id);
         $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($transfer) {
             $m->button('delete', 'data', 'Trip.delete');
-            if ($transfer->exists) $m->button('edit', 'data', 'Trip.edit');
+            if ($transfer->exists()) $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
 
