@@ -57,10 +57,10 @@ class TripBot
         $channel = $config->channel;
         $userId = $result->userId;
         $data = $result->data;
-        $trip = $this->api->getCache($userId)->trip;
+        $id = $this->api->getCache($userId)->trip;
 
         $user = User::find($userId);
-        $trip = $user->trips()->find($trip);
+        $trip = $user->trips()->find($id);
 
         $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
         $toAddress = $user->addresses()->find($data->toAddress)->toArray();
@@ -69,7 +69,7 @@ class TripBot
 
         $trip->update((array)$data);
 
-        $trip = $user->trips()->find($trip);
+        $trip = $user->trips()->find($id);
         $messageId = $trip->messageId;
         $message = (object)[
             "from" => (object)["id" => $userId],
