@@ -23,7 +23,7 @@ class BotController extends Controller
         try {
             $update = json_decode($request->getContent());
             //exec('echo "" > ' . storage_path('logs/laravel.log'));
-            //Log::alert(json_encode($update, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            Log::alert(json_encode($update, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
             if (isset($update->message)) $this->messageHandler($update->message);
             elseif (isset($update->callback_query)) $this->callbackHandler($update->callback_query);
