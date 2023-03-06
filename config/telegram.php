@@ -87,6 +87,7 @@ return json_decode(json_encode([
         "contactTripper" => "✈️ مسافر",
         "contactPacker" => "📦 صاحب بسته",
         "contactAndImageDocs" => "اطلاعات تماس و تصویر مدارک",
+        "requestDone" => "✅ واگذار شد",
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
