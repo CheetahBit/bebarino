@@ -297,7 +297,7 @@ class PackageBot
             $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
             foreach ($config->admins as $admin)
-                $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', array_merge($trip, $package))->inlineKeyboard()->rowButtons(function ($m) use ($package, $trip) {
+                $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', array_merge($trip->toArray(), $package->toArray()))->inlineKeyboard()->rowButtons(function ($m) use ($package, $trip) {
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->rowButtons(function ($m) use ($data) {
