@@ -199,6 +199,7 @@ class PackageBot
         $userId = $data->userId;
         $user = User::find($userId);
         $package = $user->packages()->find($data->package);
+        $package->cc();
         $trip = Trip::find($data->trip);
 
         $pending = config('telegram')->messages->pending;
