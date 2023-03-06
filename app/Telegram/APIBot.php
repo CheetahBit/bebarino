@@ -114,7 +114,7 @@ class APIBot
             $keywords = array_filter($keywords[0], fn ($item) => strlen($item) > 0);
             foreach ($keywords as $value) $text = str_replace(':' . $value, ($args[$value] ?? ''), $text);
         }
-        $this->data->text = $text . $plain;
+        $this->data->caption = $text . $plain;
         return $this;
     }
 
