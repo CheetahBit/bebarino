@@ -248,7 +248,8 @@ class PackageBot
         $id = $callback->id;
         $text = $callback->message->text;
         $accept = $config->messages->acceptRequest;
-        $pendding = $config->messages->penddingAdmin;
+        $pending = $config->messages->pendingAdmin;
+        
         if (in_array($userId, $config->admins)) {
             $user = User::find($trip->userId);
             $ticket = $trip->ticket;
@@ -276,7 +277,7 @@ class PackageBot
                 })->messageId($trip->messageId);
             }
         } else {
-            $text .= "\n\n" . $accept . "\n\n" . $pendding;
+            $text .= "\n\n" . $accept . "\n\n" . $pending;
             $this->api->chat($package->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
             foreach ($config->admins as $admin)

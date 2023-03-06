@@ -84,6 +84,8 @@ return json_decode(json_encode([
         "trip" => "سفر",
         "acceptRequest" => "✅ پذیرش درخواست",
         "rejectRequest" => "🚫 رد درخواست",
+        "pending" => 'در انتظار بررسی',
+        "pendingAdmin" => 'در انتظار تایید ادمین',
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
