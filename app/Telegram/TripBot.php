@@ -76,7 +76,7 @@ class TripBot
         $data->fromAddress = collect($fromAddress)->join(" , ");
         $data->toAddress = collect($toAddress)->join(" , ");
 
-        $trip = $user->trip()->create((array)$data);
+        $trip = $user->trips()->create((array)$data);
         $id = $trip->id;
         $trip->save();
 
