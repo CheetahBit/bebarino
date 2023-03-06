@@ -202,7 +202,7 @@ class PackageBot
         $trip = Trip::find($data->trip);
 
         $pending = config('telegram')->messages->pending;
-        $this->api->chat($userId)->sendMessage()->text('requestTripSent', $package, $pending)->exec();
+        $this->api->chat($userId)->sendMessage()->text('requestTripSent', $package, "\n\n".$pending)->exec();
 
         $this->api->chat($trip->user->id)->sendMessage()->text('requestTrip', $package)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
             $data = $data->trip . ',' . $data->package;

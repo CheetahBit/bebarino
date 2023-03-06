@@ -120,7 +120,7 @@ return json_decode(json_encode([
         "requestIsDone" => "این مورد قبلا انجام شده است!",
 
         "requestTripForm" => "درخواست حمل بسته\n\nلطفا به کمک دکمه های زیر بسته خود را انتخاب یا ایجاد کنید",
-        "requestTripSent" => "درخواست شما برای مسافر ارسال شد \nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc",
+        "requestTripSent" => "درخواست شما برای مسافر ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc",
         "requestTrip" => "درخواست بردن بسته \n\nاطلاعات بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc",
 
         "requestPackageForm" => "درخواست بردن بسته\n\nلطفا به کمک دکمه های زیر سفر خود را انتخاب یا ایجاد کنید",
