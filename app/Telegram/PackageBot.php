@@ -299,6 +299,10 @@ class PackageBot
             $text .= "\n\n" . $accept . "\n\n" . $pending;
             $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
+            
+            $trip->tripDesc = $trip->desc;
+            $package->packageDesc = $package->desc;
+
             foreach ($config->admins as $admin)
                 $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', array_merge($trip->toArray(), $package->toArray()))->inlineKeyboard()->rowButtons(function ($m) use ($data) {
                     $data = implode(',', $data);
@@ -309,7 +313,7 @@ class PackageBot
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->rowButtons(function ($m) use ($trip) {
                     $m->button('imageDocs', 'data', 'Package.imageDocs.' . $trip->id);
-                })->exec();
+                })->preview(false)->exec();
         }
     }
 

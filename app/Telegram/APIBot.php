@@ -98,6 +98,12 @@ class APIBot
         return $this;
     }
 
+    public function preview($show)
+    {
+        $this->data->disable_web_page_preview = !$show;
+        return $this;
+    }
+
     public function removeKeyboard()
     {
         $temp = new stdClass;
