@@ -21,12 +21,16 @@ class PackageBot
     public function show($message)
     {
         $userId = $message->from->id;
-        $id = $message->text;
+        $id = $message->text ?? $message->cache->package;
+
+        if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
+
+        $transfer = Transfer::where(['package' => $id]);
 
         $package = User::find($userId)->packages()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) {
+        $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) use ($transfer) {
             $m->button('delete', 'data', 'Package.delete');
-            $m->button('edit', 'data', 'Package.edit');
+            if ($transfer->exists) $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->exec();
 
@@ -36,21 +40,54 @@ class PackageBot
     public function edit($callback)
     {
         $userId = $callback->from->id;
+        $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
+
         $flow = new FlowBot();
         $flow->start($userId, 'package', 'Package', 'update', 'show');
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('selectAddress', 'query', time())->inlineMode('addresses');
+            $m->button('backward', 'data', 'Trip.show');
+        })->exec();
     }
 
-    public function update($data)
+    public function update($result)
     {
         $config = config('telegram');
         $channel = $config->channel;
-        $package = Package::find($data->id);
+        $userId = $result->userId;
+        $data = $result->data;
+        $id = $this->api->getCache($userId)->package;
+
+        $user = User::find($userId);
+        $package = $user->packages()->find($id);
+
+        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
+        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
+        $data->fromAddress = collect($fromAddress)->join(" , ");
+        $data->toAddress = collect($toAddress)->join(" , ");
+
+        $package->update((array)$data);
+
+        $package = $user->packages()->find($id);
+        $message = (object)[
+            "from" => (object)["id" => $userId],
+            "text" => $package->id
+        ];
+        $this->show($message);
+
         $messageId = $package->messageId;
-        $package->delete();
+        if (isset($messageId)) {
+            $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+                $m->button('sendFormRequest', 'data', 'Trip.form.' . $package->id);
+            })->exec();
 
-        $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
-
-        $this->submit($data);
+            if (!isset($result)) {
+                $result = $this->api->sendMessage()->exec();
+                $this->api->deleteMessage()->messageId($messageId)->exec();
+                $package->update(['messageId' => $result->message_id]);
+            }
+        }
     }
 
     public function create($callback)
