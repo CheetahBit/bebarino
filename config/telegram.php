@@ -131,8 +131,9 @@ return json_decode(json_encode([
         "pendingAdmin" => 'در انتظار بررسی ادمین',
 
         "rejectRequest" => 'درخواست رد شد',
+        "acceptRequest" => 'درخواست تایید شد',
 
-        
+
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",
         "inputFirstname" => "نام خود را وارد کنید",
