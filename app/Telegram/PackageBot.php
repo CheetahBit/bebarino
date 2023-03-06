@@ -338,7 +338,7 @@ class PackageBot
             $i = 0;
             foreach ($paths as $path) {
                 $api = $this->api->chat($userId)->sendPhoto()->photo($path);
-                if ($i == 0) $api->reply($messageId);
+                // if ($i == 0) $api->reply($messageId);
                 if ($i == $count - 1) $api->noreply()->caption('contactInfo', $contact);
                 $api->exec();
                 $i++;
