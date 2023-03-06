@@ -47,15 +47,27 @@ class TripBot
         })->exec();
     }
 
-    public function update($data)
+    public function update($result)
     {
         $config = config('telegram');
-        $channel = $config->channel;
-        $trip = Trip::find($data->id);
+        $channel = $config;
+        $userId = $result->userId;
+        $data = $result->data;
+        $trip = $this->api->getCache($userId)->trip;
+
+        $user = User::find($userId);
+        $trip = $user->trips()->find($trip)->update((array)$data);
         $messageId = $trip->messageId;
-        $trip->delete();
-        $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
-        $this->submit($data);
+
+        $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+            $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
+        })->exec();
+
+        if (!isset($result)) {
+            $result = $this->api->sendMessage()->exec();
+            $this->api->deleteMessage()->messageId($messageId)->exec();
+            $trip->update(['messageId' => $result->message_id]);
+        }
     }
 
     public function create($callback)
@@ -136,10 +148,9 @@ class TripBot
         $trip->cc();
 
 
-        $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)
-            ->inlineKeyboard()->rowButtons(function ($m) use ($id) {
-                $m->button('sendFormRequest', 'data', 'Package.form.' . $id);
-            })->exec();
+        $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($id) {
+            $m->button('sendFormRequest', 'data', 'Package.form.' . $id);
+        })->exec();
 
         $args = [
             "channel" => $channel,
