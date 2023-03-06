@@ -335,10 +335,11 @@ class PackageBot
         if (count($paths) > 0) {
             $this->api->showAlert($callback->id)->text('sentDocs')->exec();
             $count = count($paths);
-            foreach ($paths as $key => $path) {
+            $i = 0;
+            foreach ($paths as $path) {
                 $api = $this->api->chat($userId)->sendPhoto()->photo($path);
-                if ($key == 0) $api->reply($messageId);
-                if ($key == $count - 1) $api->caption('contactInfo', $contact);
+                if ($i == 0) $api->reply($messageId);
+                if ($i == $count - 1) $api->caption('contactInfo', $contact);
                 $api->exec();
             };
         } else $this->api->showAlert($callback->id, true)->text('noDocs')->exec();
