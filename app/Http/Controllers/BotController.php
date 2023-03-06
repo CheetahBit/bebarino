@@ -23,14 +23,14 @@ class BotController extends Controller
         try {
             $update = json_decode($request->getContent());
             //exec('echo "" > ' . storage_path('logs/laravel.log'));
-            Log::alert(json_encode($update, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            //Log::alert(json_encode($update, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
             if (isset($update->message)) $this->messageHandler($update->message);
             elseif (isset($update->callback_query)) $this->callbackHandler($update->callback_query);
             elseif (isset($update->inline_query)) $this->inlineHandler($update->inline_query);
         } catch (ErrorException $th) {
             (new APIBot)->chat(130912163)->sendMessage()->text(plain: $th->getLine() . '  ' . $th->getMessage())->exec();
-            Log::alert($th->getTraceAsString());
+            //Log::alert($th->getTraceAsString());
         }
         return response('ok', 200);
     }
@@ -45,7 +45,6 @@ class BotController extends Controller
         if (isset($message->text)) {
             $text = $message->text;
             $text = array_search($message->text, (array) $config->keywords) ?: $text;
-            Log::alert($text);
             if (array_key_exists($text, (array) $config->actions))
                 $action = $config->actions->{$text};
         }
