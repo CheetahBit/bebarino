@@ -47,7 +47,7 @@ class PackageBot
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('selectAddress', 'query', time())->inlineMode('addresses');
-            $m->button('backward', 'data', 'Trip.show');
+            $m->button('backward', 'data', 'Package.show');
         })->exec();
     }
 
