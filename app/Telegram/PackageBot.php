@@ -258,6 +258,7 @@ class PackageBot
         $userId = $callback->from->id;
         $data = explode(',', $callback->data);
         $trip = Trip::find($data[0]);
+
         $package = Package::find($data[1]);
         $messageId = $callback->message->message_id;
         $id = $callback->id;
@@ -300,11 +301,12 @@ class PackageBot
             $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
             
+            $trip->checkRequirment();
             $trip->tripDesc = $trip->desc;
             $package->packageDesc = $package->desc;
 
             foreach ($config->admins as $admin)
-                $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', array_merge($trip->toArray(), $package->toArray()))->inlineKeyboard()->rowButtons(function ($m) use ($data) {
+                $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', $trip->merge($package))->inlineKeyboard()->rowButtons(function ($m) use ($data) {
                     $data = implode(',', $data);
                     $m->button('acceptRequest', 'data', 'Package.accept.' . $data);
                     $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
