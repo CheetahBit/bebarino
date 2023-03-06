@@ -60,11 +60,9 @@ class FlowBot
                         foreach ($keys as $key) $m->key($key->fullTitle());
                     });
                 }
-            } else if (str_contains($step, 'Address')) {
-                $temp->text('select' . ucfirst($step))->inlineKeyboard()->rowButtons(function ($m) {
-                    // $m->button('createAddress', 'data', 'MyAddress.create');
-                });
-            } else $temp->text('input' . ucfirst($step))->removeKeyboard();
+            } else if (str_contains($step, 'Address'))
+                $temp->text('select' . ucfirst($step))->removeKeyboard();
+            else $temp->text('input' . ucfirst($step))->removeKeyboard();
             $temp->exec();
             $this->api->putCache($cache->userId, 'flow', $cache);
         } else $this->output($cache);
