@@ -145,8 +145,9 @@ class PackageBot
     {
         $config = config('telegram');
         $userId = $callback->from->id;
-        Cache::delete($userId);
         $main = new MainBot();
+        $main->api->deleteCache($userId);
+        
         if ($main->checkLogin($userId)) {
             $text = $callback->message->text;
             $messageId = $callback->message->message_id;
