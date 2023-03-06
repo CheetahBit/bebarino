@@ -279,14 +279,14 @@ class PackageBot
             else {
                 $transfer->update(['status' => 'verified']);
                 $text .= "\n\n" . $accept;
-                $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->rowButtons(function ($m)  use ($package, $trip) {
+                $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m)  use ($package, $trip) {
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->exec();
-                $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->rowButtons(function ($m)  use ($trip) {
+                $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
                 })->exec();
-                $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->rowButtons(function ($m)  use ($package) {
+                $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->exec();
 
