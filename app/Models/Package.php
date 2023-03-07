@@ -35,7 +35,6 @@ class Package extends Model
 
     public function requirement()
     {
-        $this->hasTicket = $this->hasTicket();
         $this->hasPassport = $this->user->idnetity->hasPassport();
         $this->hasContact = $this->user->contact->hasContact();
     }

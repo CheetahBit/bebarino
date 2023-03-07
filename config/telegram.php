@@ -126,11 +126,11 @@ return json_decode(json_encode([
         "submitPackage" => "ثبت بسته \n\nلطفا اطلاعات زیر را وارد نمایید",
         "submitTrip" => "ثبت سفر \n\nلطفا اطلاعات زیر را وارد نمایید",
 
-        "confirmPackage" => "ثبت بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
-        "confirmTrip" => "ثبت سفر\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
+        "confirmPackage" => "ثبت بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , t\n\nآیا این اطلاعات مورد تایید است؟",
+        "confirmTrip" => "ثبت سفر\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتصویر بلیط : :ticket\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
 
-        "channelPackage" => "📦 بسته جدید \n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nوضعیت درخواست :status",
-        "channelTrip" => "✈️ سفر جدید\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nوضعیت درخواست :status",
+        "channelPackage" => "📦 بسته جدید \n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nتوضیحات : :desc\n\nوضعیت درخواست :status",
+        "channelTrip" => "✈️ سفر جدید\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nتوضیحات : :desc\n\nوضعیت درخواست :status",
 
         "packageSubmitted" => "بسته شما ثبت شد\n\nt.me/:channel/:post",
         "tripSubmitted" => "سفر شما ثبت شد\n\nt.me/:channel/:post",
@@ -148,7 +148,7 @@ return json_decode(json_encode([
 
         "requestPackageForm" => "درخواست بردن بسته\n\nلطفا به کمک دکمه های زیر سفر خود را انتخاب یا ایجاد کنید",
         "requestPackageSent" => "درخواست شما برای صاحب بسته ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromAddress\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nنوضیحات: :desc",
-        "requestPackage" => "درخواست حمل بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
+        "requestPackage" => "درخواست حمل بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nتوضیحات : :desc",
 
         "pending" => 'در انتظار تایید',
         "pendingAdmin" => 'در انتظار بررسی ادمین',
@@ -157,7 +157,7 @@ return json_decode(json_encode([
         "acceptRequest" => 'درخواست تایید شد',
 
         "requestPackageAdmin" => "سفر\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :desc\n\n\nبسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc",
-        "requestTripAdmin" => "بسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nنوضیحات: :desc",
+        "requestTripAdmin" => "بسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :desc",
 
         "requestClosedByAdmin" => " درخواست شماره :id توسط ادمین بسته شد",
         "requestClosed" => "درخواست بسته شد",
