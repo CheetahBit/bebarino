@@ -101,6 +101,8 @@ return json_decode(json_encode([
         "contactPacker" => "📦 صاحب بسته",
         "contactAndImageDocs" => "اطلاعات تماس و تصویر مدارک",
         "requestDone" => "✅ واگذار شد",
+        "confirm" => "✅ تایید",
+        "cancel" => "🚫 انصراف",
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
