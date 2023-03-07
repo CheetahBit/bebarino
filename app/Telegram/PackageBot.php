@@ -222,7 +222,7 @@ class PackageBot
     {
         $userId = $result->userId;
         $package = $result->data;
-        
+
         $this->api->chat($userId)->sendMessage()->text('confirmPackage', (array)$package)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('confirm', 'data', 'Package.submit');
             $m->button('cancel', 'data', 'Main.menu');
@@ -235,6 +235,7 @@ class PackageBot
         $channel = $config->channel;
         $userId = $callback->from->id;
         $cache = $callback->cache;
+        $text = $callback->message->text;
         $data = $cache->flow->data;
 
         $user = User::find($userId);
@@ -250,8 +251,9 @@ class PackageBot
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $package->id);
         })->exec();
 
-        $args = ["channel" => $channel, "post" => $result->message_id];
-        $this->api->chat($userId)->sendMessage()->text('packageSubmitted', $args)->exec();
+        $this->api->chat($userId)->updateMessage()->text(key: 'packageSubmitted', plain: "\n\n" . $text)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+            $m->button('showRequestInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
+        })->exec();
 
         $package->update(['messageId' => $result->message_id]);
 
