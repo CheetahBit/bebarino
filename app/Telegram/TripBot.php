@@ -55,7 +55,6 @@ class TripBot
         $trip = $data[1];
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
-        $text = $callback->message->text;
         $id = $callback->id;
 
         $this->api->showAlert($id)->text('request' . ucfirst($status))->exec();
@@ -63,12 +62,12 @@ class TripBot
         $trip = User::find($userId)->trips()->find($trip);
         $trip->requirement();
 
-        $this->api->chat($userId)->updateButton()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-            $m->button('delete', 'data', 'Trip.delete');
-            if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.open');
-            else if ($trip->status != 'closedByAdmin') $m->button('closeRequest', 'data', 'Trip.status.close');
+        $this->api->chat($userId)->updateButton()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
+        })->rowButtons(function ($m) use ($trip) {
+            if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.open,' .  $trip->id);
+            else $m->button('closeRequest', 'data', 'Trip.status.close,' .  $trip->id);
         })->exec();
 
         if (isset($trip->messageId)) {
