@@ -30,7 +30,7 @@ class InlineBot
                         'country' => $flow->data->toCountry ?? $flow->data->fromCountry,
                         'city' => $flow->data->toCity ?? $flow->data->fromCity,
                     ]);
-                $addresses = $addresses->oderBy('updated_at', 'desc')->get();
+                $addresses = $addresses->orderBy('updated_at', 'desc')->get();
 
                 foreach ($addresses as $address) {
                     $results[] = [
