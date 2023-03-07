@@ -44,7 +44,7 @@ class FlowBot
         $flow = $config->flows->{$cache->name};
         if (count($flow) > $cache->cursor) {
             $step = ucfirst($flow[$cache->cursor]);
-            
+
             $temp = $this->api->chat($cache->userId)->sendMessage();
             if ($step == 'Contact') {
                 $temp->text('inputContact')->keyboard()->rowKeys(function ($m) {
@@ -62,7 +62,13 @@ class FlowBot
                         foreach ($keys as $key) $m->key($key->fullTitle());
                     });
                 }
-            } else if (str_contains($step, 'Address') && User::find($this->userId)->addresses()->exists())
+            } else if (
+                str_contains($step, 'Address') &&
+                User::find($this->userId)->addresses()->where([
+                    'country' => $cache->data->toCountry ?? $cache->data->fromCountry,
+                    'city' => $cache->data->toCity ?? $cache->data->fromCity,
+                ])->exists()
+            )
                 $temp->text('inputOrSelect' . $step)->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 });
