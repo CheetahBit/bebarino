@@ -48,13 +48,12 @@ class InlineBot
                 $trips = $user->trips;
                 $requests = $trips->merge($packages)->sortByDesc('updated_at');
                 foreach ($requests as $request) {
-                    $request->cc();
                     $type = (isset($request->date) ? 'trip' : 'package');
-
+                    $title = $keywords->{$type} . " - " .  $request->fromCountry . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
                     $results[] = [
                         'type' => 'article',
-                        'title' => $keywords->{$type},
-                        'description' => ($request->fromAddress . " > " . $request->toAddress) . "\n" . ($request->date ?? $request->desc),
+                        'title' => $title,
+                        'description' => ($request->date ?? '') . " " . $request->desc,
                         'input_message_content' => ['message_text' => $type . "-" . $request->id],
                         'id' => $request->id,
                     ];
