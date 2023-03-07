@@ -4,6 +4,7 @@ namespace App\Telegram;
 
 use App\Models\Country;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 use ReflectionClass;
 use stdClass;
 
@@ -92,7 +93,6 @@ class FlowBot
         $step = $flow[$cache->cursor];
         $type = $message->entities[0]->type ?? null;
         $error = null;
-
         $this->api->chat($this->userId)->updateButton()->messageId($messageId - 1)->exec();
         if ($step == 'contact') {
             if (!isset($message->contact)) $error = 'errorInvalidContact';
@@ -100,14 +100,14 @@ class FlowBot
             else $message->text = $message->contact->phone_number;
         } else if ($step == 'phone' && $type != 'phone_number') $error = 'errorInvalidPhone';
         else if ($step == 'email' && $type != 'email')  $error = 'errorInvalidEmail';
-        else if ($step == 'date' && preg_match($config->dateRegex, $message->text) === false)  $error = 'errorInvalidDate';
+        else if ($step == 'date' && Validator::make($message, ['text', 'date_format:Y/m/d'])->fails())  $error = 'errorInvalidDate';
         else if (
             ($step == 'passport' ||
                 ($step == 'ticket' && ($message->text ?? null) != $config->keywords->desire)) &&
             !isset($message->photo)
         )  $error = 'errorInvalidPhoto';
 
-        
+
         if (isset($error)) $this->api->chat($this->userId)->sendMessage()->text($error)->exec();
         else $cache->data->{$step} = $message->text ?? $this->download($message->photo, $step);
 

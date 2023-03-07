@@ -2,6 +2,9 @@
 
 namespace App\Console;
 
+use App\Models\Trip;
+use App\Telegram\MainBot;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -12,7 +15,13 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            $mainBot = new MainBot();
+
+            $trips = Trip::where('messageId','<>', null)->where('date', '>=', Carbon::today()->toDateString());
+            
+            
+        })->everyMinute();
     }
 
     /**
