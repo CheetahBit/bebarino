@@ -72,7 +72,7 @@ class FlowBot
                 $temp->text('inputOrSelect' . $step)->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 });
-            else if (in_array($cache->name, $config->optional))
+            else if (in_array($cache->name, $config->optionals))
                 $temp->text('input' . $step)->keyboard()->rowKeys(function ($m) {
                     $m->key('desire');
                 });
