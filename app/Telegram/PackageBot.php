@@ -83,7 +83,6 @@ class PackageBot
             })->exec();
         }
 
-        $package->update(['status' => $status]);
     }
 
     public function close($callback)
