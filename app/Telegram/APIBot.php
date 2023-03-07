@@ -71,6 +71,7 @@ class APIBot
     public function updateMessage()
     {
         $this->data->method = 'editMessageText';
+        $this->data->parse_mode = "HTML";
         return $this;
     }
 
