@@ -155,7 +155,7 @@ class TripBot
         $data = $result->data;
 
         $user = User::find($userId);
-        (new MyAddressBot)->existsOrStore($data);
+        (new MyAddressBot)->existsOrStore($userId, $data);
 
         $trip = $user->trips()->create((array) $data)->save();
 

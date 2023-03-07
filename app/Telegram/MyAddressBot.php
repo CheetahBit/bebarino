@@ -155,17 +155,17 @@ class MyAddressBot
     }
 
 
-    public function existsOrStore($data)
+    public function existsOrStore($userId, $data)
     {
         $from = [
-            "userId" => $data->userId,
+            "userId" => $userId,
             "country" => $data->fromCountry,
             "city" => $data->fromCity,
             "address" => $data->fromAddress,
         ];
 
         $to = [
-            "userId" => $data->userId,
+            "userId" => $userId,
             "country" => $data->fromCountry,
             "city" => $data->fromCity,
             "address" => $data->fromAddress,
