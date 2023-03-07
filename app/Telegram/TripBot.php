@@ -40,8 +40,8 @@ class TripBot
             }
         })->rowButtons(function ($m) use ($trip, $isAdmin) {
             if (!$isAdmin) {
-                if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.open,' .  $trip->id);
-                else $m->button('closeRequest', 'data', 'Trip.status.close,' .  $trip->id);
+                if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
+                else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
             }
         })->exec();
 

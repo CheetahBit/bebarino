@@ -145,8 +145,8 @@ return json_decode(json_encode([
         "packageInfo" => "بسته\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc\n\nوضعیت درخواست : :status",
         "tripInfo" => "سفر\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc\n\nوضعیت درخواست : :status",
 
-        "requestClose" => "درخواست بسته شد",
-        "requestOpen" => "درخواست باز شد",
+        "requestClosed" => "درخواست بسته شد",
+        "requestOpened" => "درخواست باز شد",
 
         "requestFormSent" => "فرم درخواست برای شما از طریق ربات ارسال شد",
         "requestIsDone" => "این مورد قبلا انجام شده است!",
