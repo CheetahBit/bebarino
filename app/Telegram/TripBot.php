@@ -67,8 +67,8 @@ class TripBot
             $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($trip) {
-            if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.open,' .  $trip->id);
-            else $m->button('closeRequest', 'data', 'Trip.status.close,' .  $trip->id);
+            if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
+            else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
         })->exec();
 
         $trip->requirement();
