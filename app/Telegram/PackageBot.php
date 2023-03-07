@@ -428,7 +428,7 @@ class PackageBot
             })->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
 
-            $trip->requirment();
+            $trip->requirement();
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
 
             foreach ($config->admins as $admin)
