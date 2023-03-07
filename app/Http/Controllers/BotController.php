@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -97,10 +98,15 @@ class BotController extends Controller
 
         Http::get('https://api.telegram.org/bot' . $token . '/setwebhook?url=https://bot.cheetahbit.org/api/bot');
 
-        $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))
+        Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))
             ->groupBy(function ($val) {
                 return Carbon::parse($val->date)->format('Y/m');
             })->orderBy('date', 'asc');
+
+        $trips =    DB::table('trips')
+            ->groupBy(function ($val) {
+                return Carbon::parse($val->date)->format('Y/m');
+            })->get();
 
         return response(json_encode($trips->all(), JSON_PRETTY_PRINT));
         // return response(Carbon::now()->format('Y/m/d'));
