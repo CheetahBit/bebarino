@@ -170,7 +170,7 @@ class PackageBot
         $flow->start($userId, 'package', 'Package', 'store', 'form');
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('selectAddress', 'query', time())->inlineMode('addresses');
+            $m->button('backward', 'data', 'Main.menu');
         })->exec();
     }
 
