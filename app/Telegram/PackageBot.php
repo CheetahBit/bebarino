@@ -272,7 +272,7 @@ class PackageBot
             $transfer = Transfer::where(['trip' => $trip, 'status' => 'verified']);
             if ($trip->user->id == $userId)
                 $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
-            else if ($trip->status != "opened")
+            else if ($trip->getRawOriginal('status') != "opened")
                 $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
             else if ($transfer->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
