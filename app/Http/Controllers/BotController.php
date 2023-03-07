@@ -102,9 +102,10 @@ class BotController extends Controller
         $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
         foreach ($trips as $trip) {
             $date = Carbon::parse($trip->date);
-            $month = $date->format('Y/m');
+            $year = $date->format('Y');
+            $month = $date->format('m');
             $day = $date->format('d');
-            $grouping[$month][$day][] = $trip;
+            $grouping[$year][$month][$day][] = $trip;
         }
     
         return response(json_encode($grouping, JSON_PRETTY_PRINT));
