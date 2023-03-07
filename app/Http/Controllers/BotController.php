@@ -44,12 +44,14 @@ class BotController extends Controller
         $action = new stdClass;
         if (isset($message->text)) {
             $text = $message->text;
+            $text = str_replace(['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'], ['0','1','2','3','4','5','6','7','8','9'], $text);
+            if (str_contains($text, 'package-')) $text = "requestPackage";
+            else if (str_contains($text, 'trip-')) $text = "requestTrip";
             $text = array_search($message->text, (array) $config->keywords) ?: $text;
             if (array_key_exists($text, (array) $config->actions))
                 $action = $config->actions->{$text};
         }
         if (!isset($action->class)) $action = $message->cache->action;
-
 
         $class = new ("App\Telegram\\" . $action->class . "Bot")();
         $class->{$action->method}($message);

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('price');
             $table->string('desc')->nullable();
             $table->string('messageId')->nullable();
+            $table->string('status')->default('open');
             $table->timestamps();
         });
     }

@@ -31,6 +31,7 @@ return json_decode(json_encode([
             "desc"
         ]
     ],
+    "optionals" => ["identity", "contact", "bank"],
     "actions" => [
         "/start" => ["class" => "Main", "method" => "menu"],
         "backward" => ["class" => "Main", "method" => "menu"],
@@ -45,6 +46,9 @@ return json_decode(json_encode([
 
         "submitTrip" => ["class" => "Main", "method" => "submitTrip"],
         "submitPackage" => ["class" => "Main", "method" => "submitPackage"],
+
+        "requestTrip" => ["class" => "Trip", "method" => "form"],
+        "requestPackage" => ["class" => "package", "method" => "form"],
 
         "myAddresses" => ["class" => "MyAddress", "method" => "index"],
         "myAddressesShow" => ["class" => "MyAddress", "method" => "show"],
@@ -123,8 +127,8 @@ return json_decode(json_encode([
         "confirmPacakge" => "ثبت بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
         "confirmTrip" => "ثبت سفر\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
 
-        "channelPackage" => "بسته جدید\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
-        "channelTrip" => "سفر جدید\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
+        "channelPackage" => "📦 بسته جدید \n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nوضعیت درخواست :status",
+        "channelTrip" => "✈️ سفر جدید\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nوضعیت درخواست :status",
 
         "packageSubmitted" => "بسته شما ثبت شد\n\nt.me/:channel/:post",
         "tripSubmitted" => "سفر شما ثبت شد\n\nt.me/:channel/:post",
@@ -152,6 +156,9 @@ return json_decode(json_encode([
 
         "requestPackageAdmin" => "سفر\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :desc\n\n\nبسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc",
         "requestTripAdmin" => "بسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nنوضیحات: :desc",
+
+        "requestClosedByAdmin" => " درخواست شماره :id توسط ادمین بسته شد",
+        "requestClosed" => "درخواست بسته شد",
 
         "noDocs" => "مدرکی جهت نمایش وجود ندارد",
         "sentDocs" => "مدارک ارسال شد",
@@ -185,10 +192,10 @@ return json_decode(json_encode([
         "inputOrSelectToAddress" => "نشانی مقصد را انتخاب یا وارد کنید",
 
         "inputDesc" => "توضیحات را وارد کنید",
-        "inputDate" => "تاریخ سفر را وارد کنید",
+        "inputDate" => "تاریخ سفر را وارد کنید ، قالب : dd/mm/yyyy",
         "inputTicket" => "تصویر بلیط را وارد کنید",
-        "inputWeight" => "حداکثر وزن را وارد کنید",
-        "inputPrice" => "قیمت پیشنهادی را وارد کنید",
+        "inputWeight" => "حداکثر وزن(کیلوگرم) یا تعداد(عدد) قابل حمل را وارد کنید",
+        "inputPrice" => "قیمت پیشنهادی را به همراه نوع ارز وارد کنید\n\nدلار آمریکا ، یورو ، دلار کانادا",
 
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
         "saveSuccessfully" => "باموفقیت ذخیره شد !",
@@ -199,6 +206,8 @@ return json_decode(json_encode([
         "errorAnotherContact" => 'خطای شماره متعلق به شما نیست',
         "errorInvalidPhone" => 'خطای شماره تلفن',
         "errorInvalidEmail" => 'خطای ایمیل',
-        "errorInvalidPhoto" => 'خطای نثویر',
-    ]
+        "errorInvalidPhoto" => 'خطای تصویر',
+        "errorInvalidDate" => 'خطای تاریخ',
+    ],
+    "dateRegex" => "^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$"
 ]));

@@ -72,6 +72,10 @@ class FlowBot
                 $temp->text('inputOrSelect' . $step)->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 });
+            else if (in_array($cache->name, $config->optional))
+                $temp->text('input' . $step)->keyboard()->rowKeys(function ($m) {
+                    $m->key('desire');
+                });
             else $temp->text('input' . $step)->removeKeyboard();
             $temp->exec();
             $this->api->putCache($cache->userId, 'flow', $cache);
@@ -96,6 +100,7 @@ class FlowBot
             else $message->text = $message->contact->phone_number;
         } else if ($step == 'phone' && $type != 'phone_number') $error = 'errorInvalidPhone';
         else if ($step == 'email' && $type != 'email')  $error = 'errorInvalidEmail';
+        else if ($step == 'date' && preg_match($config->dateRegex, $message->text))  $error = 'errorInvalidDate';
         else if (
             ($step == 'passport' ||
                 ($step == 'ticket' && ($message->text ?? null) != $config->keywords->desire)) &&
