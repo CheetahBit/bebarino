@@ -17,10 +17,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             $mainBot = new MainBot();
-
-            $trips = Trip::where('messageId','<>', null)->where('date', '>=', Carbon::today()->toDateString());
-            
-            
+            $mainBot->tripsGrouping();    
         })->everyMinute();
     }
 

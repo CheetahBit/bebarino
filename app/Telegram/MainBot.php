@@ -2,7 +2,9 @@
 
 namespace App\Telegram;
 
+use App\Models\Trip;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use stdClass;
 
@@ -139,5 +141,11 @@ class MainBot
         $this->api->chat($userId)->sendMessage()->text('needLogin')->exec();
         $message = (object)["from" => (object)["id" => $userId]];
         $this->menu($message);
+    }
+
+    public function tripsGrouping()
+    {
+        $trips = Trip::where('messageId','<>', null)->where('date', '>=', Carbon::today()->toDateString());
+        
     }
 }

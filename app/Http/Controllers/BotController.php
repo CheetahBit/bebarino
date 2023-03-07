@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Trip;
 use App\Telegram\APIBot;
 use App\Telegram\InlineBot;
+use Carbon\Carbon;
 use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -94,5 +96,9 @@ class BotController extends Controller
         }
 
         Http::get('https://api.telegram.org/bot' . $token . '/setwebhook?url=https://bot.cheetahbit.org/api/bot');
+
+        $trips = Trip::where('messageId','<>', null)->where('date', '>=', Carbon::today()->toDateString())->get() ;
+
+        return response(json_encode($trips->toArray(), JSON_PRETTY_PRINT));
     }
 }
