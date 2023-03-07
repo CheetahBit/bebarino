@@ -271,7 +271,7 @@ class TripBot
         $userId = $message->from->id;
         $text = $message->text;
 
-        $package = str_replace('package-', '', $text);
+        $package = explode('-', $text)[1];
         $package = Package::find($package);
         $main = new MainBot();
         if ($main->checkLogin($userId)) {

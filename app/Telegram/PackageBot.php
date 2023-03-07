@@ -265,7 +265,7 @@ class PackageBot
         $userId = $message->from->id;
         $text = $message->text;
 
-        $trip = str_replace('trip-', '', $text);
+        $trip = explode('-', $text)[1];
         $trip = Trip::find($trip);
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
