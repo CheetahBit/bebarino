@@ -24,26 +24,19 @@ class TripBot
     {
         $config = config('telegram');
         $userId = $message->from->id;
-        $isAdmin = in_array($userId, $config->admins);
+
         $id = $message->text ?? $message->cache->trip;
 
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
         $trip = User::find($userId)->trips()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $isAdmin) {
-            if ($isAdmin) {
-                $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
-                $m->button('closeRequest', 'data', 'Trip.close' .  $trip->id);
-            } else {
-                $m->button('delete', 'data', 'Trip.delete');
-                $m->button('edit', 'data', 'Trip.edit');
-                $m->button('backward', 'data', 'MyRequest.index');
-            }
-        })->rowButtons(function ($m) use ($trip, $isAdmin) {
-            if (!$isAdmin) {
-                if ($trip->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
-                else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
-            }
+        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('delete', 'data', 'Trip.delete');
+            $m->button('edit', 'data', 'Trip.edit');
+            $m->button('backward', 'data', 'MyRequest.index');
+        })->rowButtons(function ($m) use ($trip) {
+            if ($trip->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
+            else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
         })->exec();
 
         $this->api->putCache($userId, 'trip', $id);
@@ -315,9 +308,15 @@ class TripBot
 
             else {
                 $package->requirement();
-                $main->api->chat($userId)->sendMessage()->text('requestPackageForm', $package)->inlineKeyboard()->rowButtons(function ($m) {
-                    $m->button('createTrip', 'data', 'Trip.create');
-                    $m->button('selectTrip', 'query', time())->inlineMode('trips');
+                $isAdmin = in_array($userId, $config->admins);
+                $main->api->chat($userId)->sendMessage()->text('requestPackageForm', $package)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $package) {
+                    if ($isAdmin) {
+                        $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
+                        $m->button('closeRequest', 'data', 'Package.close' .  $package->id);
+                    } else {
+                        $m->button('createTrip', 'data', 'Trip.create');
+                        $m->button('selectTrip', 'query', time())->inlineMode('trips');
+                    }
                 })->exec();
                 $action = $config->actions->selectTrip;
                 $this->api->putCache($userId, 'action', $action);
@@ -480,7 +479,7 @@ class TripBot
         if (isset($ticket)) $paths->ticket = "tickets/" . $ticket;
         if (isset($passport)) $paths->passport = "passports/" . $passport;
         $paths = (array)$paths;
-        
+
         if (count($paths) > 0) {
             $this->api->showAlert($callback->id)->text('sentDocs')->exec();
             $count = count($paths);

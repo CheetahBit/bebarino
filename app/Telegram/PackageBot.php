@@ -29,19 +29,12 @@ class PackageBot
 
         $package = User::find($userId)->packages()->find($id);
         $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $isAdmin) {
-            if ($isAdmin) {
-                $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
-                $m->button('closeRequest', 'data', 'Package.close' .  $package->id);
-            } else {
-                $m->button('delete', 'data', 'Package.delete');
-                $m->button('edit', 'data', 'Package.edit');
-                $m->button('backward', 'data', 'MyRequest.index');
-            }
-        })->rowButtons(function ($m) use ($package, $isAdmin) {
-            if (!$isAdmin) {
-                if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.opened,' .  $package->id);
-                else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
-            }
+            $m->button('delete', 'data', 'Package.delete');
+            $m->button('edit', 'data', 'Package.edit');
+            $m->button('backward', 'data', 'MyRequest.index');
+        })->rowButtons(function ($m) use ($package) {
+            if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.opened,' .  $package->id);
+            else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
         })->exec();
 
         $this->api->putCache($userId, 'package', $id);
@@ -305,12 +298,17 @@ class PackageBot
                 $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
             else if ($transfer->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
-
             else {
                 $trip->requirement();
-                $main->api->chat($userId)->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) {
-                    $m->button('createPackage', 'data', 'Package.create');
-                    $m->button('selectPackage', 'query', time())->inlineMode('packages');
+                $isAdmin = in_array($userId, $config->admins);
+                $main->api->chat($userId)->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $trip) {
+                    if ($isAdmin) {
+                        $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
+                        $m->button('closeRequest', 'data', 'Trip.close' .  $trip->id);
+                    } else {
+                        $m->button('createPackage', 'data', 'Package.create');
+                        $m->button('selectPackage', 'query', time())->inlineMode('packages');
+                    }
                 })->exec();
                 $action = $config->actions->selectPackage;
                 $this->api->putCache($userId, 'action', $action);
@@ -474,7 +472,7 @@ class PackageBot
         if (isset($ticket)) $paths->ticket = "tickets/" . $ticket;
         if (isset($passport)) $paths->passport = "passports/" . $passport;
         $paths = (array)$paths;
-        
+
         if (count($paths) > 0) {
             $this->api->showAlert($callback->id)->text('sentDocs')->exec();
             $count = count($paths);
