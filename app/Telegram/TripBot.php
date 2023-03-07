@@ -36,10 +36,13 @@ class TripBot
                 $m->button('closeRequest', 'data', 'Trip.close' .  $trip->id);
             } else {
                 $m->button('delete', 'data', 'Trip.delete');
-                if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.open');
-                else $m->button('closeRequest', 'data', 'Trip.status.close');
                 $m->button('edit', 'data', 'Trip.edit');
                 $m->button('backward', 'data', 'MyRequest.index');
+            }
+        })->rowButtons(function ($m) use ($trip, $isAdmin) {
+            if (!$isAdmin) {
+                if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.open');
+                else $m->button('closeRequest', 'data', 'Trip.status.close,' .  $trip->id);
             }
         })->exec();
 
