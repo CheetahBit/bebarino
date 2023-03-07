@@ -137,5 +137,7 @@ class MainBot
     public function needLogin($userId)
     {
         $this->api->chat($userId)->sendMessage()->text('needLogin')->exec();
+        $message = (object)["from" => (object)["id" => $userId]];
+        $this->menu($message);
     }
 }
