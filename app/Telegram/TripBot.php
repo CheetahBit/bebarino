@@ -60,6 +60,7 @@ class TripBot
         $this->api->showAlert($id)->text('request' . ucfirst($status))->exec();
 
         $user = User::find($userId);
+        $user->trips()->find($trip)->update(['status' => $status]);
         $trip = $user->trips()->find($trip);
 
         $this->api->chat($userId)->updateButton()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
@@ -71,6 +72,7 @@ class TripBot
         })->exec();
 
         $trip->requirement();
+
         if (isset($trip->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
@@ -82,7 +84,6 @@ class TripBot
             })->exec();
         }
 
-        $user->trips()->find($trip)->update(['status' => $status]);
     }
 
     public function close($callback)
