@@ -100,17 +100,18 @@ class FlowBot
             else $message->text = $message->contact->phone_number;
         } else if ($step == 'phone' && $type != 'phone_number') $error = 'errorInvalidPhone';
         else if ($step == 'email' && $type != 'email')  $error = 'errorInvalidEmail';
-        else if ($step == 'date' && preg_match($config->dateRegex, $message->text))  $error = 'errorInvalidDate';
+        else if ($step == 'date' && preg_match($config->dateRegex, $message->text) === false)  $error = 'errorInvalidDate';
         else if (
             ($step == 'passport' ||
                 ($step == 'ticket' && ($message->text ?? null) != $config->keywords->desire)) &&
             !isset($message->photo)
         )  $error = 'errorInvalidPhoto';
 
-        if (isset($message->text) && $config->keywords->desire == $message->text) $message->text = null;
-
+        
         if (isset($error)) $this->api->chat($this->userId)->sendMessage()->text($error)->exec();
         else $cache->data->{$step} = $message->text ?? $this->download($message->photo, $step);
+        
+        if (isset($message->text) && $config->keywords->desire == $message->text) $cache->data->{$step} = null;
 
         $this->api->putCache($this->userId, 'flow', $cache);
         $this->next();
