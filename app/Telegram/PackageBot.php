@@ -278,8 +278,8 @@ class PackageBot
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
 
             else {
-                $main->api->chat($userId)->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-                    $m->button('createPackage', 'data', 'Package.create.' . $trip->id);
+                $main->api->chat($userId)->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) {
+                    $m->button('createPackage', 'data', 'Package.create');
                     $m->button('selectPackage', 'query', time())->inlineMode('packages');
                 })->exec();
                 $action = $config->actions->selectPackage;

@@ -48,8 +48,8 @@ return json_decode(json_encode([
         "submitTrip" => ["class" => "Main", "method" => "submitTrip"],
         "submitPackage" => ["class" => "Main", "method" => "submitPackage"],
 
-        "requestTrip" => ["class" => "Trip", "method" => "form"],
-        "requestPackage" => ["class" => "Package", "method" => "form"],
+        "requestTrip" => ["class" => "Package", "method" => "form"],
+        "requestPackage" => ["class" => "Trip", "method" => "form"],
 
         "myAddresses" => ["class" => "MyAddress", "method" => "index"],
         "myAddressesShow" => ["class" => "MyAddress", "method" => "show"],

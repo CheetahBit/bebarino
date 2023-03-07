@@ -271,7 +271,7 @@ class TripBot
         $userId = $message->from->id;
         $text = $message->text;
 
-        $package = str_replace('trip-', '', $text);
+        $package = str_replace('package-', '', $text);
         $package = Package::find($package);
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
@@ -284,8 +284,8 @@ class TripBot
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
 
             else {
-                $main->api->chat($userId)->sendMessage()->text('requestPackageForm', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
-                    $m->button('createTrip', 'data', 'Trip.create.' . $package->id);
+                $main->api->chat($userId)->sendMessage()->text('requestPackageForm', $package)->inlineKeyboard()->rowButtons(function ($m) {
+                    $m->button('createTrip', 'data', 'Trip.create');
                     $m->button('selectTrip', 'query', time())->inlineMode('trips');
                 })->exec();
                 $action = $config->actions->selectTrip;
