@@ -109,7 +109,10 @@ return json_decode(json_encode([
         "statusClosed" => "بسته",
 
         "closeRequest" => "بستن درخواست",
-        "openRequest" => "باز کردن درخواست"
+        "openRequest" => "باز کردن درخواست",
+
+        "statusPendingAdmin" => "در انتضار بررسی ادمین",
+
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
