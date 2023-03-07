@@ -43,6 +43,7 @@ class FlowBot
         $flow = $config->flows->{$cache->name};
         if (count($flow) > $cache->cursor) {
             $step = $flow[$cache->cursor];
+            $step = str_replace(['from','to'], '', $step);
             $temp = $this->api->chat($cache->userId)->sendMessage();
             if ($step == 'contact') {
                 $temp->text('inputContact')->keyboard()->rowKeys(function ($m) {
