@@ -111,7 +111,7 @@ return json_decode(json_encode([
         "closeRequest" => "بستن درخواست",
         "openRequest" => "باز کردن درخواست",
 
-        "statusPendingAdmin" => "در انتضار بررسی ادمین",
+        "statusPendingAdmin" => "در انتظار بررسی ادمین",
 
     ],
     "messages" => [

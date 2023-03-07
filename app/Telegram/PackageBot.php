@@ -64,10 +64,7 @@ class PackageBot
         $package = $user->packages()->find($package);
 
         $transfer = Transfer::where(['package' => $package->id]);
-        if($transfer->exists()) {
-            $package->status = $transfer->first()->status;
-            $package->messageId = null;
-        }
+        if($transfer->exists()) $package->status = $transfer->first()->status;
 
         $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('delete', 'data', 'Package.delete');

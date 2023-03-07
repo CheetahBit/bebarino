@@ -66,10 +66,8 @@ class TripBot
         $trip = $user->trips()->find($trip);
 
         $transfer = Transfer::where(['trip' => $trip->id]);
-        if($transfer->exists()) {
-            $trip->status = $transfer->first()->status;
-            $trip->messageId = null;
-        }
+        if ($transfer->exists())  $trip->status = $transfer->first()->status;
+
 
         $this->api->chat($userId)->updateMessage()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('delete', 'data', 'Trip.delete');
