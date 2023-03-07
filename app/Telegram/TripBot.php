@@ -60,8 +60,7 @@ class TripBot
         $this->api->showAlert($id)->text('request' . ucfirst($status))->exec();
 
         $trip = User::find($userId)->trips()->find($trip);
-        $trip->requirement();
-
+        
         $this->api->chat($userId)->updateButton()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
@@ -69,7 +68,8 @@ class TripBot
             if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.open,' .  $trip->id);
             else $m->button('closeRequest', 'data', 'Trip.status.close,' .  $trip->id);
         })->exec();
-
+        
+        $trip->requirement();
         if (isset($trip->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
