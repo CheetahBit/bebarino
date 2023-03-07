@@ -153,7 +153,7 @@ return json_decode(json_encode([
         "requestIsSelf" => "این درخواست متعلق به شماست",
         "requestIsClosed" => "این درخواست بسته شده است",
 
-        "requestTripForm" => "درخواست حمل بسته\n\nnشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nلطفا به کمک دکمه های زیر بسته خود را انتخاب یا ایجاد کنید",
+        "requestTripForm" => "درخواست حمل بسته\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nلطفا به کمک دکمه های زیر بسته خود را انتخاب یا ایجاد کنید",
         "requestTripSent" => "درخواست شما برای مسافر ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc",
         "requestTrip" => "درخواست بردن بسته \n\nاطلاعات بسته\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc",
 
