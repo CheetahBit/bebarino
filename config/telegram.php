@@ -105,8 +105,8 @@ return json_decode(json_encode([
         "confirm" => "✅ تایید",
         "cancel" => "🚫 انصراف",
         "showInChannel" => "نمایش در کانال",
-        "statusOpen" => "باز",
-        "statusClose" => "بسته",
+        "statusOpened" => "باز",
+        "statusClosed" => "بسته",
 
         "closeRequest" => "بستن درخواست",
         "openRequest" => "باز کردن درخواست"

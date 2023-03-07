@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('toAddress', 120);
             $table->string('desc');
             $table->string('messageId')->nullable();
-            $table->string('status')->default('open');
+            $table->string('status')->default('opened');
             $table->timestamps();
         });
     }
