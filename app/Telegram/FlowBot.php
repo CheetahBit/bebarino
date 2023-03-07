@@ -62,7 +62,7 @@ class FlowBot
                     });
                 }
             } else if (str_contains($step, 'Address'))
-                $temp->text('selectAddress')->inlineKeyboard()->rowButtons(function ($m) {
+                $temp->text('input' . ucfirst($step))->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 });
             else $temp->text('input' . ucfirst($step))->removeKeyboard();
