@@ -39,7 +39,7 @@ class MyRequestBot
         $message->text = $data[1];
         match($data[0]){
             "showPackage" => (new PackageBot())->show($message),
-            "shwoTrip" => (new TripBot())->show($message)
+            "showTrip" => (new TripBot())->show($message)
         };
 
         $messageId = $message->message_id - 1;
