@@ -158,7 +158,7 @@ class PackageBot
         $id = $package->id;
         $package->save();
         $package = $user->packages()->find($id);
-        $package->requirment();
+        $package->requirement();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('sendFormRequest', 'data', 'Trip.form.' . $package->id);

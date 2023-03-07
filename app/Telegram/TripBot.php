@@ -161,7 +161,7 @@ class TripBot
         $id = $trip->id;
         $trip->save();
         $trip = $user->trips()->find($id);
-        $trip->requirment();
+        $trip->requirement();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
             $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
