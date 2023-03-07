@@ -200,6 +200,7 @@ class PackageBot
     public function store($callback)
     {
         $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
         $cache = $callback->cache;
         $data = $cache->flow->data;
 
@@ -212,6 +213,7 @@ class PackageBot
 
         $temp = new stdClass;
         $temp->userId = $userId;
+        $temp->messageId = $messageId;
         $temp->package = $id;
         $temp->trip = $this->api->getCache($userId)->trip;
 
@@ -319,11 +321,10 @@ class PackageBot
         $userId = $message->from->id;
         $messageId = $message->message_id;
         $id = $message->text;
-
-        $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
-
+        
         $data = new stdClass;
         $data->userId = $userId;
+        $data->messageId = $messageId - 1;
         $data->package = $id;
         $data->trip = $message->cache->trip;
 
@@ -333,14 +334,15 @@ class PackageBot
     public function request($data)
     {
         $userId = $data->userId;
+        $messageId = $data->messageId;
         $user = User::find($userId);
         $package = $user->packages()->find($data->package);
         $package->requirement();
-        
+
         $trip = Trip::find($data->trip);
 
         $pending = config('telegram')->messages->pending;
-        $this->api->chat($userId)->sendMessage()->text('requestTripSent', $package, "\n\n" . $pending)->exec();
+        $this->api->chat($userId)->updateMessage()->text('requestTripSent', $package, "\n\n" . $pending)->messageId($messageId)->exec();
 
         $this->api->chat($trip->user->id)->sendMessage()->text('requestTrip', $package)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
             $data = $data->trip . ',' . $data->package;
