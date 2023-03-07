@@ -43,10 +43,10 @@ class Address extends Model
             "address" => $data->fromAddress,
         ];
 
-        $address = Address::where($from);
-        if ($address->doesntExist()) Address::create($from)->save();
+        $address = $this->where($from);
+        if ($address->doesntExist()) $this->create($from)->save();
 
-        $address = Address::where($to);
-        if ($address->doesntExist()) Address::create($to)->save();
+        $address = $this->where($to);
+        if ($address->doesntExist()) $this->create($to)->save();
     }
 }
