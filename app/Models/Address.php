@@ -29,24 +29,4 @@ class Address extends Model
         return $this->belongsTo(User::class, 'userId');
     }
 
-    public function existsOrStore($data)
-    {
-        $from = [
-            "country" => $data->fromCountry,
-            "city" => $data->fromCity,
-            "address" => $data->fromAddress,
-        ];
-
-        $to = [
-            "country" => $data->fromCountry,
-            "city" => $data->fromCity,
-            "address" => $data->fromAddress,
-        ];
-
-        $address = $this->where($from);
-        if ($address->doesntExist()) $this->create($from)->save();
-
-        $address = $this->where($to);
-        if ($address->doesntExist()) $this->create($to)->save();
-    }
 }

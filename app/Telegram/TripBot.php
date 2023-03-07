@@ -2,6 +2,7 @@
 
 namespace App\Telegram;
 
+use App\Models\Address;
 use App\Models\Package;
 use App\Models\Transfer;
 use App\Models\Trip;
@@ -154,7 +155,7 @@ class TripBot
         $data = $result->data;
 
         $user = User::find($userId);
-        $user->addresses->existsOrStore($data);
+        (new MyAddressBot)->existsOrStore($data);
 
         $trip = $user->trips()->create((array) $data)->save();
 

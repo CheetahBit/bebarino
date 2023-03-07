@@ -2,6 +2,7 @@
 
 namespace App\Telegram;
 
+use App\Models\Address;
 use App\Models\User;
 use stdClass;
 
@@ -151,5 +152,29 @@ class MyAddressBot
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
         $this->index($callback);
+    }
+
+
+    public function existsOrStore($data)
+    {
+        $from = [
+            "userId" => $data->userId,
+            "country" => $data->fromCountry,
+            "city" => $data->fromCity,
+            "address" => $data->fromAddress,
+        ];
+
+        $to = [
+            "userId" => $data->userId,
+            "country" => $data->fromCountry,
+            "city" => $data->fromCity,
+            "address" => $data->fromAddress,
+        ];
+
+        $address = Address::where($from);
+        if ($address->doesntExist()) Address::create($from)->save();
+
+        $address = Address::where($to);
+        if ($address->doesntExist()) Address::create($to)->save();
     }
 }
