@@ -24,6 +24,7 @@ class Trip extends Model
         "price",
         "desc",
         "messageId",
+        "status"
     ];
 
     public $hidden = [

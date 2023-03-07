@@ -61,6 +61,7 @@ class TripBot
 
         $user = User::find($userId);
         $user->trips()->find($trip)->update(['status' => $status]);
+        
         $trip = $user->trips()->find($trip);
 
         $this->api->chat($userId)->updateButton()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
