@@ -27,18 +27,19 @@ class PackageBot
 
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
-
         $package = User::find($userId)->packages()->find($id);
         $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $isAdmin) {
             if ($isAdmin) {
                 $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 $m->button('closeRequest', 'data', 'Package.close' .  $package->id);
             } else {
-                $m->button('delete', 'data', 'Package.delete');
-                if ($package->status == 'closed') $m->button('openRequest', 'data', 'Package.status.open,' .  $package->id);
-                else $m->button('closeRequest', 'data', 'Package.status.close,' .  $package->id);
                 $m->button('edit', 'data', 'Package.edit');
                 $m->button('backward', 'data', 'MyRequest.index');
+            }
+        })->rowButtons(function ($m) use ($package, $isAdmin) {
+            if (!$isAdmin) {
+                if ($package->status == 'closed') $m->button('openRequest', 'data', 'Package.status.open,' .  $package->id);
+                else $m->button('closeRequest', 'data', 'Package.status.close,' .  $package->id);
             }
         })->exec();
 
