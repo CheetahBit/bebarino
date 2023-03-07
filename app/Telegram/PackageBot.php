@@ -223,7 +223,7 @@ class PackageBot
         $userId = $result->userId;
         $package = $result->data;
 
-        $this->api->chat($userId)->sendMessage()->text('confirmPackage', $package)->inlineKeyboard()->rowButtons(function ($m) {
+        $this->api->chat($userId)->sendMessage()->text('confirmPackage', (array)$package)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('confirm', 'data', 'Package.submit');
             $m->button('cancel', 'data', 'Main.menu');
         })->exec();

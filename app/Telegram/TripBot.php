@@ -221,7 +221,7 @@ class TripBot
         $userId = $result->userId;
         $trip = $result->data;
 
-        $this->api->chat($userId)->sendMessage()->text('confirmTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) {
+        $this->api->chat($userId)->sendMessage()->text('confirmTrip', (array)$trip)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('confirm', 'data', 'Trip.submit');
             $m->button('cancel', 'data', 'Main.menu');
         })->exec();
