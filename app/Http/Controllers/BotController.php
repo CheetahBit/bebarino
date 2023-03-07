@@ -98,11 +98,16 @@ class BotController extends Controller
 
         Http::get('https://api.telegram.org/bot' . $token . '/setwebhook?url=https://bot.cheetahbit.org/api/bot');
 
-        $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))
-            ->groupBy('date')->orderBy('date', 'asc');
-
+        $grouping = [];
+        $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
+        foreach ($trips as $trip) {
+            $date = Carbon::parse($trip->date);
+            $month = $date->format('Y/m');
+            $day = $date->format('d');
+            $grouping[$month][$day][] = $trip;
+        }
     
-        return response(json_encode($trips->get(), JSON_PRETTY_PRINT));
+        return response(json_encode($grouping, JSON_PRETTY_PRINT));
         // return response(Carbon::now()->format('Y/m/d'));
     }
 }
