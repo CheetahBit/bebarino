@@ -171,6 +171,15 @@ return json_decode(json_encode([
         "inputAddress" => "نشانی را وارد کنید",
         "inputAccountName" => "نام صاحب حساب را وارد کنید",
         "inputAccountNumber" => "شماره حساب را وارد کنید",
+
+        "inputFromCountry" => "کشور مبدا را انتخاب یا وارد کنید",
+        "inputFromCity" => "شهر مبدا را وارد کنید",
+        "inputFromAddress" => "نشانی مبدا را وارد کنید",
+
+        "inputToCountry" => "کشور مقصد را انتخاب یا وارد کنید",
+        "inputToCity" => "شهر مقصد را وارد کنید",
+        "inputToAddress" => "نشانی مقصد را وارد کنید",
+
         "inputDesc" => "توضیحات را وارد کنید",
         "inputDate" => "تاریخ سفر را وارد کنید",
         "inputTicket" => "تصویر بلیط را وارد کنید",
