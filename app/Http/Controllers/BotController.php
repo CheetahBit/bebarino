@@ -30,7 +30,7 @@ class BotController extends Controller
             elseif (isset($update->inline_query)) $this->inlineHandler($update->inline_query);
         } catch (ErrorException $th) {
             (new APIBot)->chat(130912163)->sendMessage()->text(plain: $th->getLine() . '  ' . $th->getMessage())->exec();
-            //Log::alert($th->getTraceAsString());
+            Log::alert($th->getTraceAsString());
         }
         return response('ok', 200);
     }

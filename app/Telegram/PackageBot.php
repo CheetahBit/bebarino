@@ -235,7 +235,6 @@ class PackageBot
         $channel = $config->channel;
         $userId = $callback->from->id;
         $cache = $callback->cache;
-        $text = $callback->message->text;
         $messageId = $callback->message->message_id;
         $data = $cache->flow->data;
 
