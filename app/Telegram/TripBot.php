@@ -445,11 +445,12 @@ class TripBot
                     $data = implode(',', $data);
                     $m->button('acceptRequest', 'data', 'Trip.accept.' . $data);
                     $m->button('rejectRequest', 'data', 'Trip.reject.' . $data);
-                })->rowButtons(function ($m)   use ($package, $trip) {
+                })->rowButtons(function ($m)   use ($trip) {
+                    $m->button('tripperDocs', 'data', 'Trip.contactAndImageDocs.tripper,' . $trip->id);
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
+                })->rowButtons(function ($m) use ($package) {
+                    $m->button('packerDocs', 'data', 'Trip.contactAndImageDocs.packer' . $package->id);
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
-                })->rowButtons(function ($m) use ($trip) {
-                    $m->button('contactAndImageDocs', 'data', 'Trip.contactAndImageDocs.' . $trip->id);
                 })->exec();
         }
     }
@@ -458,16 +459,28 @@ class TripBot
     {
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
+        $data = explode(',', $callback->data);
+        $id = $data[1];
 
-        $trip = Trip::find($callback->data);
-        $ticket = $trip->getRawOriginal('ticket');
-        $passport = $trip->user->identity->getRawOriginal('passport');
-        $contact = $trip->user->contact;
+        $ticket = null;
+
+        if ($data[0] == 'packer') {
+            $user = Package::find($id)->user;
+        } else if ($data[0] == 'tripper') {
+            $trip = Trip::find($id);
+
+            $user = $trip->user;
+            $ticket = $trip->getRawOriginal('ticket');
+        }
+
+        $passport = $user->identity->getRawOriginal('passport');
+        $contact = $user->contact;
 
         $paths = new stdClass;
         if (isset($ticket)) $paths->ticket = "tickets/" . $ticket;
         if (isset($passport)) $paths->passport = "passports/" . $passport;
         $paths = (array)$paths;
+        
         if (count($paths) > 0) {
             $this->api->showAlert($callback->id)->text('sentDocs')->exec();
             $count = count($paths);
@@ -475,7 +488,7 @@ class TripBot
             foreach ($paths as $path) {
                 $api = $this->api->chat($userId)->sendPhoto()->photo($path);
                 if ($i == 0) $api->reply($messageId);
-                if ($i == $count - 1) $api->noreply()->caption('contactInfo', $contact);
+                if ($i == $count - 1 && isset($contact)) $api->noreply()->caption('contactInfo', $contact);
                 $api->exec();
                 $i++;
             };

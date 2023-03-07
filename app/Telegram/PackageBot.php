@@ -64,7 +64,7 @@ class PackageBot
         $package = $user->packages()->find($package);
 
         $transfer = Transfer::where(['package' => $package->id]);
-        if($transfer->exists()) $package->status = $transfer->first()->status;
+        if ($transfer->exists()) $package->status = $transfer->first()->status;
 
         $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('delete', 'data', 'Package.delete');
@@ -209,7 +209,7 @@ class PackageBot
 
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);
-        
+
         $package = $user->packages()->create((array)$data);
         $id = $package->id;
         $package->save();
@@ -439,11 +439,12 @@ class PackageBot
                     $data = implode(',', $data);
                     $m->button('acceptRequest', 'data', 'Package.accept.' . $data);
                     $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
-                })->rowButtons(function ($m)   use ($package, $trip) {
+                })->rowButtons(function ($m)   use ($trip) {
+                    $m->button('tripperDocs', 'data', 'Package.contactAndImageDocs.tripper,' . $trip->id);
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
+                })->rowButtons(function ($m) use ($package) {
+                    $m->button('packerDocs', 'data', 'Package.contactAndImageDocs.packer' . $package->id);
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
-                })->rowButtons(function ($m) use ($trip) {
-                    $m->button('contactAndImageDocs', 'data', 'Package.contactAndImageDocs.' . $trip->id);
                 })->exec();
         }
     }
@@ -452,16 +453,28 @@ class PackageBot
     {
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
+        $data = explode(',', $callback->data);
+        $id = $data[1];
 
-        $trip = Trip::find($callback->data);
-        $ticket = $trip->getRawOriginal('ticket');
-        $passport = $trip->user->identity->getRawOriginal('passport');
-        $contact = $trip->user->contact;
+        $ticket = null;
+
+        if ($data[0] == 'packer') {
+            $user = Package::find($id)->user;
+        } else if ($data[0] == 'tripper') {
+            $trip = Trip::find($id);
+
+            $user = $trip->user;
+            $ticket = $trip->getRawOriginal('ticket');
+        }
+
+        $passport = $user->identity->getRawOriginal('passport');
+        $contact = $user->contact;
 
         $paths = new stdClass;
         if (isset($ticket)) $paths->ticket = "tickets/" . $ticket;
         if (isset($passport)) $paths->passport = "passports/" . $passport;
         $paths = (array)$paths;
+        
         if (count($paths) > 0) {
             $this->api->showAlert($callback->id)->text('sentDocs')->exec();
             $count = count($paths);
@@ -469,7 +482,7 @@ class PackageBot
             foreach ($paths as $path) {
                 $api = $this->api->chat($userId)->sendPhoto()->photo($path);
                 if ($i == 0) $api->reply($messageId);
-                if ($i == $count - 1) $api->noreply()->caption('contactInfo', $contact);
+                if ($i == $count - 1 && isset($contact)) $api->noreply()->caption('contactInfo', $contact);
                 $api->exec();
                 $i++;
             };
