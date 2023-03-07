@@ -227,12 +227,14 @@ class TripBot
         })->exec();
     }
 
-    public function submit($result)
+    public function submit($callback)
     {
         $config = config('telegram');
         $channel = $config->channel;
-        $userId = $result->userId;
-        $data = $result->data;
+        $userId = $callback->from->id;
+        $cache = $callback->cache;
+        $text = $callback->message->text;
+        $data = $cache->flow->data;
 
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);
@@ -247,8 +249,9 @@ class TripBot
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
         })->exec();
 
-        $args = ["channel" => $channel, "post" => $result->message_id];
-        $this->api->chat($userId)->sendMessage()->text('tripSubmitted', $args)->exec();
+        $this->api->chat($userId)->updateMessage()->text(key: 'tripSubmitted', plain: "\n\n" . $text)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+            $m->button('showRequestInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
+        })->exec();
 
         $trip->update(['messageId' => $result->message_id]);
 
