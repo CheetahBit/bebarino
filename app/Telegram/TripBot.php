@@ -65,6 +65,12 @@ class TripBot
 
         $trip = $user->trips()->find($trip);
 
+        $transfer = Transfer::where(['trip' => $trip->id]);
+        if($transfer->exists()) {
+            $trip->status = $transfer->first()->status;
+            $trip->messageId = null;
+        }
+
         $this->api->chat($userId)->updateMessage()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('delete', 'data', 'Trip.delete');
             $m->button('edit', 'data', 'Trip.edit');
@@ -429,7 +435,7 @@ class TripBot
             $transfer->update(['status' => 'pendingAdmin']);
             $text .= "\n\n" . $accept . "\n\n" . $pending;
             $this->api->chat($package->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
-                $m->button('closeRequest', 'data', 'Package.status.close,' . $package->id);
+                $m->button('closeRequest', 'data', 'Package.status.closed,' . $package->id);
             })->exec();
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
 

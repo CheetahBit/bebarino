@@ -63,6 +63,12 @@ class PackageBot
 
         $package = $user->packages()->find($package);
 
+        $transfer = Transfer::where(['package' => $package->id]);
+        if($transfer->exists()) {
+            $package->status = $transfer->first()->status;
+            $package->messageId = null;
+        }
+
         $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('delete', 'data', 'Package.delete');
             $m->button('edit', 'data', 'Package.edit');
@@ -424,7 +430,7 @@ class PackageBot
             $transfer->update(['status' => 'pendingAdmin']);
             $text .= "\n\n" . $accept . "\n\n" . $pending;
             $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
-                $m->button('closeRequest', 'data', 'Trip.status.close,' . $trip->id);
+                $m->button('closeRequest', 'data', 'Trip.status.closed,' . $trip->id);
             })->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
 
