@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\StatusLabel;
 use App\Casts\TicketImg;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +35,7 @@ class Trip extends Model
 
     protected $casts = [
         'ticket' => TicketImg::class,
+        "status" => StatusLabel::class
     ];
 
     public function user()

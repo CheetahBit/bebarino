@@ -136,7 +136,9 @@ return json_decode(json_encode([
         "packageSubmitted" => "بسته شما ثبت شد",
         "tripSubmitted" => "سفر شما ثبت شد",
         "showRequestInChannel" => "نمایش درخواست در کانال",
-
+        "statusOpen" => "باز",
+        "statusClose" => "بسته",
+    
         "packageInfo" => "بسته\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc",
         "tripInfo" => "سفر\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc",
 

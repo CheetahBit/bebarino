@@ -19,6 +19,11 @@ class Package extends Model
         "toAddress",
         "desc",
         "messageId",
+        "status"
+    ];
+
+    protected $casts = [
+        "status" => StatusLabel::class
     ];
 
     public $hidden = [
