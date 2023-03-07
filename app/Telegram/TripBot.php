@@ -177,11 +177,14 @@ class TripBot
 
     public function store($result)
     {
+        $config = config('telegram');
         $userId = $result->userId;
         $data = $result->data;
 
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);
+
+        if ($config->keywords->desire == $data->ticket) $data->ticket = null;
 
         $trip = $user->trips()->create((array)$data);
         $id = $trip->id;
