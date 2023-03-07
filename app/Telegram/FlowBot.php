@@ -3,6 +3,7 @@
 namespace App\Telegram;
 
 use App\Models\Country;
+use App\Models\User;
 use ReflectionClass;
 use stdClass;
 
@@ -61,8 +62,8 @@ class FlowBot
                         foreach ($keys as $key) $m->key($key->fullTitle());
                     });
                 }
-            } else if (str_contains($step, 'Address'))
-                $temp->text('input' . $step)->inlineKeyboard()->rowButtons(function ($m) {
+            } else if (str_contains($step, 'Address') && User::find($this->userId)->addersses()->exists())
+                $temp->text('inputOrSelect' . $step)->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 });
             else $temp->text('input' . $step)->removeKeyboard();
