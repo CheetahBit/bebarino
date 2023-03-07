@@ -45,7 +45,7 @@ class Trip extends Model
 
     public function hasTicket()
     {
-        $ticket = $this->ticket;
+        $ticket = $this->getRawOriginal('ticket');
         return $ticket !== null ? "✅" : "❌";
     }
 
