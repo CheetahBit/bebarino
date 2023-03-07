@@ -35,6 +35,7 @@ class TripBot
                 $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
                 $m->button('closeRequest', 'data', 'Trip.close' .  $trip->id);
             } else {
+                $m->button('delete', 'data', 'Trip.delete');
                 $m->button('edit', 'data', 'Trip.edit');
                 $m->button('backward', 'data', 'MyRequest.index');
             }
@@ -65,6 +66,7 @@ class TripBot
         $trip = $user->trips()->find($trip);
 
         $this->api->chat($userId)->updateMessage()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('delete', 'data', 'Trip.delete');
             $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($trip) {

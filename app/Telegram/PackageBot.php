@@ -33,6 +33,7 @@ class PackageBot
                 $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 $m->button('closeRequest', 'data', 'Package.close' .  $package->id);
             } else {
+                $m->button('delete', 'data', 'Package.delete');
                 $m->button('edit', 'data', 'Package.edit');
                 $m->button('backward', 'data', 'MyRequest.index');
             }
@@ -63,6 +64,7 @@ class PackageBot
         $package = $user->packages()->find($package);
         
         $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+            $m->button('delete', 'data', 'Package.delete');
             $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($package) {
