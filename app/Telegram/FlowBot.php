@@ -62,7 +62,7 @@ class FlowBot
                         foreach ($keys as $key) $m->key($key->fullTitle());
                     });
                 }
-            } else if (str_contains($step, 'Address') && User::find($this->userId)->addersses()->exists())
+            } else if (str_contains($step, 'Address') && User::find($this->userId)->addresses()->exists())
                 $temp->text('inputOrSelect' . $step)->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 });
