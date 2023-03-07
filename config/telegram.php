@@ -127,8 +127,8 @@ return json_decode(json_encode([
         "submitPackage" => "ثبت بسته \n\nلطفا اطلاعات زیر را وارد نمایید",
         "submitTrip" => "ثبت سفر \n\nلطفا اطلاعات زیر را وارد نمایید",
 
-        "confirmPackage" => "ثبت بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nآیا این اطلاعات مورد تایید است؟",
-        "confirmTrip" => "ثبت سفر\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتصویر بلیط : :ticket\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
+        "confirmPackage" => "ثبت بسته\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nآیا این اطلاعات مورد تایید است؟",
+        "confirmTrip" => "ثبت سفر\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتصویر بلیط : :ticket\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
 
         "channelPackage" => "📦 بسته جدید \n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nتوضیحات : :desc\n\nوضعیت درخواست :status",
         "channelTrip" => "✈️ سفر جدید\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nتوضیحات : :desc\n\nوضعیت درخواست :status",
