@@ -253,7 +253,7 @@ class TripBot
             $m->button('showRequestInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
         })->exec();
 
-        $trip->update(['messageId' => $result->message_id]);
+        $user->trips()->find($id)->update(['messageId' => $result->message_id]);
 
         $message = new stdClass;
         $message->from = (object)['id' => $userId];

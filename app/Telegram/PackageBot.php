@@ -244,6 +244,7 @@ class PackageBot
         $package = $user->packages()->create((array) $data);
         $id = $package->id;
         $package->save();
+        
         $package = $user->packages()->find($id);
         $package->requirement();
 
@@ -255,7 +256,7 @@ class PackageBot
             $m->button('showRequestInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
         })->exec();
 
-        $package->update(['messageId' => $result->message_id]);
+        $user->packages()->find($id)->update(['messageId' => $result->message_id]);
 
         $message = new stdClass;
         $message->from = (object)['id' => $userId];
