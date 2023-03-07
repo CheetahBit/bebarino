@@ -172,7 +172,8 @@ class MyAddressBot
         $addresses = User::find($userId)->addresses();
         $address = $addresses->where($from);
         if ($address->doesntExist()) $addresses->create($from)->save();
-
+        
+        $addresses = User::find($userId)->addresses();
         $address = $addresses->where($to);
         if ($address->doesntExist()) $addresses->create($to)->save();
     }
