@@ -37,7 +37,7 @@ class APIBot
 
     public function setCache($id, $data)
     {
-        Cache::store('database')->put($id, json_encode($data));
+        Cache::store('database')->put($id, json_encode($data, JSON_UNESCAPED_UNICODE));
     }
 
     public function putCache($id, $key, $value)
