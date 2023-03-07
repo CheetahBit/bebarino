@@ -119,19 +119,31 @@ class TripBot
         $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
 
         $flow = new FlowBot();
-        $flow->start($userId, 'trip', 'Trip', 'update', 'form');
+        $flow->start($userId, 'trip', 'Trip', 'confirmUpdate', 'form');
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'Trip.show');
         })->exec();
     }
 
-    public function update($result)
+    public function confirmUpdate($result)
+    {
+        $userId = $result->userId;
+        $trip = $result->data;
+
+        $this->api->chat($userId)->sendMessage()->text('confirmTrip', (array)$trip)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('confirm', 'data', 'Trip.update');
+            $m->button('cancel', 'data', 'Main.menu');
+        })->exec();
+    }
+
+    public function update($callback)
     {
         $config = config('telegram');
         $channel = $config->channel;
-        $userId = $result->userId;
-        $data = $result->data;
+        $userId = $callback->from->id;
+        $cache = $callback->cache;
+        $data = $cache->flow->data;
         $id = $this->api->getCache($userId)->trip;
 
         $user = User::find($userId);
@@ -168,18 +180,30 @@ class TripBot
         $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
 
         $flow = new FlowBot();
-        $flow->start($userId, 'trip', 'Trip', 'store', 'form');
+        $flow->start($userId, 'trip', 'Trip', 'confirmStore', 'form');
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'Main.menu');
         })->exec();
     }
 
-    public function store($result)
+    public function confirmStore($result)
+    {
+        $userId = $result->userId;
+        $trip = $result->data;
+
+        $this->api->chat($userId)->sendMessage()->text('confirmTrip', (array)$trip)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('confirm', 'data', 'Trip.store');
+            $m->button('cancel', 'data', 'Main.menu');
+        })->exec();
+    }
+
+    public function store($callback)
     {
         $config = config('telegram');
-        $userId = $result->userId;
-        $data = $result->data;
+        $userId = $callback->from->id;
+        $cache = $callback->cache;
+        $data = $cache->flow->data;
 
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);
@@ -217,7 +241,7 @@ class TripBot
         (new MyRequestBot())->index($callback);
     }
 
-    public function confirm($result)
+    public function confirmSumbit($result)
     {
         $userId = $result->userId;
         $trip = $result->data;

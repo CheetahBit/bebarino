@@ -120,19 +120,31 @@ class PackageBot
         $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
 
         $flow = new FlowBot();
-        $flow->start($userId, 'package', 'Package', 'update', 'show');
+        $flow->start($userId, 'package', 'Package', 'confirmUpdate', 'show');
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'Package.show');
         })->exec();
     }
 
-    public function update($result)
+    public function confirmUpdate($result)
+    {
+        $userId = $result->userId;
+        $package = $result->data;
+
+        $this->api->chat($userId)->sendMessage()->text('confirmPackage', (array)$package)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('confirm', 'data', 'Package.update');
+            $m->button('cancel', 'data', 'Main.menu');
+        })->exec();
+    }
+
+    public function update($callback)
     {
         $config = config('telegram');
         $channel = $config->channel;
-        $userId = $result->userId;
-        $data = $result->data;
+        $userId = $callback->from->id;
+        $cache = $callback->cache;
+        $data = $cache->flow->data;
         $id = $this->api->getCache($userId)->package;
 
         $user = User::find($userId);
@@ -167,17 +179,29 @@ class PackageBot
         $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
 
         $flow = new FlowBot();
-        $flow->start($userId, 'package', 'Package', 'store', 'form');
+        $flow->start($userId, 'package', 'Package', 'confirmStore', 'form');
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'Main.menu');
         })->exec();
     }
 
-    public function store($result)
+    public function confirmStore($result)
     {
         $userId = $result->userId;
-        $data = $result->data;
+        $package = $result->data;
+
+        $this->api->chat($userId)->sendMessage()->text('confirmPackage', (array)$package)->inlineKeyboard()->rowButtons(function ($m) {
+            $m->button('confirm', 'data', 'Package.store');
+            $m->button('cancel', 'data', 'Main.menu');
+        })->exec();
+    }
+
+    public function store($callback)
+    {
+        $userId = $callback->from->id;
+        $cache = $callback->cache;
+        $data = $cache->flow->data;
 
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);
@@ -213,7 +237,7 @@ class PackageBot
         (new MyRequestBot())->index($callback);
     }
 
-    public function confirm($result)
+    public function confirmSubmit($result)
     {
         $userId = $result->userId;
         $package = $result->data;
