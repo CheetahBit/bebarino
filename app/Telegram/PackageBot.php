@@ -152,7 +152,7 @@ class PackageBot
         $data = $result->data;
 
         $user = User::find($userId);
-        $user->addresses()->existsOrStore($data);
+        (new MyAddressBot)->existsOrStore($data);
 
         $package = $user->packages()->create((array) $data)->save();
         $package->refresh();
