@@ -107,6 +107,9 @@ return json_decode(json_encode([
         "showInChannel" => "نمایش در کانال",
         "statusOpen" => "باز",
         "statusClose" => "بسته",
+
+        "closeRequest" => "بستن درخواست",
+        "openRequest" => "باز کردن درخواست"
     ],
     "messages" => [
         "guestMenu" => "منوی میهمان",
