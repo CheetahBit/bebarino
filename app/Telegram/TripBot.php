@@ -157,9 +157,10 @@ class TripBot
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);
 
-        $trip = $user->trips()->create((array) $data)->save();
-
-        $trip->refresh();
+        $trip = $user->trips()->create((array) $data);
+        $id = $trip->id;
+        $trip->save();
+        $trip = $user->trips()->find($id);
         $trip->requirment();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {

@@ -154,8 +154,10 @@ class PackageBot
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);
 
-        $package = $user->packages()->create((array) $data)->save();
-        $package->refresh();
+        $package = $user->packages()->create((array) $data);
+        $id = $package->id;
+        $package->save();
+        $package = $user->packages()->find($id);
         $package->requirment();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
