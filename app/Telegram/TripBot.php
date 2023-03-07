@@ -341,8 +341,7 @@ class TripBot
         $userId = $data->userId;
         $user = User::find($userId);
         $trip = $user->trips()->find($data->trip);
-        $trip->cc();
-        $trip->checkRequirment();
+        $trip->requirment();
         $package = Package::find($data->package);
 
         $pending = config('telegram')->messages->pending;
