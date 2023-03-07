@@ -2,6 +2,7 @@
 
 namespace App\Telegram;
 
+use App\Models\Transfer;
 use App\Models\User;
 use App\Telegram\APIBot;
 use Illuminate\Support\Facades\Cache;
@@ -54,7 +55,7 @@ class InlineBot
                         'type' => 'article',
                         'title' => $title,
                         'description' => ($request->date ?? '') . " " . $request->desc,
-                        'input_message_content' => ['message_text' => 'show'.ucfirst($type) . "-" . $request->id],
+                        'input_message_content' => ['message_text' => 'show' . ucfirst($type) . "-" . $request->id],
                         'id' => $request->id,
                     ];
                 }
@@ -63,11 +64,11 @@ class InlineBot
             case 'packages':
                 $packages = $user->packages()->get()->reverse()->values();
                 foreach ($packages as $package) {
-                    $package->cc();
-
+                    if (Transfer::where(['package' => $package->id])->exists()) continue;
+                    $title = $keywords->package . " - " .  $package->fromCountry . " , " . $package->fromCity . " > " . $package->toCountry . " , " . $package->toCity;
                     $results[] = [
                         'type' => 'article',
-                        'title' => $keywords->package . ($package->fromAddress . " > " . $package->toAddress),
+                        'title' => $title,
                         'description' => $package->desc,
                         'input_message_content' => ['message_text' =>  $package->id],
                         'id' => $package->id,
@@ -83,21 +84,21 @@ class InlineBot
             case 'trips':
                 $trips = $user->trips()->get()->reverse()->values();
                 foreach ($trips as $trip) {
-                    $trip->cc();
-
+                    if (Transfer::where(['trip' => $trip->id])->exists()) continue;
+                    $title = $keywords->trip . " - " .  $trip->fromCountry . " , " . $trip->fromCity . " > " . $trip->toCountry . " , " . $trip->toCity;
                     $results[] = [
                         'type' => 'article',
-                        'title' => $keywords->trip . ($trip->fromAddress . " > " . $trip->toAddress),
-                        'description' => $trip->desc,
+                        'title' => $title,
+                        'description' => $trip->date . '  '.$trip->desc,
                         'input_message_content' => ['message_text' =>  $trip->id],
                         'id' => $trip->id,
                     ];
                 }
                 $results[] = [
                     'type' => 'article',
-                    'title' => $keywords->createPackage,
-                    'input_message_content' => ['message_text' => 'createPackage'],
-                    'id' => 'createPackage',
+                    'title' => $keywords->createTrip,
+                    'input_message_content' => ['message_text' => 'createTrip'],
+                    'id' => 'createTrip',
                 ];
                 break;
             default:
