@@ -61,10 +61,10 @@ class TripBot
 
         $user = User::find($userId);
         $user->trips()->find($trip)->update(['status' => $status]);
-        
+
         $trip = $user->trips()->find($trip);
 
-        $this->api->chat($userId)->updateButton()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+        $this->api->chat($userId)->updateMessage()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($trip) {
@@ -78,7 +78,7 @@ class TripBot
             $config = config('telegram');
             $channel = $config->channel;
             $trip->statues = $status;
-            $this->api->chat('@' . $channel)->updateButton()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
+            $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
                 if ($trip->status == 'closed') $url = 't.me/' . $config->bot . '?start=trip-' . $trip->id;
                 else $url = 't.me/' . $config->channel;
                 $m->button('sendFormRequest', 'url', $url);

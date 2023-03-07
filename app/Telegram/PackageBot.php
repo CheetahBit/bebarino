@@ -61,7 +61,7 @@ class PackageBot
         $package = User::find($userId)->packages()->find($package);
         $package->requirement();
 
-        $this->api->chat($userId)->updateButton()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+        $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('delete', 'data', 'Package.delete');
             if ($package->status == 'closed') $m->button('openRequest', 'data', 'Package.status.open');
             else if ($package->status != 'closedByAdmin') $m->button('closeRequest', 'data', 'Package.status.close');
@@ -73,7 +73,7 @@ class PackageBot
             $config = config('telegram');
             $channel = $config->channel;
             $package->statues = $status;
-            $this->api->chat('@' . $channel)->updateButton()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
+            $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
                 if ($package->status == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
                 else $url = 't.me/' . $config->channel;
                 $m->button('sendFormRequest', 'url', $url);
