@@ -53,7 +53,7 @@ class FlowBot
                 $temp->text('inputTicket')->keyboard()->rowKeys(function ($m) {
                     $m->key('desire');
                 });
-            } else if ($step == 'Country') {
+            } else if (str_contains($step, 'Country')) {
                 $temp->text('inputCountry')->keyboard();
                 $countries = Country::all();
                 foreach ($countries->chunk(3) as $keys) {
