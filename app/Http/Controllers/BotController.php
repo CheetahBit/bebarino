@@ -46,7 +46,7 @@ class BotController extends Controller
         $action = new stdClass;
         if (isset($message->text)) {
             $text = $message->text;
-            $text = str_replace(['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'], ['0','1','2','3','4','5','6','7','8','9'], $text);
+            $text = str_replace(['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], $text);
             if (str_contains($text, 'package-')) $text = "requestPackage";
             else if (str_contains($text, 'trip-')) $text = "requestTrip";
             $text = array_search($message->text, (array) $config->keywords) ?: $text;
@@ -97,7 +97,12 @@ class BotController extends Controller
 
         Http::get('https://api.telegram.org/bot' . $token . '/setwebhook?url=https://bot.cheetahbit.org/api/bot');
 
-        $trips = Trip::where('messageId','<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->get() ;
+        $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))
+            ->oderBy('asc', 'date')->groupBy(function ($val) {
+                return Carbon::parse($val->date)->format('Y');
+            })->groupBy(function ($val) {
+                return Carbon::parse($val->date)->format('m');
+            })->get();
 
         return response(json_encode($trips->toArray(), JSON_PRETTY_PRINT));
         // return response(Carbon::now()->format('Y/m/d'));
