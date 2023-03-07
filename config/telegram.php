@@ -178,7 +178,7 @@ return json_decode(json_encode([
 
         "inputToCountry" => "کشور مقصد را انتخاب یا وارد کنید",
         "inputToCity" => "شهر مقصد را وارد کنید",
-        "selectAddress" => "نشانی مقصد را وارد کنید",
+        "inputToAddress" => "نشانی مقصد را وارد کنید",
 
         "inputDesc" => "توضیحات را وارد کنید",
         "inputDate" => "تاریخ سفر را وارد کنید",

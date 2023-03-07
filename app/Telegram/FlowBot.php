@@ -42,18 +42,18 @@ class FlowBot
         $cache->cursor = count((array)$cache->data);
         $flow = $config->flows->{$cache->name};
         if (count($flow) > $cache->cursor) {
-            $step = $flow[$cache->cursor];
+            $step = ucfirst($flow[$cache->cursor]);
             
             $temp = $this->api->chat($cache->userId)->sendMessage();
-            if ($step == 'contact') {
+            if ($step == 'Contact') {
                 $temp->text('inputContact')->keyboard()->rowKeys(function ($m) {
                     $m->key('sharePhone', 'request_contact', true);
                 });
-            } else if ($step == 'ticket') {
+            } else if ($step == 'Ticket') {
                 $temp->text('inputTicket')->keyboard()->rowKeys(function ($m) {
                     $m->key('desire');
                 });
-            } else if ($step == 'country') {
+            } else if ($step == 'Country') {
                 $temp->text('inputCountry')->keyboard();
                 $countries = Country::all();
                 foreach ($countries->chunk(3) as $keys) {
@@ -62,10 +62,10 @@ class FlowBot
                     });
                 }
             } else if (str_contains($step, 'Address'))
-                $temp->text('input' . ucfirst($step))->inlineKeyboard()->rowButtons(function ($m) {
+                $temp->text('input' . $step)->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 });
-            else $temp->text('input' . ucfirst($step))->removeKeyboard();
+            else $temp->text('input' . $step)->removeKeyboard();
             $temp->exec();
             $this->api->putCache($cache->userId, 'flow', $cache);
         } else $this->output($cache);
