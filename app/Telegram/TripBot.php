@@ -79,7 +79,7 @@ class TripBot
             $channel = $config->channel;
             $trip->statues = $status;
             $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
-                if ($trip->status == 'closed') $url = 't.me/' . $config->bot . '?start=trip-' . $trip->id;
+                if ($trip->status == 'opened') $url = 't.me/' . $config->bot . '?start=trip-' . $trip->id;
                 else $url = 't.me/' . $config->channel;
                 $m->button('sendFormRequest', 'url', $url);
             })->exec();
