@@ -38,8 +38,8 @@ class PackageBot
             }
         })->rowButtons(function ($m) use ($package, $isAdmin) {
             if (!$isAdmin) {
-                if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.open,' .  $package->id);
-                else $m->button('closeRequest', 'data', 'Package.status.close,' .  $package->id);
+                if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.opened,' .  $package->id);
+                else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
             }
         })->exec();
 
