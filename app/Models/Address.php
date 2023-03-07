@@ -22,10 +22,31 @@ class Address extends Model
         'updated_at'
     ];
 
-    
+
 
     public function user()
     {
-        return $this->belongsTo(User::class,'userId');
+        return $this->belongsTo(User::class, 'userId');
+    }
+
+    public function existsOrStore($data)
+    {
+        $from = [
+            "country" => $data->fromCountry,
+            "city" => $data->fromCity,
+            "address" => $data->fromAddress,
+        ];
+
+        $to = [
+            "country" => $data->fromCountry,
+            "city" => $data->fromCity,
+            "address" => $data->fromAddress,
+        ];
+
+        $address = Address::where($from);
+        if ($address->doesntExist()) Address::create($from)->save();
+
+        $address = Address::where($to);
+        if ($address->doesntExist()) Address::create($to)->save();
     }
 }

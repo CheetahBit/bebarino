@@ -154,34 +154,21 @@ class TripBot
         $data = $result->data;
 
         $user = User::find($userId);
-        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
-        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
-        $data->fromAddress = collect($fromAddress)->join(" , ");
-        $data->toAddress = collect($toAddress)->join(" , ");
-        if ($config->keywords->desire == $data->ticket) $data->ticket = null;
+        $user->addresses()->existsOrStore($data);
 
-        $trip = $user->trips()->create((array) $data);
-        $id = $trip->id;
-        $trip->save();
+        $trip = $user->trips()->create((array) $data)->save();
 
-        $trip = $user->trips()->find($id);
-        $trip->checkRequirment();
-        $trip->cc();
+        $trip->refresh();
+        $trip->requirment();
 
-
-        $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($id) {
-            $m->button('sendFormRequest', 'data', 'Package.form.' . $id);
+        $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+            $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
         })->exec();
 
-        $args = [
-            "channel" => $channel,
-            "post" => $result->message_id
-        ];
+        $args = ["channel" => $channel, "post" => $result->message_id];
         $this->api->chat($userId)->sendMessage()->text('tripSubmitted', $args)->exec();
 
-        $user->trips()->find($id)->update([
-            'messageId' => $result->message_id
-        ]);
+        $trip->update(['messageId' => $result->message_id]);
 
         $message = new stdClass;
         $message->from = (object)['id' => $userId];
@@ -320,23 +307,23 @@ class TripBot
             // else if (!isset($passport)) $this->api->showAlert($id, true)->text('noPassport')->exec();
             // else if (!$contact) $this->api->showAlert($id, true)->text('noContact')->exec();
             // else {
-                $transfer->update(['status' => 'verified']);
-                $text .= "\n\n" . $accept;
-                $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m)  use ($package, $trip) {
-                    $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
-                    $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
-                })->exec();
-                $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
-                    $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
-                })->exec();
-                $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
-                    $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
-                })->exec();
+            $transfer->update(['status' => 'verified']);
+            $text .= "\n\n" . $accept;
+            $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m)  use ($package, $trip) {
+                $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
+                $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
+            })->exec();
+            $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
+                $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
+            })->exec();
+            $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
+                $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
+            })->exec();
 
-                $channel = $config->channel;
-                $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
-                    $m->button('requestDone', 'url', 't.me/' . $channel);
-                })->messageId($package->messageId)->exec();
+            $channel = $config->channel;
+            $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
+                $m->button('requestDone', 'url', 't.me/' . $channel);
+            })->messageId($package->messageId)->exec();
             // }
         } else {
             $transfer->update(['status' => 'pendingAdmin']);

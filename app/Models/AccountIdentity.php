@@ -38,4 +38,9 @@ class AccountIdentity extends Model
         return $this->belongsTo(User::class,'userId');
     }
 
+    public function hasPassport()
+    {
+        $passport = $this->getRawOriginal('passport');
+        return $passport !== null ? "✅" : "❌";
+    }
 }

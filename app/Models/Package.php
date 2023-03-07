@@ -11,7 +11,11 @@ class Package extends Model
     use HasFactory;
 
     protected $fillable = [
+        "fromCountry",
+        "fromCity",
         "fromAddress",
+        "toCountry",
+        "toCity",
         "toAddress",
         "desc",
         "messageId",
@@ -29,9 +33,10 @@ class Package extends Model
         return $this->belongsTo(User::class, 'userId');
     }
 
-    public function cc()
+    public function requirement()
     {
-        $this->fromAddress = implode(",", array_slice(explode(",", $this->fromAddress), 0, 2));
-        $this->toAddress = implode(",", array_slice(explode(",", $this->toAddress), 0, 2));
+        $this->hasTicket = $this->hasTicket();
+        $this->hasPassport = $this->user->idnetity->hasPassport();
+        $this->hasContact = $this->user->contact->hasContact();
     }
 }

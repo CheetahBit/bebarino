@@ -36,13 +36,14 @@ class AccountContact extends Model
         return $this->belongsTo(User::class, 'userId');
     }
 
-    public function isFullFill()
+    public function hasContact()
     {
+        $flag = true;
         foreach ($this->fillable as $column) {
             if ($this->getRawOriginal($column) == null) {
-                return false;
+                $flag =  false;
             }
         }
-        return true;
+        return $flag ? "✅" : "❌";
     }
 }

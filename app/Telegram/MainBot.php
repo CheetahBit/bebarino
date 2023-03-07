@@ -96,7 +96,6 @@ class MainBot
         if ($this->checkLogin($userId)) {
             $this->api->chat($userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
             $this->api->chat($userId)->sendMessage()->text('submitTrip')->inlineKeyboard()->rowButtons(function($m){
-                $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 $m->button('backward', 'data', 'Main.menu');
             })->exec();
             $flow = new FlowBot();
@@ -110,7 +109,6 @@ class MainBot
         if ($this->checkLogin($userId)) {
             $this->api->chat($userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
             $this->api->chat($userId)->sendMessage()->text('submitPackage')->inlineKeyboard()->rowButtons(function($m){
-                $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 $m->button('backward', 'data', 'Main.menu');
             })->exec();
             $flow = new FlowBot();

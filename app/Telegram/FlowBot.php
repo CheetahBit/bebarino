@@ -61,7 +61,9 @@ class FlowBot
                     });
                 }
             } else if (str_contains($step, 'Address'))
-                $temp->text('select' . ucfirst($step))->removeKeyboard();
+                $temp->text('selectAddress')->inlineKeyboard()->rowButtons(function ($m) {
+                    $m->button('selectAddress', 'query', time())->inlineMode('addresses');
+                });
             else $temp->text('input' . ucfirst($step))->removeKeyboard();
             $temp->exec();
             $this->api->putCache($cache->userId, 'flow', $cache);
@@ -91,6 +93,8 @@ class FlowBot
                 ($step == 'ticket' && ($message->text ?? null) != $config->keywords->desire)) &&
             !isset($message->photo)
         )  $error = 'errorInvalidPhoto';
+
+        if (isset($message->text) && $config->keywords->desire == $message->text) $message->text = null;
 
         if (isset($error)) $this->api->chat($this->userId)->sendMessage()->text($error)->exec();
         else $cache->data->{$step} = $message->text ?? $this->download($message->photo, $step);

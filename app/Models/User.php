@@ -50,4 +50,5 @@ class User extends Model
     {
         return $this->hasMany(Transfer::class,'userId');
     }
+
 }

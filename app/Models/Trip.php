@@ -11,7 +11,11 @@ class Trip extends Model
     use HasFactory;
 
     protected $fillable = [
+        "fromCountry",
+        "fromCity",
         "fromAddress",
+        "toCountry",
+        "toCity",
         "toAddress",
         "date",
         "ticket",
@@ -37,18 +41,17 @@ class Trip extends Model
         return $this->belongsTo(User::class, 'userId');
     }
 
-    public function cc()
+    public function hasTicket()
     {
-        $this->fromAddress = implode(",", array_slice(explode(",", $this->fromAddress), 0, 2));
-        $this->toAddress = implode(",", array_slice(explode(",", $this->toAddress), 0, 2));
+        $ticket = $this->ticket;
+        return $ticket !== null ? "✅" : "❌";
     }
 
-    public function checkRequirment()
+
+    public function requirement()
     {
-        $ticket = $this->getRawOriginal('ticket');
-        $this->hasTicket = $ticket !== null ? "✅" : "❌";
-        $passport = $this->user->identity->getRawOriginal('passport');
-        $this->hasPassport =  $passport !== null ? "✅" : "❌";
-        $this->hasContact = $this->user->contact->isFullFill() ? "✅" : "❌";
+        $this->hasTicket = $this->hasTicket();
+        $this->hasPassport = $this->user->idnetity->hasPassport();
+        $this->hasContact = $this->user->contact->hasContact();
     }
 }

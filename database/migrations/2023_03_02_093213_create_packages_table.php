@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('userId');
+            $table->string('fromCountry');
+            $table->string('fromCity');
             $table->string('fromAddress');
+            $table->string('toCountry');
+            $table->string('toCity');
             $table->string('toAddress');
             $table->string('desc');
             $table->string('messageId')->nullable();

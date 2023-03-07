@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->foreignId('userId');
+            $table->string('fromCountry');
+            $table->string('fromCity');
             $table->string('fromAddress');
-            $table->string('toAddress');
+            $table->string('toCountry');
+            $table->string('toCity');
             $table->string('date');
             $table->string('ticket')->nullable();
             $table->string('weight');

@@ -68,6 +68,7 @@ class BotController extends Controller
     public function inlineHandler($inline)
     {
         if ($inline->chat_type = "sender") {
+            $inline->cache = json_decode(Cache::store('database')->get($inline->from->id, '{}'));
             $inlineBot = new InlineBot();
             $inlineBot->handle($inline);
         }

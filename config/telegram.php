@@ -21,10 +21,14 @@ return json_decode(json_encode([
             "country", "city", "address"
         ],
         "trip" => [
-            "fromAddress", "toAddress", "date", "ticket", "weight", "price", "desc"
+            "fromCountry", "fromCity", "fromAddress",
+            "toCountry", "toCity", "toAddress",
+            "date", "ticket", "weight", "price", "desc"
         ],
         "package" => [
-            "fromAddress", "toAddress", "desc"
+            "fromCountry", "fromCity", "fromAddress",
+            "toCountry", "toCity", "toAddress",
+            "desc"
         ]
     ],
     "actions" => [
@@ -110,32 +114,33 @@ return json_decode(json_encode([
 
         "myRequests" => "درخواست‌های من",
 
-        "submitPackage" => "ثبت بسته \n\nلطفا اطلاعات زیر را وارد نمایید",
-        "submitTrip" => "ثبت سفر \n\nلطفا اطلاعات زیر را وارد نمایید",
-
         "deleted" => "حذف شد",
         "removeKeyboard" => ".",
 
-        "channelPackage" => "بسته جدید\n\nاز مبدا : :fromAddress\nبه مقصد : :toAddress\n\nتوضیحات : :desc",
-        "channelTrip" => "سفر جدید\n\nاز مبدا : :fromAddress\nبه مقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
+        "submitPackage" => "ثبت بسته \n\nلطفا اطلاعات زیر را وارد نمایید",
+        "submitTrip" => "ثبت سفر \n\nلطفا اطلاعات زیر را وارد نمایید",
+
+
+        "channelPackage" => "بسته جدید\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
+        "channelTrip" => "سفر جدید\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
 
         "packageSubmitted" => "بسته شما ثبت شد\n\nt.me/:channel/:post",
         "tripSubmitted" => "سفر شما ثبت شد\n\nt.me/:channel/:post",
 
-        "packageInfo" => "بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc",
-        "tripInfo" => "سفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc",
+        "packageInfo" => "بسته\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nنوضیحات: :desc",
+        "tripInfo" => "سفر\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc",
 
         "requestFormSent" => "فرم درخواست برای شما از طریق ربات ارسال شد",
         "requestIsDone" => "این مورد قبلا انجام شده است!",
         "requestSelf" => "این درخواست متعلق به شماست",
 
         "requestTripForm" => "درخواست حمل بسته\n\nلطفا به کمک دکمه های زیر بسته خود را انتخاب یا ایجاد کنید",
-        "requestTripSent" => "درخواست شما برای مسافر ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc",
-        "requestTrip" => "درخواست بردن بسته \n\nاطلاعات بسته\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nنوضیحات: :desc",
+        "requestTripSent" => "درخواست شما برای مسافر ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nنوضیحات: :desc",
+        "requestTrip" => "درخواست بردن بسته \n\nاطلاعات بسته\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nنوضیحات: :desc",
 
         "requestPackageForm" => "درخواست بردن بسته\n\nلطفا به کمک دکمه های زیر سفر خود را انتخاب یا ایجاد کنید",
         "requestPackageSent" => "درخواست شما برای صاحب بسته ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromAddress\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nنوضیحات: :desc",
-        "requestPackage" => "درخواست حمل بسته\n\nاز مبدا : :fromAddress\nبه مقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
+        "requestPackage" => "درخواست حمل بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
 
         "pending" => 'در انتظار تایید',
         "pendingAdmin" => 'در انتظار بررسی ادمین',
@@ -143,7 +148,7 @@ return json_decode(json_encode([
         "rejectRequest" => 'درخواست رد شد',
         "acceptRequest" => 'درخواست تایید شد',
 
-        "requestPackageAdmin" => "سفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :desc\n\n\nبسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc",
+        "requestPackageAdmin" => "سفر\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :desc\n\n\nبسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc",
         "requestTripAdmin" => "بسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nنوضیحات: :desc",
 
         "noDocs" => "مدرکی جهت نمایش وجود ندارد",
@@ -177,7 +182,8 @@ return json_decode(json_encode([
 
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
         "saveSuccessfully" => "باموفقیت ذخیره شد !",
-        "cancelEdit" => "ویرایش اطلاعات لعو شد",
+        "cancelEdit" => "ویرایش اطلاعات لغو شد",
+        "notFound" => "موردی یافت نشد!",
 
         "errorInvalidContact" => 'خطای شماره موبایل',
         "errorAnotherContact" => 'خطای شماره متعلق به شما نیست',

@@ -17,27 +17,36 @@ class InlineBot
         $keywords = $config->keywords;
         $messages = $config->messages;
 
-        $cache = json_decode(Cache::store('database')->get($inline->from->id, '{}'));
+        $cache = $inline->cache;
 
         $user = User::find($id);
         $results = [];
         switch ($cache->inline) {
             case 'addresses':
-                foreach ($user->addresses()->get()->reverse()->values() as $address) {
+                $addresses = $user->addresses();
+                $flow = $cache->flow ?? null;
+                if (isset($flow) && ($flow->name == 'trip' || $flow->name == 'package'))
+                    $addresses->where([
+                        'country' => $flow->data->toCountry ?? $flow->data->fromCountry,
+                        'city' => $flow->data->toCity ?? $flow->data->fromCity,
+                    ]);
+                $addresses = $addresses->oderBy('updated_at', 'desc')->get();
+
+                foreach ($addresses as $address) {
                     $results[] = [
                         'type' => 'article',
                         'title' => $address->country . " , " . $address->city,
                         'description' => $address->address,
-                        'input_message_content' => ['message_text' => $address->id],
+                        'input_message_content' => ['message_text' => $address->address],
                         'id' => $address->id,
                     ];
                 }
-                $results[] = [
-                    'type' => 'article',
-                    'title' => $keywords->createAddress,
-                    'input_message_content' => ['message_text' => 'createAddress'],
-                    'id' => 'createAddress',
-                ];
+                if (count($results) < 1)
+                    $results[] = [
+                        'type' => 'article',
+                        'title' => $messages->notFound,
+                        'id' => 'createAddress',
+                    ];
                 break;
 
             case 'requests':
@@ -51,7 +60,7 @@ class InlineBot
                     $results[] = [
                         'type' => 'article',
                         'title' => $keywords->{$type},
-                        'description' => ($request->fromAddress . " > " . $request->toAddress) ."\n".( $request->date ?? $request->desc),
+                        'description' => ($request->fromAddress . " > " . $request->toAddress) . "\n" . ($request->date ?? $request->desc),
                         'input_message_content' => ['message_text' => $type . "-" . $request->id],
                         'id' => $request->id,
                     ];
