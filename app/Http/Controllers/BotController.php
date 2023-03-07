@@ -99,7 +99,7 @@ class BotController extends Controller
 
         $trips = Trip::where('messageId','<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->get() ;
 
-        // return response(json_encode($trips->toArray(), JSON_PRETTY_PRINT));
-        return response(Carbon::now()->format('Y/m/d'));
+        return response(json_encode($trips->toArray(), JSON_PRETTY_PRINT));
+        // return response(Carbon::now()->format('Y/m/d'));
     }
 }
