@@ -86,7 +86,6 @@ class TripBot
                 $m->button('sendFormRequest', 'url', $url);
             })->exec();
         }
-
     }
 
     public function close($callback)
@@ -123,7 +122,6 @@ class TripBot
         $flow->start($userId, 'trip', 'Trip', 'update', 'form');
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('selectAddress', 'query', time())->inlineMode('addresses');
             $m->button('backward', 'data', 'Trip.show');
         })->exec();
     }
@@ -137,26 +135,21 @@ class TripBot
         $id = $this->api->getCache($userId)->trip;
 
         $user = User::find($userId);
+        (new MyAddressBot)->existsOrStore($userId, $data);
+
         $trip = $user->trips()->find($id);
-
-        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
-        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
-        $data->fromAddress = collect($fromAddress)->join(" , ");
-        $data->toAddress = collect($toAddress)->join(" , ");
-
         $trip->update((array)$data);
 
-        $trip = $user->trips()->find($id);
-        $message = (object)[
-            "from" => (object)["id" => $userId],
-            "text" => $trip->id
-        ];
+        $message = (object)["from" => (object)["id" => $userId], "text" => $id];
         $this->show($message);
+
+        $trip = $user->trips()->find($id);
+        $trip->requirement();
 
         $messageId = $trip->messageId;
         if (isset($messageId)) {
-            $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-                $m->button('sendFormRequest', 'data', 'Package.form.' . $trip->id);
+            $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
+                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
             })->exec();
 
             if (!isset($result)) {
@@ -184,12 +177,9 @@ class TripBot
     {
         $userId = $result->userId;
         $data = $result->data;
-        $user = User::find($userId);
 
-        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
-        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
-        $data->fromAddress = collect($fromAddress)->join(" , ");
-        $data->toAddress = collect($toAddress)->join(" , ");
+        $user = User::find($userId);
+        (new MyAddressBot)->existsOrStore($userId, $data);
 
         $trip = $user->trips()->create((array)$data);
         $id = $trip->id;

@@ -62,7 +62,7 @@ class PackageBot
         $user->packages()->find($package)->update(['status' => $status]);
 
         $package = $user->packages()->find($package);
-        
+
         $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('delete', 'data', 'Package.delete');
             $m->button('edit', 'data', 'Package.edit');
@@ -71,7 +71,7 @@ class PackageBot
             if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.opened,' .  $package->id);
             else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
         })->exec();
-        
+
         $package->requirement();
 
         if (isset($package->messageId)) {
@@ -84,7 +84,6 @@ class PackageBot
                 $m->button('sendFormRequest', 'url', $url);
             })->exec();
         }
-
     }
 
     public function close($callback)
@@ -124,7 +123,6 @@ class PackageBot
         $flow->start($userId, 'package', 'Package', 'update', 'show');
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('selectAddress', 'query', time())->inlineMode('addresses');
             $m->button('backward', 'data', 'Package.show');
         })->exec();
     }
@@ -138,32 +136,27 @@ class PackageBot
         $id = $this->api->getCache($userId)->package;
 
         $user = User::find($userId);
+        (new MyAddressBot)->existsOrStore($userId, $data);
+
         $package = $user->packages()->find($id);
-
-        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
-        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
-        $data->fromAddress = collect($fromAddress)->join(" , ");
-        $data->toAddress = collect($toAddress)->join(" , ");
-
         $package->update((array)$data);
 
-        $package = $user->packages()->find($id);
-        $message = (object)[
-            "from" => (object)["id" => $userId],
-            "text" => $package->id
-        ];
+        $message = (object)["from" => (object)["id" => $userId], "text" => $id];
         $this->show($message);
+
+        $package = $user->packages()->find($id);
+        $package->requirement();
 
         $messageId = $package->messageId;
         if (isset($messageId)) {
-            $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
-                $m->button('sendFormRequest', 'data', 'Trip.form.' . $package->id);
+            $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
+                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
             })->exec();
 
             if (!isset($result)) {
                 $result = $this->api->sendMessage()->exec();
                 $this->api->deleteMessage()->messageId($messageId)->exec();
-                $package->update(['messageId' => $result->message_id]);
+                $user->packages()->find($package->id)->update(['messageId' => $result->message_id]);
             }
         }
     }
@@ -185,13 +178,10 @@ class PackageBot
     {
         $userId = $result->userId;
         $data = $result->data;
+
         $user = User::find($userId);
-
-        $fromAddress = $user->addresses()->find($data->fromAddress)->toArray();
-        $toAddress = $user->addresses()->find($data->toAddress)->toArray();
-        $data->fromAddress = collect($fromAddress)->join(" , ");
-        $data->toAddress = collect($toAddress)->join(" , ");
-
+        (new MyAddressBot)->existsOrStore($userId, $data);
+        
         $package = $user->packages()->create((array)$data);
         $id = $package->id;
         $package->save();
@@ -254,10 +244,10 @@ class PackageBot
         $package->requirement();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
-            $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $package->id);
+            $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
         })->exec();
 
-        $this->api->chat($userId)->updateMessage()->text( 'packageSubmitted', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+        $this->api->chat($userId)->updateMessage()->text('packageSubmitted', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
             $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
         })->exec();
 
