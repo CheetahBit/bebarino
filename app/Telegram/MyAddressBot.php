@@ -158,23 +158,22 @@ class MyAddressBot
     public function existsOrStore($userId, $data)
     {
         $from = [
-            "userId" => $userId,
             "country" => $data->fromCountry,
             "city" => $data->fromCity,
             "address" => $data->fromAddress,
         ];
 
         $to = [
-            "userId" => $userId,
             "country" => $data->fromCountry,
             "city" => $data->fromCity,
             "address" => $data->fromAddress,
         ];
 
-        $address = Address::where($from);
-        if ($address->doesntExist()) Address::create($from)->save();
+        $addresses = User::find($userId)->addresses();
+        $address = $addresses->where($from);
+        if ($address->doesntExist()) $addresses->create($from)->save();
 
-        $address = Address::where($to);
-        if ($address->doesntExist()) Address::create($to)->save();
+        $address = $addresses->where($to);
+        if ($address->doesntExist()) $addresses->create($to)->save();
     }
 }
