@@ -137,6 +137,8 @@ class TripBot
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);
 
+        if ($config->keywords->desire == $data->ticket) $data->ticket = null;
+
         $trip = $user->trips()->find($id);
         $trip->update((array)$data);
 
