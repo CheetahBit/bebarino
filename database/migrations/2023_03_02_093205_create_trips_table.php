@@ -16,9 +16,10 @@ return new class extends Migration
             $table->foreignId('userId');
             $table->string('fromCountry');
             $table->string('fromCity');
-            $table->string('fromAddress');
+            $table->string('fromAddress',120);
             $table->string('toCountry');
             $table->string('toCity');
+            $table->string('toAddress',120);
             $table->string('date');
             $table->string('ticket')->nullable();
             $table->string('weight');

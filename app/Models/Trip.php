@@ -53,7 +53,7 @@ class Trip extends Model
     public function requirement()
     {
         $this->hasTicket = $this->hasTicket();
-        $this->hasPassport = $this->user->idnetity->hasPassport();
+        $this->hasPassport = $this->user->identity->hasPassport();
         $this->hasContact = $this->user->contact->hasContact();
     }
 }

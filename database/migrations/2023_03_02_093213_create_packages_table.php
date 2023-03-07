@@ -16,10 +16,10 @@ return new class extends Migration
             $table->foreignId('userId');
             $table->string('fromCountry');
             $table->string('fromCity');
-            $table->string('fromAddress');
+            $table->string('fromAddress', 120);
             $table->string('toCountry');
             $table->string('toCity');
-            $table->string('toAddress');
+            $table->string('toAddress', 120);
             $table->string('desc');
             $table->string('messageId')->nullable();
             $table->string('status')->default('open');

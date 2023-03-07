@@ -245,6 +245,7 @@ class TripBot
         $trip = $user->trips()->create((array) $data);
         $id = $trip->id;
         $trip->save();
+        
         $trip = $user->trips()->find($id);
         $trip->requirement();
 
