@@ -271,9 +271,9 @@ class PackageBot
         if ($main->checkLogin($userId)) {
             $transfer = Transfer::where(['trip' => $trip, 'status' => 'verified']);
             if ($trip->user->id == $userId)
-                $main->api->chat($userId)->sendMessage()->text('requestSelf')->exec();
+                $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
             else if ($trip->status != "open")
-                $main->api->chat($userId)->sendMessage()->text('requestClosed')->exec();
+                $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
             else if ($transfer->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
 

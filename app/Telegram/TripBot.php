@@ -277,9 +277,9 @@ class TripBot
         if ($main->checkLogin($userId)) {
             $transfer = Transfer::where(['package' => $package, 'status' => 'verified']);
             if ($package->user->id == $userId)
-                $main->api->chat($userId)->sendMessage()->text('requestSelf')->exec();
-            else if ($package->status != "open")
-                $main->api->chat($userId)->sendMessage()->text('requestClosed')->exec();
+                $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
+            else if ($package->status != "opened")
+                $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
             else if ($transfer->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
 

@@ -150,7 +150,8 @@ return json_decode(json_encode([
 
         "requestFormSent" => "فرم درخواست برای شما از طریق ربات ارسال شد",
         "requestIsDone" => "این مورد قبلا انجام شده است!",
-        "requestSelf" => "این درخواست متعلق به شماست",
+        "requestIsSelf" => "این درخواست متعلق به شماست",
+        "requestIsClosed" => "این درخواست بسته شده است",
 
         "requestTripForm" => "درخواست حمل بسته\n\nلطفا به کمک دکمه های زیر بسته خود را انتخاب یا ایجاد کنید",
         "requestTripSent" => "درخواست شما برای مسافر ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc",
