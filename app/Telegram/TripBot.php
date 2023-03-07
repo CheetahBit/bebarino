@@ -147,6 +147,8 @@ class TripBot
         (new MyRequestBot())->index($callback);
     }
 
+
+
     public function submit($result)
     {
         $config = config('telegram');

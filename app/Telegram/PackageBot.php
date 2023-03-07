@@ -145,11 +145,23 @@ class PackageBot
         (new MyRequestBot())->index($callback);
     }
 
-    public function submit($result)
+    public function confirm($result)
+    {
+        $userId = $result->userId;
+        $package = $result->data;
+        
+        $this->api->chat($userId)->sendMessage()->text('confirmPacakge', $package)->inlineKeyboard()->rowButtons(function($m){
+            $m->button('confirm', 'data' , 'Package.submit');
+            $m->button('cancel', 'data' , 'Main.menu');
+        })->exec();
+    }
+
+    public function submit($callback)
     {
         $channel = config('telegram')->channel;
-        $userId = $result->userId;
-        $data = $result->data;
+        $userId = $callback->from->id;
+        $cache = $callback->cache;
+        $data = $cache->flow->data;
 
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);

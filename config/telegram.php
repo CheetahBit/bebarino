@@ -120,6 +120,8 @@ return json_decode(json_encode([
         "submitPackage" => "ثبت بسته \n\nلطفا اطلاعات زیر را وارد نمایید",
         "submitTrip" => "ثبت سفر \n\nلطفا اطلاعات زیر را وارد نمایید",
 
+        "confirmPacakge" => "ثبت بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
+        "confirmTrip" => "ثبت سفر\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
 
         "channelPackage" => "بسته جدید\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",
         "channelTrip" => "سفر جدید\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اظلاعات تماس\n\nتوضیحات : :desc",

@@ -99,7 +99,7 @@ class MainBot
                 $m->button('backward', 'data', 'Main.menu');
             })->exec();
             $flow = new FlowBot();
-            $flow->start($userId, 'trip', 'Trip', 'submit', 'menu');
+            $flow->start($userId, 'trip', 'Trip', 'confirm', 'menu');
         } else $this->needLogin($userId);
     }
 
@@ -112,7 +112,7 @@ class MainBot
                 $m->button('backward', 'data', 'Main.menu');
             })->exec();
             $flow = new FlowBot();
-            $flow->start($userId, 'package', 'Package', 'submit', 'menu');
+            $flow->start($userId, 'package', 'Package', 'confirm', 'menu');
         } else $this->needLogin($userId);
     }
 
