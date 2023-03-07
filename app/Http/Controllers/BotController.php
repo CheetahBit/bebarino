@@ -102,7 +102,7 @@ class BotController extends Controller
                 return Carbon::parse($val->date)->format('Y');
             })->groupBy(function ($val) {
                 return Carbon::parse($val->date)->format('m');
-            })->get();
+            });
 
         return response(json_encode($trips->toArray(), JSON_PRETTY_PRINT));
         // return response(Carbon::now()->format('Y/m/d'));
