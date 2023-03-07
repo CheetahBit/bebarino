@@ -38,8 +38,8 @@ class MyRequestBot
         $data = explode('-', $text);
         $message->text = $data[1];
         match($data[0]){
-            "package" => (new PackageBot())->show($message),
-            "trip" => (new TripBot())->show($message)
+            "showPackage" => (new PackageBot())->show($message),
+            "shwoTrip" => (new TripBot())->show($message)
         };
 
         $messageId = $message->message_id - 1;
