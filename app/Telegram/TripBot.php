@@ -40,7 +40,7 @@ class TripBot
             }
         })->rowButtons(function ($m) use ($trip, $isAdmin) {
             if (!$isAdmin) {
-                if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
+                if ($trip->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
                 else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
             }
         })->exec();
@@ -68,7 +68,7 @@ class TripBot
             $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($trip) {
-            if ($trip->status == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
+            if ($trip->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
             else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
         })->exec();
 
@@ -79,7 +79,7 @@ class TripBot
             $channel = $config->channel;
             $trip->statues = $status;
             $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
-                if ($trip->status == 'opened') $url = 't.me/' . $config->bot . '?start=trip-' . $trip->id;
+                if ($trip->getRawOriginal('status') == 'opened') $url = 't.me/' . $config->bot . '?start=trip-' . $trip->id;
                 else $url = 't.me/' . $config->channel;
                 $m->button('sendFormRequest', 'url', $url);
             })->exec();
