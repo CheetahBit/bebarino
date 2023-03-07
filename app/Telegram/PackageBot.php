@@ -253,8 +253,8 @@ class PackageBot
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $package->id);
         })->exec();
 
-        $this->api->chat($userId)->updateMessage()->text(key: 'packageSubmitted', plain: "\n\n" . $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
-            $m->button('showRequestInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
+        $this->api->chat($userId)->updateMessage()->text( 'packageSubmitted', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+            $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
         })->exec();
 
         $user->packages()->find($id)->update(['messageId' => $result->message_id]);

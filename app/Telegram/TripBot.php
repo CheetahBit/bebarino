@@ -245,7 +245,7 @@ class TripBot
         $trip = $user->trips()->create((array) $data);
         $id = $trip->id;
         $trip->save();
-        
+
         $trip = $user->trips()->find($id);
         $trip->requirement();
 
@@ -253,8 +253,8 @@ class TripBot
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
         })->exec();
 
-        $this->api->chat($userId)->updateMessage()->text(key: 'tripSubmitted', plain: "\n\n" . $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
-            $m->button('showRequestInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
+        $this->api->chat($userId)->updateMessage()->text('tripSubmitted')->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+            $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
         })->exec();
 
         $user->trips()->find($id)->update(['messageId' => $result->message_id]);

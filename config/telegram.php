@@ -104,7 +104,7 @@ return json_decode(json_encode([
         "requestDone" => "✅ واگذار شد",
         "confirm" => "✅ تایید",
         "cancel" => "🚫 انصراف",
-        "showRequestInChannel" => "نمایش درخواست در کانال",
+        "showInChannel" => "نمایش در کانال",
         "statusOpen" => "باز",
         "statusClose" => "بسته",
     ],
@@ -136,10 +136,9 @@ return json_decode(json_encode([
         "channelPackage" => "📦 بسته جدید \n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتوضیحات : :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nوضعیت درخواست : :status",
         "channelTrip" => "✈️ سفر جدید\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nوضعیت درخواست : :status",
 
-        "packageSubmitted" => "بسته شما ثبت شد",
-        "tripSubmitted" => "سفر شما ثبت شد",
+        "packageSubmitted" => "بسته شما ثبت شد\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتوضیحات : :desc",
+        "tripSubmitted" => "سفر شما ثبت شد\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nتوضیحات : :desc",
         
-    
         "packageInfo" => "بسته\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc",
         "tripInfo" => "سفر\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc",
 
