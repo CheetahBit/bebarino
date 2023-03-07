@@ -38,7 +38,7 @@ class PackageBot
             }
         })->rowButtons(function ($m) use ($package, $isAdmin) {
             if (!$isAdmin) {
-                if ($package->status == 'closed') $m->button('openRequest', 'data', 'Package.status.open,' .  $package->id);
+                if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.open,' .  $package->id);
                 else $m->button('closeRequest', 'data', 'Package.status.close,' .  $package->id);
             }
         })->exec();
@@ -53,28 +53,31 @@ class PackageBot
         $package = $data[1];
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
-        $text = $callback->message->text;
         $id = $callback->id;
 
         $this->api->showAlert($id)->text('request' . ucfirst($status))->exec();
 
-        $package = User::find($userId)->packages()->find($package);
-        $package->requirement();
+        $user = User::find($userId);
+        $user->packages()->find($package)->update(['status' => $status]);
 
-        $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
-            $m->button('delete', 'data', 'Package.delete');
-            if ($package->status == 'closed') $m->button('openRequest', 'data', 'Package.status.open');
-            else if ($package->status != 'closedByAdmin') $m->button('closeRequest', 'data', 'Package.status.close');
+        $package = $user->packages()->find($package);
+        
+        $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
+        })->rowButtons(function ($m) use ($package) {
+            if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.opened,' .  $package->id);
+            else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
         })->exec();
+        
+        $package->requirement();
 
         if (isset($package->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
             $package->statues = $status;
             $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
-                if ($package->status == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
+                if ($package->getRawOriginal('status') == 'opened') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
                 else $url = 't.me/' . $config->channel;
                 $m->button('sendFormRequest', 'url', $url);
             })->exec();
