@@ -237,6 +237,8 @@ class TripBot
         $messageId = $callback->message->message_id;
         $data = $cache->flow->data;
 
+        if ($config->keywords->desire == $data->ticket) $data->ticket = null;
+
         $user = User::find($userId);
         (new MyAddressBot)->existsOrStore($userId, $data);
 

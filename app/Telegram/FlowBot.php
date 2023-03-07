@@ -110,8 +110,6 @@ class FlowBot
         
         if (isset($error)) $this->api->chat($this->userId)->sendMessage()->text($error)->exec();
         else $cache->data->{$step} = $message->text ?? $this->download($message->photo, $step);
-        
-        if (isset($message->text) && $config->keywords->desire == $message->text) $cache->data->{$step} = null;
 
         $this->api->putCache($this->userId, 'flow', $cache);
         $this->next();
