@@ -321,7 +321,7 @@ class PackageBot
         $userId = $message->from->id;
         $messageId = $message->message_id;
         $id = $message->text;
-        
+
         $data = new stdClass;
         $data->userId = $userId;
         $data->messageId = $messageId - 1;
@@ -370,7 +370,7 @@ class PackageBot
 
         $trip = Trip::find($data[0]);
         $package = Package::find($data[1]);
-        $package->cc();
+        $package->requirement();
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
         if (in_array($userId, $config->admins)) {
@@ -428,7 +428,7 @@ class PackageBot
             })->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
 
-            $trip->checkRequirment();
+            $trip->requirment();
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
 
             foreach ($config->admins as $admin)

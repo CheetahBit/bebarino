@@ -374,8 +374,7 @@ class TripBot
         $data = explode(',', $callback->data);
 
         $trip = Trip::find($data[0]);
-        $trip->checkRequirment();
-        $trip->cc();
+        $trip->requirment();
         $package = Package::find($data[1]);
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
