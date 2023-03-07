@@ -284,6 +284,7 @@ class TripBot
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
 
             else {
+                $package->requirement();
                 $main->api->chat($userId)->sendMessage()->text('requestPackageForm', $package)->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('createTrip', 'data', 'Trip.create');
                     $m->button('selectTrip', 'query', time())->inlineMode('trips');
