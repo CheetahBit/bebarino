@@ -177,9 +177,6 @@ return json_decode(json_encode([
         "inputWeight" => "حداکثر وزن را وارد کنید",
         "inputPrice" => "قیمت پیشنهادی را وارد کنید",
 
-        "selectFromAddress" => "آدرس مبدا را انتخاب کنید",
-        "selectToAddress" => "آدرس مقصد را انتخاب کنید",
-
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
         "saveSuccessfully" => "باموفقیت ذخیره شد !",
         "cancelEdit" => "ویرایش اطلاعات لغو شد",
