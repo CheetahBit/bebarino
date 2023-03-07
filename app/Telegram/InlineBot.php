@@ -41,12 +41,6 @@ class InlineBot
                         'id' => $address->id,
                     ];
                 }
-                if (count($results) < 1)
-                    $results[] = [
-                        'type' => 'article',
-                        'title' => $messages->notFound,
-                        'id' => 'createAddress',
-                    ];
                 break;
 
             case 'requests':
