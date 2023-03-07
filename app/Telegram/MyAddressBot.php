@@ -164,9 +164,9 @@ class MyAddressBot
         ];
 
         $to = [
-            "country" => $data->fromCountry,
-            "city" => $data->fromCity,
-            "address" => $data->fromAddress,
+            "country" => $data->toCountry,
+            "city" => $data->toCity,
+            "address" => $data->toAddress,
         ];
 
         $addresses = User::find($userId)->addresses();
