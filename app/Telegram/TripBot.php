@@ -234,6 +234,7 @@ class TripBot
         $userId = $callback->from->id;
         $cache = $callback->cache;
         $text = $callback->message->text;
+        $messageId = $callback->message->message_id;
         $data = $cache->flow->data;
 
         $user = User::find($userId);
@@ -249,7 +250,7 @@ class TripBot
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
         })->exec();
 
-        $this->api->chat($userId)->updateMessage()->text(key: 'tripSubmitted', plain: "\n\n" . $text)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+        $this->api->chat($userId)->updateMessage()->text(key: 'tripSubmitted', plain: "\n\n" . $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
             $m->button('showRequestInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
         })->exec();
 
