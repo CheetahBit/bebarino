@@ -51,18 +51,19 @@ class InlineBot
                 $requests = $packages->merge($trips)->sortByDesc('updated_at');
                 foreach ($requests as $request) {
                     $request = collect($request);
-                    $type = (isset($request->date) ? 'trip' : 'package');
-                    $title = $keywords->{$type} . " - " .  $request->fromCountry . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
-                    $results[] = [
-                        'type' => 'article',
-                        'title' => $title,
-                        'description' => ($request->date ?? '') . " " . $request->desc,
-                        'input_message_content' => ['message_text' => 'show' . ucfirst($type) . "-" . $request->id],
-                        'id' => $type.$request->id,
-                        'packages' => $packages->toArray(),
-                        'trips' => $trips->toArray(),
+                    Log::alert($request);
+                    // $type = (isset($request->date) ? 'trip' : 'package');
+                    // $title = $keywords->{$type} . " - " .  $request->fromCountry . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
+                    // $results[] = [
+                    //     'type' => 'article',
+                    //     'title' => $title,
+                    //     'description' => ($request->date ?? '') . " " . $request->desc,
+                    //     'input_message_content' => ['message_text' => 'show' . ucfirst($type) . "-" . $request->id],
+                    //     'id' => $type.$request->id,
+                    //     'packages' => $packages->toArray(),
+                    //     'trips' => $trips->toArray(),
 
-                    ];
+                    // ];
                 }
                 break;
 
