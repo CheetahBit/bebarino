@@ -58,7 +58,7 @@ class InlineBot
                         'input_message_content' => ['message_text' => 'show' . ucfirst($type) . "-" . $request->id],
                         'id' => $type.$request->id,
                         'packages' => $packages->toArray(),
-                        'trips' => $trips->toArray(),
+                        'trips' => $requests->toArray(),
 
                     ];
                 }
