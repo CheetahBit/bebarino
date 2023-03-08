@@ -106,7 +106,7 @@ class PackageBot
             })->exec();
         }
 
-        $package->update(['status' => 'closedByAdmin']);
+        Package::find($data)->update(['status' => 'closedByAdmin']);
     }
 
     public function edit($callback)

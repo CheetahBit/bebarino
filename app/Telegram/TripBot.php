@@ -92,7 +92,7 @@ class TripBot
         $data = $callback->data;
 
         $this->api->showAlert($id)->text('requestClosed')->exec();
-        $trip = Trip::find($data);
+        $trip = Package::find($data);
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
             $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
         })->exec();
@@ -107,7 +107,7 @@ class TripBot
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->channel);
             })->exec();
         }
-        $trip->update(['status' => 'closedByAdmin']);
+        Package::find($data)->update(['status' => 'closedByAdmin']);
     }
 
     public function edit($callback)
