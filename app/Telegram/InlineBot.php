@@ -52,7 +52,7 @@ class InlineBot
                 $requests = collect($requests)->sortByDesc('updated_at');
 
                 foreach ($requests as $request) {
-                    Log::alert($request);
+                    Log::alert($request->date);
                     $type = (isset($request->date) ? 'trip' : 'package');
                     $title = $keywords->{$type} . " - " .  $request->date . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
                     $results[] = [
