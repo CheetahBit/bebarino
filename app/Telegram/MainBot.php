@@ -178,7 +178,7 @@ class MainBot
                 $data->trips .= "\n✅" . $day . "\n";
             }
             $temp = $trip->fromCity . " به " . $trip->toCity;
-            $data->trips .= "✅" . `<a href="t.me/$channel/$trip->messageId">$temp</a>` . "\n";
+            $data->trips .= "✅" . '<a href="t.me/'.$channel.'/'.$trip->messageId.'">'.$temp.'</a>' . "\n";
         }
     }
 }
