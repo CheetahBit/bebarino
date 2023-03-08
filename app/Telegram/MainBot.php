@@ -165,9 +165,9 @@ class MainBot
                             $text = '';
                             while (strlen($text) < 4000) $text .= $temp[$i++];
                             $data->trips = $text;
-                            $this->api->chat($channel)->sendMessage()->text('tripsGroup', $data)->exec();
+                            $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
                         }
-                    }else $this->api->chat($channel)->sendMessage()->text('tripsGroup', $data)->exec();
+                    }else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
                 }
                 $data->month = $date->format('F');
                 $data->trips = '';
