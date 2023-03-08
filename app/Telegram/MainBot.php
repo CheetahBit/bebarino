@@ -153,7 +153,7 @@ class MainBot
         $data->trips = '';
 
         $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
-
+        return $trips;
         foreach ($trips as $trip) {
             $date = Carbon::parse($trip->date);
             if ($data->month != $date->format('F')) {
