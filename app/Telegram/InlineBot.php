@@ -47,6 +47,7 @@ class InlineBot
 
             case 'requests':
                 $packages = $user->packages;
+                Log::alert($packages);
                 if (!is_array($packages)) $packages = collect([$packages]);
                 $trips = $user->trips;
                 if (!is_array($trips)) $trips = collect([$trips]);
