@@ -45,8 +45,8 @@ class InlineBot
                 break;
 
             case 'requests':
-                $packages = $user->packages->all();
-                $trips = $user->trips->all();
+                $packages = $user->packages->get();
+                $trips = $user->trips->get();
                 $requests = $packages->push($trips)->sortByDesc('updated_at');
                 foreach ($requests as $request) {
                     $type = (isset($request->date) ? 'trip' : 'package');
