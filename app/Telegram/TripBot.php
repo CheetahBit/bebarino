@@ -30,12 +30,15 @@ class TripBot
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
         $trip = User::find($userId)->trips()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('edit', 'data', 'Trip.edit');
+        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+            if ($trip->getRawOriginal('status') == 'closedByAdmin')
+                $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($trip) {
-            if ($trip->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
-            else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
+            if ($trip->getRawOriginal('status') == 'closedByAdmin') {
+                if ($trip->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
+                else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
+            }
         })->exec();
 
         $this->api->putCache($userId, 'trip', $id);

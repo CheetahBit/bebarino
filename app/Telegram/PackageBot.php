@@ -27,12 +27,15 @@ class PackageBot
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
         $package = User::find($userId)->packages()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('edit', 'data', 'Package.edit');
+        $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+            if ($package->getRawOriginal('status') == 'closedByAdmin')
+                $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($package) {
-            if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.opened,' .  $package->id);
-            else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
+            if ($package->getRawOriginal('status') == 'closedByAdmin') {
+                if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.opened,' .  $package->id);
+                else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
+            }
         })->exec();
 
         $this->api->putCache($userId, 'package', $id);
