@@ -349,7 +349,7 @@ class TripBot
         $messageId = $data->messageId;
         $user = User::find($userId);
         $trip = $user->trips()->find($data->trip);
-        $trip->requirment();
+        $trip->requirement();
         $package = Package::find($data->package);
 
         $pending = config('telegram')->messages->pending;
@@ -380,7 +380,7 @@ class TripBot
         $data = explode(',', $callback->data);
 
         $trip = Trip::find($data[0]);
-        $trip->requirment();
+        $trip->requirement();
         $package = Package::find($data[1]);
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
@@ -439,7 +439,7 @@ class TripBot
             })->exec();
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
 
-            $trip->checkRequirment();
+            $trip->requirement();
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
 
             foreach ($config->admins as $admin)
