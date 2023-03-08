@@ -54,7 +54,7 @@ class InlineBot
                 foreach ($requests as $request) {
                     Log::alert($request);
                     $type = (isset($request->date) ? 'trip' : 'package');
-                    $title = $keywords->{$type} . " - " .  $request->fromCountry . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
+                    $title = $keywords->{$type} . " - " .  $request->date . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
                     $results[] = [
                         'type' => 'article',
                         'title' => $title,
