@@ -6,6 +6,7 @@ use App\Models\Transfer;
 use App\Models\User;
 use App\Telegram\APIBot;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class InlineBot
 {
@@ -48,6 +49,7 @@ class InlineBot
                 $packages = collect($user->packages->toArray());
                 $trips = collect($user->trips->toArray());
                 $requests = $packages->merge($trips)->sortByDesc('updated_at');
+                Log::alert((array)$requests);
                 foreach ($requests as $request) {
                     $type = (isset($request->date) ? 'trip' : 'package');
                     $title = $keywords->{$type} . " - " .  $request->fromCountry . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
