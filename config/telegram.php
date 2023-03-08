@@ -116,6 +116,7 @@ return json_decode(json_encode([
         "openRequest" => "باز کردن درخواست",
 
         "statusPendingAdmin" => "در انتظار بررسی ادمین",
+        "sendRequestToChannel" => "ارسال درخواست به کانال",
 
     ],
     "messages" => [
@@ -179,6 +180,8 @@ return json_decode(json_encode([
 
         "requestClosedByAdmin" => " درخواست شماره :code توسط ادمین بسته شد",
         "requestClosed" => "درخواست بسته شد",
+
+
 
         "noDocs" => "مدرکی جهت نمایش وجود ندارد",
         "sentDocs" => "مدارک ارسال شد",
