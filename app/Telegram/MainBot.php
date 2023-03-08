@@ -147,7 +147,7 @@ class MainBot
         $config = config('telegram');
         $channel = '@' . $config->channel;
 
-        $day = null;
+
         $data = new stdClass;
         $data->country = null;
         $data->trips = '';
@@ -155,15 +155,14 @@ class MainBot
         $countries = Country::where('id', '>', 1)->get();
         $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
 
-        foreach ($countries as $country) {
-            $filtered = $trips->filter(function ($trip,) use ($country) {
-                return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
-            });
-            if (count($filtered) > 0) {
-                $trips = $trips->diff($filtered);
-                $data->country = $country->fullTitle();
+
+        $func = function ($trips, $country) use ($channel) {
+            if (count($trips) > 0) {
+                $day = null;
+                $data = new stdClass;
+                $data->country = $country;
                 $data->trips = '';
-                foreach ($filtered as $trip) {
+                foreach ($trips as $trip) {
                     if ($day != $trip->date) {
                         $day = $trip->date;
                         $data->trips .= "\n👉" . $day . "\n";
@@ -183,30 +182,15 @@ class MainBot
                     }
                 } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
             }
-        }
+        };
 
-        if (count($trips) > 0) {
-            $data->country = 'کشورهای دیگر';
-            $data->trips = '';
-            foreach ($trips as $trip) {
-                if ($day != $trip->date) {
-                    $day = $trip->date;
-                    $data->trips .= "\n👉" . $day . "\n";
-                }
-                $temp = $trip->fromCity . " به " . $trip->toCity;
-                $data->trips .= "🔸 " . '<a href="t.me/' . $channel . '/' . $trip->messageId . '">' . $temp . '</a>' . "\n";
-            }
-
-            if (strlen($data->trips) > 4000) {
-                $i = 0;
-                $temp = explode("\n", $data->trips);
-                while ($i < count($temp)) {
-                    $text = '';
-                    while (strlen($text) < 4000) $text .= $temp[$i++];
-                    $data->trips = $text;
-                    $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
-                }
-            } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+        foreach ($countries as $country) {
+            $filtered = $trips->filter(function ($trip,) use ($country) {
+                return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
+            });
+            $func($filtered,  $country->fullTitle());
+            $trips = $trips->diff($filtered);
         }
+        $func($trips,  'کشورهای دیگر');
     }
 }
