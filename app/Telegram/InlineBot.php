@@ -46,7 +46,7 @@ class InlineBot
 
             case 'requests':
                 $packages = $user->packages;
-                $trips = $user->trips();
+                $trips = $user->trips;
                 $requests = $trips->merge($packages)->sortBy('updated_at', 'desc');
                 foreach ($requests as $request) {
                     $type = (isset($request->date) ? 'trip' : 'package');
@@ -58,7 +58,7 @@ class InlineBot
                         'input_message_content' => ['message_text' => 'show' . ucfirst($type) . "-" . $request->id],
                         'id' => $type.$request->id,
                         'packages' => $packages->toArray(),
-                        'trips' => $requests->toArray(),
+                        'trips' => $trips->toArray(),
 
                     ];
                 }
