@@ -175,8 +175,8 @@ return json_decode(json_encode([
         "rejectRequest" => 'درخواست رد شد',
         "acceptRequest" => 'درخواست تایید شد',
 
-        "requestPackageAdmin" => "سفر\n\nشماره درخواست :code\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :desc\n\n\nبسته\n\nشماره درخواست :packageCode\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc",
-        "requestTripAdmin" => "بسته\n\nشماره درخواست :packageCode\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nشماره درخواست :code\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :desc",
+        "requestPackageAdmin" => "سفر\n\nشماره درخواست :code\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nنوضیحات: :desc\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\n\nبسته\n\nشماره درخواست :packageCode\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n:packageHasPassport تصویر مدارک شناسایی\n:packageHasContact اطلاعات تماس",
+        "requestTripAdmin" => "بسته\n\nشماره درخواست :packageCode\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n:packageHasPassport تصویر مدارک شناسایی\n:packageHasContact اطلاعات تماس\n\n\nسفر\n\nشماره درخواست :code\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nنوضیحات: :desc\n\n:hasTicket تصویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
 
         "requestClosedByAdmin" => " درخواست شماره :code توسط ادمین بسته شد",
         "requestClosed" => "درخواست بسته شد",
