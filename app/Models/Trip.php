@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\StatusLabel;
 use App\Casts\TicketImg;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -55,5 +56,12 @@ class Trip extends Model
         $this->hasTicket = $this->hasTicket();
         $this->hasPassport = $this->user->identity->hasPassport();
         $this->hasContact = $this->user->contact->hasContact();
+    }
+
+    protected function code(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => "T-" . $this->id + 1000,
+        );
     }
 }

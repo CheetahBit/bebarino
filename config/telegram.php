@@ -11,7 +11,7 @@ return json_decode(json_encode([
             "contact"
         ],
         "identity" => [
-            "username", "firstname", "lastname", "passport"
+            "username", "fullname", "passport"
         ],
         "contact" => [
             "email", "phone", "country", "city", "address"
@@ -142,8 +142,8 @@ return json_decode(json_encode([
         "confirmPackage" => "ثبت بسته\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
         "confirmTrip" => "ثبت سفر\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nتوضیحات : :desc\n\nآیا این اطلاعات مورد تایید است؟",
 
-        "channelPackage" => "📦 بسته جدید \n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتوضیحات : :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nوضعیت درخواست : :status",
-        "channelTrip" => "✈️ سفر جدید\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nوضعیت درخواست : :status",
+        "channelPackage" => "📦 بسته جدید \n\nشماره درخواست #:code\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتوضیحات : :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nوضعیت درخواست : :status",
+        "channelTrip" => "✈️ سفر جدید\n\nشماره درخواست #:code\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nوضعیت درخواست : :status",
 
         "packageSubmitted" => "بسته شما ثبت شد\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتوضیحات : :desc",
         "tripSubmitted" => "سفر شما ثبت شد\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nتوضیحات : :desc",
@@ -159,12 +159,12 @@ return json_decode(json_encode([
         "requestIsSelf" => "این درخواست متعلق به شماست",
         "requestIsClosed" => "این درخواست بسته شده است",
 
-        "requestTripForm" => "درخواست حمل بسته\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nلطفا به کمک دکمه های زیر بسته خود را انتخاب یا ایجاد کنید",
-        "requestTripSent" => "درخواست شما برای مسافر ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
+        "requestTripForm" => "درخواست حمل بسته\n\nشماره درخواست #:code\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nلطفا به کمک دکمه های زیر بسته خود را انتخاب یا ایجاد کنید",
+        "requestTripSent" => "درخواست شما برای مسافر ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nشماره درخواست #:code\n\\nمبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nنوضیحات: :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
         "requestTrip" => "درخواست بردن بسته \n\nاطلاعات بسته\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
 
-        "requestPackageForm" => "درخواست بردن بسته\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتوضیحات : :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nلطفا به کمک دکمه های زیر سفر خود را انتخاب یا ایجاد کنید",
-        "requestPackageSent" => "درخواست شما برای صاحب بسته ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromCountry , :fromCity ,:fromAddress\nمقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nنوضیحات: :desc\n\n:hasTicket تصویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
+        "requestPackageForm" => "درخواست بردن بسته\n\nشماره درخواست #:code\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتوضیحات : :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nلطفا به کمک دکمه های زیر سفر خود را انتخاب یا ایجاد کنید",
+        "requestPackageSent" => "درخواست شما برای صاحب بسته ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nشماره درخواست #:code\n\nمبدا : :fromCountry , :fromCity ,:fromAddress\nمقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nنوضیحات: :desc\n\n:hasTicket تصویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
         "requestPackage" => "درخواست حمل بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
 
         "pending" => 'در انتظار تایید',
@@ -176,7 +176,7 @@ return json_decode(json_encode([
         "requestPackageAdmin" => "سفر\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :desc\n\n\nبسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc",
         "requestTripAdmin" => "بسته\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n\nسفر\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nنوضیحات: :desc",
 
-        "requestClosedByAdmin" => " درخواست شماره :id توسط ادمین بسته شد",
+        "requestClosedByAdmin" => " درخواست شماره :code توسط ادمین بسته شد",
         "requestClosed" => "درخواست بسته شد",
 
         "noDocs" => "مدرکی جهت نمایش وجود ندارد",
@@ -187,8 +187,7 @@ return json_decode(json_encode([
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",
-        "inputFirstname" => "نام خود را وارد کنید",
-        "inputLastname" => "نام خانوادگی خود را وارد کنید",
+        "inputFullname" => "نام خود را وارد کنید",
         "inputPassport" => "تصویر پاسپورت خود را وارد کنید",
 
         "inputPhone" => "شماره موبایل را وارد کنید",
@@ -218,6 +217,7 @@ return json_decode(json_encode([
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
         "saveSuccessfully" => "باموفقیت ذخیره شد !",
         "notFound" => "موردی یافت نشد!",
+        "notEditable" => "امکان ویرایش وجود ندارد",
 
         "errorInvalidContact" => 'خطای شماره موبایل',
         "errorAnotherContact" => 'خطای شماره متعلق به شما نیست',

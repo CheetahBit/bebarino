@@ -24,14 +24,15 @@ class TripBot
     {
         $config = config('telegram');
         $userId = $message->from->id;
+        $isAdmin = in_array($userId, $config->admins);
 
         $id = $message->text ?? $message->cache->trip;
 
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
         $trip = User::find($userId)->trips()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('delete', 'data', 'Trip.delete');
+        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin) {
+            if ($isAdmin) $m->button('delete', 'data', 'Trip.delete');
             $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($trip) {
@@ -114,13 +115,23 @@ class TripBot
     {
         $userId = $callback->from->id;
         $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
+        $id = $callback->id;
+        $cache = $callback->cache;
+        $trip = $cache->trip;
 
-        $flow = new FlowBot();
-        $flow->start($userId, 'trip', 'Trip', 'confirmUpdate', 'form');
+        $transfer = Transfer::where(['trip' => $trip])->where(function ($query) {
+            return $query->whereIn('status', ['pendingAdmin', 'verified']);
+        });
+        if ($transfer->exists())
+            $this->api->showAlert($id)->text('notEditable')->exec();
+        else {
+            $flow = new FlowBot();
+            $flow->start($userId, 'trip', 'Trip', 'confirmUpdate', 'form');
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('backward', 'data', 'Trip.show');
-        })->exec();
+            $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+                $m->button('backward', 'data', 'Trip.show');
+            })->exec();
+        }
     }
 
     public function confirmUpdate($result)
@@ -139,6 +150,7 @@ class TripBot
         $config = config('telegram');
         $channel = $config->channel;
         $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
         $cache = $callback->cache;
         $data = $cache->flow->data;
         $id = $this->api->getCache($userId)->trip;
@@ -151,11 +163,10 @@ class TripBot
         $trip = $user->trips()->find($id);
         $trip->update((array)$data);
 
-        $message = (object)["from" => (object)["id" => $userId], "text" => $id];
-        $this->show($message);
-
         $trip = $user->trips()->find($id);
         $trip->requirement();
+
+        $this->api->chat($userId)->updateMessage()->text('tripInfo', $trip)->messageId($messageId)->exec();
 
         $messageId = $trip->messageId;
         if (isset($messageId)) {
@@ -353,7 +364,9 @@ class TripBot
         $package = Package::find($data->package);
 
         $pending = config('telegram')->messages->pending;
-        $this->api->chat($userId)->updateMessage()->text('requestPackageSent', $trip,  "\n\n" . $pending)->messageId($messageId)->exec();
+        $this->api->chat($userId)->updateMessage()->text('requestPackageSent', $trip,  "\n\n" . $pending)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+            $m->button('sendRequestToChannel', 'data', 'Trip.sendToChannel.' . $trip->id);
+        })->exec();
 
         $this->api->chat($package->user->id)->sendMessage()->text('requestPackage', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
             $data = $data->trip . ',' . $data->package;
@@ -367,6 +380,33 @@ class TripBot
             'type' => 'tripToPackage',
             'status' => 'pendingPacker'
         ])->save();
+    }
+
+    public function sendToChannel($callback)
+    {
+        $config = config('telegram');
+        $channel = $config->channel;
+        $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
+        $id = $callback->data;
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+
+        $user = User::find($userId);
+        $trip = $user->trips()->find($id);
+
+        if (!isset($trip->messageId)) {
+            $trip->requirement();
+            $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
+                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
+            })->exec();
+
+            $this->api->chat($userId)->sendMessage()->text('tripSubmitted', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+                $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
+            })->exec();
+
+            $user->trips()->find($id)->update(['messageId' => $result->message_id]);
+        }
     }
 
     public function reject($callback)
@@ -421,9 +461,13 @@ class TripBot
                 $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
             })->exec();
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
+                $m->button('closeRequest', 'data', 'Trip.status.closed,' . $trip->id);
+            })->rowButtons(function ($m)  use ($trip) {
                 $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
             })->exec();
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
+                $m->button('closeRequest', 'data', 'Package.status.closed,' . $package->id);
+            })->rowButtons(function ($m)  use ($package) {
                 $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
             })->exec();
 

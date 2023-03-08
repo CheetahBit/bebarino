@@ -44,8 +44,10 @@ class MainBot
         })->exec();
 
 
-        $messageId = $message->message_id ?? $message->message->message_id + 1; 
-        $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
+        // $messageId = $message->message_id ?? $message->message->message_id + 1; 
+        // $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
+
+
     }
 
     public function beginning($message)

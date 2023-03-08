@@ -28,8 +28,8 @@ class PackageBot
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
         $package = User::find($userId)->packages()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $isAdmin) {
-            $m->button('delete', 'data', 'Package.delete');
+        $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin) {
+            if ($isAdmin) $m->button('delete', 'data', 'Package.delete');
             $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($package) {
@@ -114,13 +114,23 @@ class PackageBot
     {
         $userId = $callback->from->id;
         $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
+        $id = $callback->id;
+        $cache = $callback->cache;
+        $package = $cache->package;
 
-        $flow = new FlowBot();
-        $flow->start($userId, 'package', 'Package', 'confirmUpdate', 'show');
+        $transfer = Transfer::where(['package' => $package])->where(function ($query) {
+            return $query->whereIn('status', ['pendingAdmin', 'verified']);
+        });
+        if ($transfer->exists())
+            $this->api->showAlert($id)->text('notEditable')->exec();
+        else {
+            $flow = new FlowBot();
+            $flow->start($userId, 'package', 'Package', 'confirmUpdate', 'show');
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('backward', 'data', 'Package.show');
-        })->exec();
+            $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+                $m->button('backward', 'data', 'Package.show');
+            })->exec();
+        }
     }
 
     public function confirmUpdate($result)
@@ -139,6 +149,7 @@ class PackageBot
         $config = config('telegram');
         $channel = $config->channel;
         $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
         $cache = $callback->cache;
         $data = $cache->flow->data;
         $id = $this->api->getCache($userId)->package;
@@ -149,11 +160,10 @@ class PackageBot
         $package = $user->packages()->find($id);
         $package->update((array)$data);
 
-        $message = (object)["from" => (object)["id" => $userId], "text" => $id];
-        $this->show($message);
-
         $package = $user->packages()->find($id);
         $package->requirement();
+        
+        $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->exec();
 
         $messageId = $package->messageId;
         if (isset($messageId)) {
@@ -343,7 +353,9 @@ class PackageBot
         $trip = Trip::find($data->trip);
 
         $pending = config('telegram')->messages->pending;
-        $this->api->chat($userId)->updateMessage()->text('requestTripSent', $package, "\n\n" . $pending)->messageId($messageId)->exec();
+        $this->api->chat($userId)->updateMessage()->text('requestTripSent', $package, "\n\n" . $pending)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+            $m->button('sendRequestToChannel', 'data', 'Package.sendToChannel.' . $package->id);
+        })->exec();
 
         $this->api->chat($trip->user->id)->sendMessage()->text('requestTrip', $package)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
             $data = $data->trip . ',' . $data->package;
@@ -357,6 +369,33 @@ class PackageBot
             'type' => 'packageToTrip',
             'status' => 'pendingTripper'
         ])->save();
+    }
+
+    public function sendToChannel($callback)
+    {
+        $config = config('telegram');
+        $channel = $config->channel;
+        $userId = $callback->from->id;
+        $messageId = $callback->message->message_id;
+        $id = $callback->data;
+
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
+
+        $user = User::find($userId);
+        $package = $user->packages()->find($id);
+
+        if (!isset($package->messageId)) {
+            $package->requirement();
+            $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
+                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
+            })->exec();
+
+            $this->api->chat($userId)->sendMessage()->text('packageSubmitted', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+                $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
+            })->exec();
+
+            $user->packages()->find($id)->update(['messageId' => $result->message_id]);
+        }
     }
 
     public function reject($callback)

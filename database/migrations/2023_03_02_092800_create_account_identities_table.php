@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('account_identities', function (Blueprint $table) {
             $table->foreignId('userId');
             $table->string('username')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('lastname')->nullable();
+            $table->string('fullname')->nullable();
             $table->string('passport')->nullable();
             $table->timestamps();
         });

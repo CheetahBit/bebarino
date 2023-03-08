@@ -43,4 +43,11 @@ class Package extends Model
         $this->hasPassport = $this->user->identity->hasPassport();
         $this->hasContact = $this->user->contact->hasContact();
     }
+
+    protected function code(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => "T-" . $this->id + 1000,
+        );
+    }
 }
