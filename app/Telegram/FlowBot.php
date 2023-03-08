@@ -106,7 +106,7 @@ class FlowBot
             else $message->text = $message->contact->phone_number;
         } else if ($step == 'phone' && $type != 'phone_number' && !$isDesire) $error = 'errorInvalidPhone';
         else if ($step == 'email' && $type != 'email' && !$isDesire)  $error = 'errorInvalidEmail';
-        else if ($step == 'date' && Validator::make((array)$message, ['text', 'date_format:Y/m/d'])->fails())  $error = 'errorInvalidDate';
+        else if ($step == 'date' && Validator::make((array)$message, ['text' => 'date_format:Y/m/d'])->fails())  $error = 'errorInvalidDate';
         else if (($step == 'passport' || $step == 'ticket') && !$isDesire && !isset($message->photo))  $error = 'errorInvalidPhoto';
 
 
