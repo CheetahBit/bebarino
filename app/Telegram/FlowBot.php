@@ -63,6 +63,11 @@ class FlowBot
                         foreach ($keys as $key) $m->key($key->fullTitle());
                     });
                 }
+                if(in_array($cache->name, $config->optionals)){
+                    $temp->rowKeys(function (APIBot $m) {
+                        $m->key('desire');
+                    });
+                }
             } else if (
                 str_contains($step, 'Address') &&
                 User::find($this->userId)->addresses()->where([
