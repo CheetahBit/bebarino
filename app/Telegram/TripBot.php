@@ -341,7 +341,7 @@ class TripBot
             else {
                 $package->requirement();
                 $isAdmin = in_array($userId, $config->admins);
-                $main->api->chat($userId)->sendMessage()->text('requestPackageForm', $package, plain:$trips)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $package) {
+                $main->api->chat($userId)->sendMessage()->text('requestPackageForm', $package, plain:json_encode($trips))->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $package) {
                     if ($isAdmin) {
                         if ($isAdmin) $m->button('delete', 'data', 'Package.delete.' .  $package->id);
                         $m->button('closeRequest', 'data', 'Package.close.' .  $package->id);
