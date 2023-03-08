@@ -42,40 +42,47 @@ class PackageBot
     {
         $data = explode(",", $callback->data);
         $status = $data[0];
-        $package = $data[1];
+        $packageId = $data[1];
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
         $id = $callback->id;
-
-        $this->api->showAlert($id)->text('request' . ucfirst($status))->exec();
-
         $user = User::find($userId);
-        $user->packages()->find($package)->update(['status' => $status]);
+        $package = $user->packages()->find($packageId);
 
-        $package = $user->packages()->find($package);
-
-        $transfer = Transfer::where(['package' => $package->id]);
-        if ($transfer->exists()) $package->status = $transfer->first()->status;
-
-        $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
-            $m->button('edit', 'data', 'Package.edit');
-            $m->button('backward', 'data', 'MyRequest.index');
-        })->rowButtons(function ($m) use ($package) {
-            if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.opened,' .  $package->id);
-            else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
-        })->exec();
-
-        $package->requirement();
-
-        if (isset($package->messageId)) {
-            $config = config('telegram');
-            $channel = $config->channel;
-            $package->status = $status;
-            $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
-                if ($package->getRawOriginal('status') == 'opened') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
-                else $url = 't.me/' . $config->channel;
-                $m->button('sendFormRequest', 'url', $url);
+        if ($package->getRawOriginal('status') == 'closedByAdmin') {
+            $this->api->showAlert($id)->text('requestClosedByAdmin')->exec();
+            $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+                $m->button('backward', 'data', 'MyRequest.index');
             })->exec();
+        } else {
+            $this->api->showAlert($id)->text('request' . ucfirst($status))->exec();
+            $package->update(['status' => $status]);
+
+            $package = $user->packages()->find($packageId);
+
+            $transfer = Transfer::where(['package' => $package->id]);
+            if ($transfer->exists()) $package->status = $transfer->first()->status;
+
+            $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+                $m->button('edit', 'data', 'Package.edit');
+                $m->button('backward', 'data', 'MyRequest.index');
+            })->rowButtons(function ($m) use ($package) {
+                if ($package->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Package.status.opened,' .  $package->id);
+                else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
+            })->exec();
+
+            $package->requirement();
+
+            if (isset($package->messageId)) {
+                $config = config('telegram');
+                $channel = $config->channel;
+                $package->status = $status;
+                $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
+                    if ($package->getRawOriginal('status') == 'opened') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
+                    else $url = 't.me/' . $config->channel;
+                    $m->button('sendFormRequest', 'url', $url);
+                })->exec();
+            }
         }
     }
 
@@ -99,9 +106,9 @@ class PackageBot
             $package->requirement();
             $package->status = 'closedByAdmin';
             $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
-                if ($package->getRawOriginal('status') == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
-                else $url = 't.me/' . $config->channel;
-                $m->button('sendFormRequest', 'url', $url);
+                // if ($package->getRawOriginal('status') == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
+                // else $url = 't.me/' . $config->channel;
+                // $m->button('sendFormRequest', 'url', $url);
             })->exec();
         }
 
@@ -160,7 +167,7 @@ class PackageBot
 
         $package = $user->packages()->find($id);
         $package->requirement();
-        
+
         $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->exec();
 
         $messageId = $package->messageId;
@@ -311,7 +318,7 @@ class PackageBot
                 $isAdmin = in_array($userId, $config->admins);
                 $main->api->chat($userId)->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $trip) {
                     if ($isAdmin) {
-                        $m->button('delete', 'data', 'Trip.delete.'.  $trip->id);
+                        $m->button('delete', 'data', 'Trip.delete.' .  $trip->id);
                         $m->button('closeRequest', 'data', 'Trip.close.' .  $trip->id);
                         $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
                     } else {
