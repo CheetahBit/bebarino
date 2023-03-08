@@ -329,7 +329,7 @@ class TripBot
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
             $transfer = Transfer::where('package', $package->id);
-            $temp = $transfer;
+            $temp = Transfer::where('package', $package->id);
             $trips = User::find($userId)->trips()->select('id')->pluck('id')->toArray();
             if ($package->user->id == $userId)
                 $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
