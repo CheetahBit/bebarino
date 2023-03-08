@@ -2,6 +2,7 @@
 
 namespace App\Telegram;
 
+use App\Models\Country;
 use App\Models\Trip;
 use App\Models\User;
 use Carbon\Carbon;
@@ -44,10 +45,8 @@ class MainBot
         })->exec();
 
 
-        $messageId = $message->message_id ?? $message->message->message_id + 1; 
+        $messageId = $message->message_id ?? $message->message->message_id + 1;
         $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
-
-
     }
 
     public function beginning($message)
@@ -145,40 +144,41 @@ class MainBot
     public function tripsGroup()
     {
         $config = config('telegram');
-        $channel = '@'.$config->channel;
+        $channel = '@' . $config->channel;
 
         $day = null;
         $data = new stdClass;
-        $data->month = null;
+        $data->country = null;
         $data->trips = '';
 
+        $countries = Country::where('id', '>', 1)->get();
         $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
-        return $trips->toArray();
-        foreach ($trips as $trip) {
-            $date = Carbon::parse($trip->date);
-            if ($data->month != $date->format('F')) {
-                if (isset($data->month)) {
-                    if (strlen($data->trips) > 4000) {
-                        $i = 0;
-                        $temp = explode("\n", $data->trips);
-                        while ($i < count($temp)) {
-                            $text = '';
-                            while (strlen($text) < 4000) $text .= $temp[$i++];
-                            $data->trips = $text;
-                            $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
-                        }
-                    }else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+
+        foreach ($countries as $country) {
+            $filtered = $trips->filter(function ($trip,) use ($country) {
+                return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
+            });
+            $data->country = $country->fullTitle();
+            
+            foreach ($filtered as $trip) {
+                if ($day != $trip->date) {
+                    $day = $trip->date;
+                    $data->trips .= "\n👉" . $day . "\n";
                 }
-                $data->month = $date->format('F');
-                $data->trips = '';
+                $temp = $trip->fromCity . " به " . $trip->toCity;
+                $data->trips .= "🔸 " . '<a href="t.me/' . $channel . '/' . $trip->messageId . '">' . $temp . '</a>' . "\n";
             }
 
-            if ($day != $date->format('Y/m/d')) {
-                $day = $date->format('Y/m/d');
-                $data->trips .= "\n👉" . $day . "\n";
-            }
-            $temp = $trip->fromCity . " به " . $trip->toCity;
-            $data->trips .= "🔸 " . '<a href="t.me/'.$channel.'/'.$trip->messageId.'">'.$temp.'</a>' . "\n";
+            if (strlen($data->trips) > 4000) {
+                $i = 0;
+                $temp = explode("\n", $data->trips);
+                while ($i < count($temp)) {
+                    $text = '';
+                    while (strlen($text) < 4000) $text .= $temp[$i++];
+                    $data->trips = $text;
+                    $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+                }
+            } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
         }
     }
 }
