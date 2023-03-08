@@ -329,6 +329,7 @@ class TripBot
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
             $transfer = Transfer::where('package', $package->id);
+            $temp = $transfer;
             $trips = User::find($userId)->trips()->select('id')->pluck('id')->toArray();
             if ($package->user->id == $userId)
                 $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
@@ -336,7 +337,7 @@ class TripBot
                 $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
             else if ($transfer->whereIn('trip', $trips)->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestAlready')->exec();
-            else if ($transfer->where('status', 'verified')->exists())
+            else if ($temp->where('status', 'verified')->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
             else {
                 $package->requirement();
