@@ -32,13 +32,13 @@ class InlineBot
                         'city' => $flow->data->toCity ?? $flow->data->fromCity,
                     ]);
                 $addresses = $addresses->orderBy('updated_at', 'desc')->get();
-
+                $select = $cache->action->class == 'MyAddress';
                 foreach ($addresses as $address) {
                     $results[] = [
                         'type' => 'article',
                         'title' => $address->country . " , " . $address->city,
                         'description' => $address->address,
-                        'input_message_content' => ['message_text' => $address->address],
+                        'input_message_content' => ['message_text' => $select ? $address->id : $address->address],
                         'id' => $address->id,
                     ];
                 }

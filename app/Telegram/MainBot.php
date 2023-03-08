@@ -43,10 +43,9 @@ class MainBot
             $m->key('aboutUs');
         })->exec();
 
-        if (isset($message->message)) {
-            $messageId = $message->message->message_id;
-            $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
-        }
+
+        $messageId = $message->message_id ?? $message->message->message_id + 1;
+        $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
     }
 
     public function beginning($message)
@@ -152,9 +151,9 @@ class MainBot
         $data = new stdClass;
         $data->month = null;
         $data->trips = '';
-        
+
         $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
-        
+
         foreach ($trips as $trip) {
             $date = Carbon::parse($trip->date);
             if ($data->month != $date->format('F')) {
