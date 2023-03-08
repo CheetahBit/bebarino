@@ -62,7 +62,6 @@ class TripBot
 
 
         $this->api->chat($userId)->updateMessage()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('delete', 'data', 'Trip.delete');
             $m->button('edit', 'data', 'Trip.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($trip) {
@@ -103,7 +102,7 @@ class TripBot
             $channel = $config->channel;
             $trip->requirement();
             $trip->status = 'closedByAdmin';
-            $this->api->chat('@' . $channel)->updateButton()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
+            $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->channel);
             })->exec();
         }

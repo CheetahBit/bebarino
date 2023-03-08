@@ -58,7 +58,6 @@ class PackageBot
         if ($transfer->exists()) $package->status = $transfer->first()->status;
 
         $this->api->chat($userId)->updateMessage()->text('packageInfo', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
-            $m->button('delete', 'data', 'Package.delete');
             $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($package) {
@@ -99,8 +98,8 @@ class PackageBot
             $channel = $config->channel;
             $package->requirement();
             $package->status = 'closedByAdmin';
-            $this->api->chat('@' . $channel)->updateButton()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
-                if ($package->status == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
+            $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
+                if ($package->getRawOriginal('status') == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
                 else $url = 't.me/' . $config->channel;
                 $m->button('sendFormRequest', 'url', $url);
             })->exec();
