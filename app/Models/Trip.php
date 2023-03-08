@@ -31,7 +31,6 @@ class Trip extends Model
         'id',
         'userId',
         'created_at',
-        'updated_at'
     ];
 
     protected $casts = [

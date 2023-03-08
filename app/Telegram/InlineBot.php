@@ -48,7 +48,7 @@ class InlineBot
             case 'requests':
                 $packages = $user->packages;
                 $trips = $user->trips;
-                $requests = collect(array_merge((array)$packages, (array) $trips))->sortByDesc('updated_at');
+                $requests = $packages->merge($trips)->sortByDesc('updated_at');
                 foreach ($requests as $request) {
                     $type = (isset($request->date) ? 'trip' : 'package');
                     $title = $keywords->{$type} . " - " .  $request->fromCountry . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
