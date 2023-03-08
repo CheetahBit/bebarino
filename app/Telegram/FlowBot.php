@@ -110,7 +110,7 @@ class FlowBot
         else if ($step == 'email' && $type != 'email' && !$isDesire)  $error = 'errorInvalidEmail';
         else if ($step == 'date') {
             if (Validator::make((array)$message, ['text' => 'date_format:Y/m/d'])->fails()) $error = 'errorInvalidDate';
-            else if (Carbon::now()->lte(Carbon::parse($message->text))) $error = 'errorDatePast';
+            else if (Carbon::now()->lte(Carbon::parse($message->text)->date())) $error = 'errorDatePast';
         } else if (($step == 'passport' || $step == 'ticket') && !$isDesire && !isset($message->photo))  $error = 'errorInvalidPhoto';
 
 
