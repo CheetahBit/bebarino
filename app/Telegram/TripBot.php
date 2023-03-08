@@ -240,7 +240,7 @@ class TripBot
         (new MyRequestBot())->index($callback);
     }
 
-    public function confirmSumbit($result)
+    public function confirmSubmit($result)
     {
         $userId = $result->userId;
         $trip = $result->data;

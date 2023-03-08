@@ -99,6 +99,5 @@ class BotController extends Controller
         Http::get('https://api.telegram.org/bot' . $token . '/setwebhook?url=https://bot.cheetahbit.org/api/bot');
 
 
-        return Carbon::parse("2025/01/01")->lte(Carbon::today()) ? 'before': 'after';
     }
 }
