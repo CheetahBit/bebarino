@@ -47,9 +47,9 @@ class InlineBot
 
             case 'requests':
                 $packages = $user->packages;
-                if(!is_array($packages)) collect([$packages]);
+                if (!is_array($packages)) $packages = collect([$packages]);
                 $trips = $user->trips;
-                if(!is_array($trips)) collect([$trips]);
+                if (!is_array($trips)) $trips = [$trips];
                 $requests = $packages->merge($trips)->sortByDesc('updated_at');
                 foreach ($requests as $request) {
                     $type = (isset($request->date) ? 'trip' : 'package');
@@ -59,10 +59,7 @@ class InlineBot
                         'title' => $title,
                         'description' => ($request->date ?? '') . " " . $request->desc,
                         'input_message_content' => ['message_text' => 'show' . ucfirst($type) . "-" . $request->id],
-                        'id' => $type.$request->id,
-                        'packages' => $packages->toArray(),
-                        'trips' => $trips->toArray(),
-
+                        'id' => $type . $request->id,
                     ];
                 }
                 break;
@@ -95,7 +92,7 @@ class InlineBot
                     $results[] = [
                         'type' => 'article',
                         'title' => $title,
-                        'description' => $trip->date . '  '.$trip->desc,
+                        'description' => $trip->date . '  ' . $trip->desc,
                         'input_message_content' => ['message_text' =>  $trip->id],
                         'id' => $trip->id,
                     ];
