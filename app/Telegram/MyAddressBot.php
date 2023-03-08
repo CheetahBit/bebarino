@@ -146,14 +146,13 @@ class MyAddressBot
         $userId = $callback->from->id;
         $messageId = $callback->message->message_id;
 
-        $this->api->chat($userId)->sendMessage()->text('cancelEdit')->keyboard()->rowKeys(function ($m) {
+        $this->api->chat($userId)->sendMessage()->text('removeKeyboard')->keyboard()->rowKeys(function ($m) {
             $m->key('backward');
         })->exec();
 
         $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
         $this->index($callback);
     }
-
 
     public function existsOrStore($userId, $data)
     {

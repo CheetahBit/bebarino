@@ -216,7 +216,6 @@ return json_decode(json_encode([
 
         "loginSuccessfully" => "باموفقیت وارد شدبد!",
         "saveSuccessfully" => "باموفقیت ذخیره شد !",
-        "cancelEdit" => "ویرایش اطلاعات لغو شد",
         "notFound" => "موردی یافت نشد!",
 
         "errorInvalidContact" => 'خطای شماره موبایل',
