@@ -252,10 +252,10 @@ class TripBot
         $channel = $config->channel;
         $deleted = $config->messages->deleted;
         $userId = $callback->from->id;
-        $cache = $callback->cache;
+        $trip = $callback->data;
         $text = $callback->message->text . "\n\n" . $deleted;
 
-        $trip = User::find($userId)->trips()->find($cache->trip);
+        $trip = User::find($userId)->trips()->find($trip);
         $messageId = $trip->messageId;
         $trip->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();

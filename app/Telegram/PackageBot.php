@@ -240,10 +240,10 @@ class PackageBot
         $channel = $config->channel;
         $deleted = $config->messages->deleted;
         $userId = $callback->from->id;
-        $cache = $callback->cache;
+        $package = $callback->data;
         $text = $callback->message->text . "\n\n" . $deleted;
 
-        $package = User::find($userId)->packages()->find($cache->package);
+        $package = User::find($userId)->packages()->find($package);
         $messageId = $package->messageId;
         $package->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
