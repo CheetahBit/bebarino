@@ -92,11 +92,12 @@ class PackageBot
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
         })->exec();
-        $this->api->chat($package->user->id)->sendMessage()->text('requestClosedByAdmin', $package->id)->exec();
+        $this->api->chat($package->user->id)->sendMessage()->text('requestClosedByAdmin', $package)->exec();
 
         if (isset($package->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
+            $package->requirement();
             $package->status = 'closedByAdmin';
             $this->api->chat('@' . $channel)->updateButton()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
                 if ($package->status == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;

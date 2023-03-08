@@ -96,11 +96,12 @@ class TripBot
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
             $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
         })->exec();
-        $this->api->chat($trip->user->id)->sendMessage()->text('requestClosedByAdmin', $trip->id)->exec();
+        $this->api->chat($trip->user->id)->sendMessage()->text('requestClosedByAdmin', $trip)->exec();
 
         if (isset($trip->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
+            $trip->requirement();
             $trip->status = 'closedByAdmin';
             $this->api->chat('@' . $channel)->updateButton()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->channel);
