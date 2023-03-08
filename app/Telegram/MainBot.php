@@ -167,7 +167,7 @@ class MainBot
                             $data->trips = $text;
                             $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
                         }
-                    }else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+                    }else return $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
                 }
                 $data->month = $date->format('F');
                 $data->trips = '';
