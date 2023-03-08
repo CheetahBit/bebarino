@@ -88,6 +88,7 @@ class PackageBot
         $data = $callback->data;
 
         $this->api->showAlert($id)->text('requestClosed')->exec();
+        
         $package = Package::find($data);
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
