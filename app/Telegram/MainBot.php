@@ -156,12 +156,14 @@ class MainBot
         $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
 
         foreach ($countries as $country) {
-            Log::alert($trips);
+            
             $filtered = $trips->filter(function ($trip,) use ($country) {
                 return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
             });
             if (count($filtered) > 0) {
+                Log::alert(count($trips));
                 $trips = $trips->diff($filtered);
+                Log::alert(count($trips));
                 $data->country = $country->fullTitle();
                 $data->trips = '';
                 foreach ($filtered as $trip) {
@@ -180,9 +182,9 @@ class MainBot
                         $text = '';
                         while (strlen($text) < 4000) $text .= $temp[$i++];
                         $data->trips = $text;
-                        $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+                        $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data);
                     }
-                } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+                } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data);
             }
         }
 
@@ -205,9 +207,9 @@ class MainBot
                     $text = '';
                     while (strlen($text) < 4000) $text .= $temp[$i++];
                     $data->trips = $text;
-                    $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+                    $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data);
                 }
-            } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+            } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data);
         }
     }
 }
