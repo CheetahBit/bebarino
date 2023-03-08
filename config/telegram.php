@@ -224,6 +224,7 @@ return json_decode(json_encode([
         "errorInvalidEmail" => 'خطای ایمیل',
         "errorInvalidPhoto" => 'خطای تصویر',
         "errorInvalidDate" => 'خطای تاریخ',
+        "errorDatePast" => 'تاریخ گذشته',
 
         "needLogin" => "ابتدا باید وارد ربات شوید!"
     ],
