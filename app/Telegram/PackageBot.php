@@ -50,7 +50,7 @@ class PackageBot
         $package = $user->packages()->find($packageId);
 
         if ($package->getRawOriginal('status') == 'closedByAdmin') {
-            $this->api->showAlert($id)->text('requestClosedByAdmin')->exec();
+            $this->api->showAlert($id)->text('requestClosedByAdmin', $package)->exec();
             $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
                 $m->button('backward', 'data', 'MyRequest.index');
             })->exec();

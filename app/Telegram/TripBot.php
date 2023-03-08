@@ -50,13 +50,12 @@ class TripBot
         $messageId = $callback->message->message_id;
         $id = $callback->id;
 
-
         $user = User::find($userId);
 
         $trip = $user->trips()->find($trip);
 
         if ($trip->getRawOriginal('status') == 'closedByAdmin') {
-            $this->api->showAlert($id)->text('requestClosedByAdmin')->exec();
+            $this->api->showAlert($id)->text('requestClosedByAdmin', $trip)->exec();
             $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
                 $m->button('backward', 'data', 'MyRequest.index');
             })->exec();
