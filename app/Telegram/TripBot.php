@@ -470,8 +470,7 @@ class TripBot
 
         $trip = Trip::find($data[0]);
         $package = Package::find($data[1]);
-        $package->makeVisible('code');
-
+    
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
         if (in_array($userId, $config->admins)) {
@@ -508,7 +507,7 @@ class TripBot
 
             $trip->requirement();
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
-
+            $trip->packageCode = $package->code;
             foreach ($config->admins as $admin)
                 $this->api->chat($admin)->sendMessage()->text('requestTripAdmin', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
                     $data = implode(',', $data);
