@@ -159,7 +159,7 @@ class MainBot
                 return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
             });
             if (count($filtered) > 0) {
-                $trips = $trips->diff($filtered)->all();
+                
                 $data->country = $country->fullTitle();
                 $data->trips = '';
                 foreach ($filtered as $trip) {
@@ -181,6 +181,8 @@ class MainBot
                         $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
                     }
                 } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+
+                $trips = $trips->diff($filtered->toArray());
             }
         }
 
