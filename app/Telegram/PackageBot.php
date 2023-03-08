@@ -243,12 +243,12 @@ class PackageBot
         $package = $callback->data;
         $text = $callback->message->text . "\n\n" . $deleted;
 
-        $package = User::find($userId)->packages()->find($package);
+        $package = Package::find($package);
         $messageId = $package->messageId;
         $package->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
         $messageId = $callback->message->message_id;
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+        $this->api->chat($userId)->updateMessage()->messageId($messageId)->text(plain:$text)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
         })->exec();
 

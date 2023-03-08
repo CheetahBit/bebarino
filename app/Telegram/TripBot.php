@@ -255,12 +255,12 @@ class TripBot
         $trip = $callback->data;
         $text = $callback->message->text . "\n\n" . $deleted;
 
-        $trip = User::find($userId)->trips()->find($trip);
+        $trip = Trip::find($trip);
         $messageId = $trip->messageId;
         $trip->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
         $messageId = $callback->message->message_id;
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+        $this->api->chat($userId)->updateMessage()->messageId($messageId)->text(plain:$text)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
             $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
         })->exec();
 
