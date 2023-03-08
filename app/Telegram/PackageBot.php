@@ -248,9 +248,11 @@ class PackageBot
         $package->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
         $messageId = $callback->message->message_id;
-        $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+            $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
+        })->exec();
 
-        (new MyRequestBot())->index($callback);
+        $this->api->chat($package->user->id)->sendMessage()->text('requestDeletedByAdmin', $package)->exec();
     }
 
     public function confirmSubmit($result)

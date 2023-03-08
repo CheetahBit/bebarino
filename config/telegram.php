@@ -180,6 +180,7 @@ return json_decode(json_encode([
         "requestTripAdmin" => "بسته\n\nشماره درخواست :packageCode\n\nمبدا : :packageFromAddress\n\nمقصد : :packageToAddress\n\nنوضیحات: :packageDesc\n\n:packageHasPassport تصویر مدارک شناسایی\n:packageHasContact اطلاعات تماس\n\n\nسفر\n\nشماره درخواست :code\n\nمبدا : :fromAddress\n\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nنوضیحات: :desc\n\n:hasTicket تصویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
 
         "requestClosedByAdmin" => " درخواست شماره :code توسط ادمین بسته شد",
+        "requestDeletedByAdmin" => " درخواست شماره :code توسط ادمین حذف شد",
         "requestClosed" => "درخواست بسته شد",
 
 

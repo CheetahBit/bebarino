@@ -260,9 +260,11 @@ class TripBot
         $trip->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
         $messageId = $callback->message->message_id;
-        $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
+        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+            $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
+        })->exec();
 
-        (new MyRequestBot())->index($callback);
+        $this->api->chat($trip->user->id)->sendMessage()->text('requestDeletedByAdmin', $trip)->exec();
     }
 
     public function confirmSubmit($result)
