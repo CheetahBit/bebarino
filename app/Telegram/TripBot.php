@@ -407,8 +407,6 @@ class TripBot
         $messageId = $callback->message->message_id;
         $id = $callback->data;
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
-
         $user = User::find($userId);
         $trip = $user->trips()->find($id);
 
@@ -418,7 +416,7 @@ class TripBot
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
             })->exec();
 
-            $this->api->chat($userId)->sendMessage()->text('tripSubmitted', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+            $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
                 $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
             })->exec();
 

@@ -390,8 +390,6 @@ class PackageBot
         $messageId = $callback->message->message_id;
         $id = $callback->data;
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
-
         $user = User::find($userId);
         $package = $user->packages()->find($id);
 
@@ -401,7 +399,7 @@ class PackageBot
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
             })->exec();
 
-            $this->api->chat($userId)->sendMessage()->text('packageSubmitted', $package)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+            $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
                 $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
             })->exec();
 
