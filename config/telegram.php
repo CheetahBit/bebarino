@@ -94,8 +94,8 @@ return json_decode(json_encode([
         "createTrip" => "➕ افزودن سفر",
         "indexRequest" => "نمایش درخواست‌ها",
         "sendFormRequest" => "📨 ارسال درخواست",
-        "package" => "بسته",
-        "trip" => "سفر",
+        "package" => "📦 بسته",
+        "trip" => "✈️ سفر",
         "acceptRequest" => "✅ پذیرش درخواست",
         "rejectRequest" => "🚫 رد درخواست",
         "contactTripper" => "✈️ مسافر",
