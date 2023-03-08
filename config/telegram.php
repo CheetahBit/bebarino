@@ -102,7 +102,7 @@ return json_decode(json_encode([
         "contactTripper" => "✈️ مسافر",
         "tripperDocs" => "اطلاعات مسافر",
         "contactPacker" => "📦 صاحب بسته",
-        "tripperDocs" => "اطلاعات صاحب بسته",
+        "packerDocs" => "اطلاعات صاحب بسته",
         "contactAndImageDocs" => "اطلاعات تماس و تصویر مدارک",
         "requestDone" => "✅ واگذار شد",
         "confirm" => "✅ تایید",
