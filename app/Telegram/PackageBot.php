@@ -88,7 +88,6 @@ class PackageBot
         $data = $callback->data;
 
         $this->api->showAlert($id)->text('requestClosed')->exec();
-        
         $package = Package::find($data);
         $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
@@ -99,7 +98,7 @@ class PackageBot
             $config = config('telegram');
             $channel = $config->channel;
             $package->requirement();
-            $package->status = 'statusClosedByAdmin';
+            $package->status = 'closedByAdmin';
             $this->api->chat('@' . $channel)->updateButton()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
                 if ($package->status == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
                 else $url = 't.me/' . $config->channel;
