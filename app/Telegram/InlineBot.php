@@ -48,8 +48,9 @@ class InlineBot
             case 'requests':
                 $packages = $user->packages;
                 $trips = $user->trips;
-                $requests = $packages->merge([$trips])->sortByDesc('updated_at');
+                $requests = array_merge($packages->toArra(), $trips->toArray());
                 Log::alert($requests);
+                $requests = collect($requests)->sortByDesc('updated_at');
                 Log::alert($requests->toArray());
                 foreach ($requests as $request) {
                     $type = (isset($request->date) ? 'trip' : 'package');
