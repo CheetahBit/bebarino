@@ -57,7 +57,7 @@ class FlowBot
                     $m->key('desire');
                 });
             } else if (str_contains($step, 'Country')) {
-                $temp->text('inputCountry')->keyboard();
+                $temp->text('input' . $step)->keyboard();
                 $countries = Country::all();
                 foreach ($countries->chunk(3) as $keys) {
                     $temp->rowKeys(function (APIBot $m) use ($keys) {
