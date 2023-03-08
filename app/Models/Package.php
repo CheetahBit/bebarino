@@ -47,7 +47,7 @@ class Package extends Model
     protected function code(): Attribute
     {
         return Attribute::make(
-            get: fn () => "T-" . $this->id + 1000,
+            get: fn () => "#P" . $this->id + 1000,
         );
     }
 }
