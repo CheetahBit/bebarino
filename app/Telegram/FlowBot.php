@@ -63,13 +63,13 @@ class FlowBot
                         foreach ($keys as $key) $m->key($key->fullTitle());
                     });
                 }
-                if (in_array($cache->name, $config->optionals)) {
+                if(in_array($cache->name, $config->optionals)){
                     $temp->rowKeys(function (APIBot $m) {
                         $m->key('desire');
                     });
                 }
             } else if (
-                ($step == 'FromAddress' || $step == 'ToAddress') &&
+                str_contains($step, 'Address') && $step != "Address" &&
                 User::find($this->userId)->addresses()->where([
                     'country' => $cache->data->toCountry ?? $cache->data->fromCountry,
                     'city' => $cache->data->toCity ?? $cache->data->fromCity,
