@@ -312,6 +312,7 @@ class PackageBot
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
             $transfer = Transfer::where('trip' ,$trip->id);
+            $temp = $transfer;
             $packages = User::find($userId)->packages()->select('id')->pluck('id')->toArray();
             if ($trip->user->id == $userId)
                 $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
@@ -319,7 +320,7 @@ class PackageBot
                 $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
             else if ($transfer->whereIn('package', $packages)->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestAlready')->exec();
-            else if ($transfer->where('status', 'verified')->exists())
+            else if ($temp->where('status', 'verified')->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
             else {
                 $trip->requirement();
