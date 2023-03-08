@@ -46,12 +46,12 @@ class InlineBot
                 break;
 
             case 'requests':
-                $packages = collect($user->packages->toArray());
-                $trips = collect($user->trips->toArray());
+                $packages = $user->packages->toArray();
+                $trips = $user->trips->toArray();
                 $requests = $packages->merge($trips)->sortByDesc('updated_at');
                 foreach ($requests as $request) {
-                    $request = collect($request);
-                    Log::alert($request->fromCountry);
+                    // $request = collect($request);
+                    Log::alert($request);
                     // $type = (isset($request->date) ? 'trip' : 'package');
                     // $title = $keywords->{$type} . " - " .  $request->fromCountry . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
                     // $results[] = [
