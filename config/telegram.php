@@ -161,6 +161,7 @@ return json_decode(json_encode([
         "requestIsDone" => "این مورد قبلا انجام شده است!",
         "requestIsSelf" => "این درخواست متعلق به شماست",
         "requestIsClosed" => "این درخواست بسته شده است",
+        "requestAlready" => "قبلا درخواست ارسال کرده اید",
 
         "requestTripForm" => "درخواست حمل بسته\n\nشماره درخواست :code\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصثویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nلطفا به کمک دکمه های زیر بسته خود را انتخاب یا ایجاد کنید",
         "requestTripSent" => "درخواست شما برای مسافر ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nشماره درخواست :code\n\\nمبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nنوضیحات: :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",

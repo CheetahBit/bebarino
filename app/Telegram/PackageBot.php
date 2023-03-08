@@ -311,13 +311,16 @@ class PackageBot
         $trip = Trip::find($trip);
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
-            $transfer = Transfer::where(['trip' => $trip, 'status' => 'verified']);
+            $transfer = Transfer::where(['trip' => $trip]);
+            $packages = User::find($userId)->packages()->select('id')->pluck('id')->toArray();
             if ($trip->user->id == $userId)
                 $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
             else if ($trip->getRawOriginal('status') != "opened")
                 $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
-            else if ($transfer->exists())
+            else if ($transfer->where('status', 'verified')->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
+            else if ($transfer->whereIn('package', $packages)->exists())
+                $main->api->chat($userId)->sendMessage()->text('requestAlready')->exec();
             else {
                 $trip->requirement();
                 $isAdmin = in_array($userId, $config->admins);

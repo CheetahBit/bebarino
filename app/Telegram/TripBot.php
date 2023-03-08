@@ -260,7 +260,7 @@ class TripBot
         $trip->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
         $messageId = $callback->message->message_id;
-        $this->api->chat($userId)->updateMessage()->messageId($messageId)->text(plain:$text)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+        $this->api->chat($userId)->updateMessage()->messageId($messageId)->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
             $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
         })->exec();
 
@@ -328,13 +328,16 @@ class TripBot
         $package = Package::find($package);
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
-            $transfer = Transfer::where(['package' => $package, 'status' => 'verified']);
+            $transfer = Transfer::where('package', $package);
+            $trips = User::find($userId)->trips()->select('id')->pluck('id')->toArray();
             if ($package->user->id == $userId)
                 $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
             else if ($package->getRawOriginal('status') != "opened")
                 $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
-            else if ($transfer->exists())
+            else if ($transfer->where('status', 'verified')->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
+            else if ($transfer->whereIn('trip', $trips)->exists())
+                $main->api->chat($userId)->sendMessage()->text('requestAlready')->exec();
 
             else {
                 $package->requirement();
