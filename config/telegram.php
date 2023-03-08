@@ -164,7 +164,7 @@ return json_decode(json_encode([
         "requestTrip" => "درخواست بردن بسته \n\nاطلاعات بسته\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
 
         "requestPackageForm" => "درخواست بردن بسته\n\nشماره درخواست #:id\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتوضیحات : :desc\n\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس\n\nلطفا به کمک دکمه های زیر سفر خود را انتخاب یا ایجاد کنید",
-        "requestPackageSent" => "درخواست شما برای صاحب بسته ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromAddress\nمقصد : :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nنوضیحات: :desc\n\n:hasTicket تصویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
+        "requestPackageSent" => "درخواست شما برای صاحب بسته ارسال شد \n\nلطفا منتظر نتیجه درخواست بمانید\n\nمبدا : :fromCountry , :fromCity ,:fromAddress\nمقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nنوضیحات: :desc\n\n:hasTicket تصویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
         "requestPackage" => "درخواست حمل بسته\n\nاز مبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\n\nتوضیحات : :desc\n\n:hasTicket تصویر بلیط\n:hasPassport تصویر مدارک شناسایی\n:hasContact اطلاعات تماس",
 
         "pending" => 'در انتظار تایید',
