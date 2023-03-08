@@ -317,10 +317,10 @@ class PackageBot
                 $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
             else if ($trip->getRawOriginal('status') != "opened")
                 $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
-            else if ($transfer->where('status', 'verified')->exists())
-                $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
             else if ($transfer->whereIn('package', $packages)->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestAlready')->exec();
+            else if ($transfer->where('status', 'verified')->exists())
+                $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
             else {
                 $trip->requirement();
                 $isAdmin = in_array($userId, $config->admins);

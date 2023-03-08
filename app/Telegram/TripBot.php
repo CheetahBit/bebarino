@@ -334,11 +334,10 @@ class TripBot
                 $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
             else if ($package->getRawOriginal('status') != "opened")
                 $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
-            else if ($transfer->where('status', 'verified')->exists())
-                $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
             else if ($transfer->whereIn('trip', $trips)->exists())
                 $main->api->chat($userId)->sendMessage()->text('requestAlready')->exec();
-
+            else if ($transfer->where('status', 'verified')->exists())
+                $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
             else {
                 $package->requirement();
                 $isAdmin = in_array($userId, $config->admins);
