@@ -242,8 +242,11 @@ class TripBot
 
     public function confirmSubmit($result)
     {
+        $config = config('telegram');
         $userId = $result->userId;
         $trip = $result->data;
+
+        if ($config->keywords->desire == $trip->ticket) $trip->ticket = $config->keywords->notEntered;
 
         $this->api->chat($userId)->sendMessage()->text('confirmTrip', (array)$trip)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('confirm', 'data', 'Trip.submit');
