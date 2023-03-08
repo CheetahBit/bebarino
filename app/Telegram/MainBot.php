@@ -158,27 +158,29 @@ class MainBot
             $filtered = $trips->filter(function ($trip,) use ($country) {
                 return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
             });
-            $data->country = $country->fullTitle();
-            $data->trips = '';
-            foreach ($filtered as $trip) {
-                if ($day != $trip->date) {
-                    $day = $trip->date;
-                    $data->trips .= "\n👉" . $day . "\n";
+            if (count($filtered) > 0) {
+                $data->country = $country->fullTitle();
+                $data->trips = '';
+                foreach ($filtered as $trip) {
+                    if ($day != $trip->date) {
+                        $day = $trip->date;
+                        $data->trips .= "\n👉" . $day . "\n";
+                    }
+                    $temp = $trip->fromCity . " به " . $trip->toCity;
+                    $data->trips .= "🔸 " . '<a href="t.me/' . $channel . '/' . $trip->messageId . '">' . $temp . '</a>' . "\n";
                 }
-                $temp = $trip->fromCity . " به " . $trip->toCity;
-                $data->trips .= "🔸 " . '<a href="t.me/' . $channel . '/' . $trip->messageId . '">' . $temp . '</a>' . "\n";
-            }
 
-            if (strlen($data->trips) > 4000) {
-                $i = 0;
-                $temp = explode("\n", $data->trips);
-                while ($i < count($temp)) {
-                    $text = '';
-                    while (strlen($text) < 4000) $text .= $temp[$i++];
-                    $data->trips = $text;
-                    $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
-                }
-            } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+                if (strlen($data->trips) > 4000) {
+                    $i = 0;
+                    $temp = explode("\n", $data->trips);
+                    while ($i < count($temp)) {
+                        $text = '';
+                        while (strlen($text) < 4000) $text .= $temp[$i++];
+                        $data->trips = $text;
+                        $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+                    }
+                } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
+            }
         }
     }
 }
