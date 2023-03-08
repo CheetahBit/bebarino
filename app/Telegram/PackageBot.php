@@ -311,7 +311,7 @@ class PackageBot
         $trip = Trip::find($trip);
         $main = new MainBot();
         if ($main->checkLogin($userId)) {
-            $transfer = Transfer::where(['trip' => $trip]);
+            $transfer = Transfer::where('trip' ,$trip->id);
             $packages = User::find($userId)->packages()->select('id')->pluck('id')->toArray();
             if ($trip->user->id == $userId)
                 $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
