@@ -81,7 +81,7 @@ class MainBot
     {
         $userId = $message->from->id;
         $this->api->chat($userId)->sendMessage()->text('support')->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('contactSupport', 'url', 'tg://user?id=' . config('telegram.support'));
+            $m->button('contactSupport', 'url', 'tg://user?id=' . config('telegram')->support);
         })->exec();
     }
 
