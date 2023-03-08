@@ -493,10 +493,6 @@ class TripBot
             })->exec();
             $this->api->chat($trip->userId)->removeKeyboard()->exec();
 
-            $channel = $config->channel;
-            $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
-                $m->button('requestDone', 'url', 't.me/' . $channel);
-            })->messageId($package->messageId)->exec();
         } else {
             $transfer->update(['status' => 'pendingAdmin']);
             $text .= "\n\n" . $accept . "\n\n" . $pending;
