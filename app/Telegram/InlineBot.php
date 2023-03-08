@@ -49,20 +49,20 @@ class InlineBot
                 $packages = collect($user->packages->toArray());
                 $trips = collect($user->trips->toArray());
                 $requests = $packages->merge($trips)->sortByDesc('updated_at');
-                Log::alert((array)$requests);
                 foreach ($requests as $request) {
-                    $type = (isset($request->date) ? 'trip' : 'package');
-                    $title = $keywords->{$type} . " - " .  $request->fromCountry . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
-                    $results[] = [
-                        'type' => 'article',
-                        'title' => $title,
-                        'description' => ($request->date ?? '') . " " . $request->desc,
-                        'input_message_content' => ['message_text' => 'show' . ucfirst($type) . "-" . $request->id],
-                        'id' => $type.$request->id,
-                        'packages' => $packages->toArray(),
-                        'trips' => $trips->toArray(),
+                    Log::alert((array)$request);
+                    // $type = (isset($request->date) ? 'trip' : 'package');
+                    // $title = $keywords->{$type} . " - " .  $request->fromCountry . " , " . $request->fromCity . " > " . $request->toCountry . " , " . $request->toCity;
+                    // $results[] = [
+                    //     'type' => 'article',
+                    //     'title' => $title,
+                    //     'description' => ($request->date ?? '') . " " . $request->desc,
+                    //     'input_message_content' => ['message_text' => 'show' . ucfirst($type) . "-" . $request->id],
+                    //     'id' => $type.$request->id,
+                    //     'packages' => $packages->toArray(),
+                    //     'trips' => $trips->toArray(),
 
-                    ];
+                    // ];
                 }
                 break;
 
