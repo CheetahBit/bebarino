@@ -327,8 +327,8 @@ class TripBot
                 $main->api->chat($userId)->sendMessage()->text('requestPackageForm', $package)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $package) {
                     if ($isAdmin) {
                         if ($isAdmin) $m->button('delete', 'data', 'Package.delete.' .  $package->id);
-                        $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                         $m->button('closeRequest', 'data', 'Package.close.' .  $package->id);
+                        $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                     } else {
                         $m->button('createTrip', 'data', 'Trip.create');
                         $m->button('selectTrip', 'query', time())->inlineMode('trips');
