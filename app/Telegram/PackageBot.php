@@ -348,6 +348,8 @@ class PackageBot
         $messageId = $message->message_id;
         $id = $message->text;
 
+        $this->api->chat($userId)->deleteMessage()->messageId($messageId)->exec();
+
         $data = new stdClass;
         $data->userId = $userId;
         $data->messageId = $messageId - 1;
