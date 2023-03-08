@@ -160,10 +160,7 @@ class MainBot
                 return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
             });
             if (count($filtered) > 0) {
-                Log::alert(count($trips));
                 $trips = $trips->diff($filtered);
-                Log::alert(count($filtered));
-                Log::alert(count($trips));
                 $data->country = $country->fullTitle();
                 $data->trips = '';
                 foreach ($filtered as $trip) {
@@ -182,9 +179,9 @@ class MainBot
                         $text = '';
                         while (strlen($text) < 4000) $text .= $temp[$i++];
                         $data->trips = $text;
-                        $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data);
+                        $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
                     }
-                } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data);
+                } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
             }
         }
 
@@ -207,9 +204,9 @@ class MainBot
                     $text = '';
                     while (strlen($text) < 4000) $text .= $temp[$i++];
                     $data->trips = $text;
-                    $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data);
+                    $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
                 }
-            } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data);
+            } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
         }
     }
 }
