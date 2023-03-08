@@ -159,7 +159,7 @@ class MainBot
                 return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
             });
             if (count($filtered) > 0) {
-                $trips = $trips->diff($filtered);
+                $trips = $trips->diff($filtered)->all();
                 $data->country = $country->fullTitle();
                 $data->trips = '';
                 foreach ($filtered as $trip) {
