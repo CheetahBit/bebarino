@@ -23,13 +23,11 @@ class PackageBot
         $config = config('telegram');
         $userId = $message->from->id;
         $id = $message->text ?? $message->cache->package;
-        $isAdmin = in_array($userId, $config->admins);
 
         if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
 
         $package = User::find($userId)->packages()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin) {
-            if ($isAdmin) $m->button('delete', 'data', 'Package.delete');
+        $this->api->chat($userId)->sendMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('edit', 'data', 'Package.edit');
             $m->button('backward', 'data', 'MyRequest.index');
         })->rowButtons(function ($m) use ($package) {
@@ -313,8 +311,9 @@ class PackageBot
                 $isAdmin = in_array($userId, $config->admins);
                 $main->api->chat($userId)->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $trip) {
                     if ($isAdmin) {
+                        $m->button('delete', 'data', 'Trip.delete.'.  $trip->id);
                         $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
-                        $m->button('closeRequest', 'data', 'Trip.close' .  $trip->id);
+                        $m->button('closeRequest', 'data', 'Trip.close.' .  $trip->id);
                     } else {
                         $m->button('createPackage', 'data', 'Package.create');
                         $m->button('selectPackage', 'query', time())->inlineMode('packages');
@@ -440,7 +439,7 @@ class PackageBot
         $trip = Trip::find($data[0]);
         $package = Package::find($data[1]);
         $package->makeVisible('code');
-        
+
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
         if (in_array($userId, $config->admins)) {
