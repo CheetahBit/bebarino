@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             $mainBot = new MainBot();
-            $mainBot->tripsGrouping();    
+            $mainBot->tripsGroup();    
         })->everyMinute();
     }
 

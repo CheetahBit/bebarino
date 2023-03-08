@@ -146,7 +146,7 @@ return json_decode(json_encode([
 
         "packageSubmitted" => "بسته شما ثبت شد\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتوضیحات : :desc",
         "tripSubmitted" => "سفر شما ثبت شد\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nتوضیحات : :desc",
-        
+
         "packageInfo" => "بسته\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nنوضیحات: :desc\n\nوضعیت درخواست : :status",
         "tripInfo" => "سفر\n\nمبدا : :fromCountry , :fromCity\nبه مقصد : :toCountry , :toCity\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc\n\nوضعیت درخواست : :status",
 
@@ -181,9 +181,8 @@ return json_decode(json_encode([
         "noDocs" => "مدرکی جهت نمایش وجود ندارد",
         "sentDocs" => "مدارک ارسال شد",
 
-        "noTicket" => "بلیط بارگذاری نشده است",
-        "noPassport" => "پاسپورت بارگذاری نشده است",
-        "noContact" => "اطلاعات تماس وارد نشده است",
+        "tripsGroup" => "حمل بار\n\nپروازهای :month\n:trips",
+
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",

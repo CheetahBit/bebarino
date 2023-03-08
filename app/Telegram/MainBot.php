@@ -97,7 +97,7 @@ class MainBot
         $userId = $message->from->id;
         if ($this->checkLogin($userId)) {
             $this->api->chat($userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
-            $this->api->chat($userId)->sendMessage()->text('submitTrip')->inlineKeyboard()->rowButtons(function($m){
+            $this->api->chat($userId)->sendMessage()->text('submitTrip')->inlineKeyboard()->rowButtons(function ($m) {
                 $m->button('backward', 'data', 'Main.menu');
             })->exec();
             $flow = new FlowBot();
@@ -110,7 +110,7 @@ class MainBot
         $userId = $message->from->id;
         if ($this->checkLogin($userId)) {
             $this->api->chat($userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
-            $this->api->chat($userId)->sendMessage()->text('submitPackage')->inlineKeyboard()->rowButtons(function($m){
+            $this->api->chat($userId)->sendMessage()->text('submitPackage')->inlineKeyboard()->rowButtons(function ($m) {
                 $m->button('backward', 'data', 'Main.menu');
             })->exec();
             $flow = new FlowBot();
@@ -143,9 +143,43 @@ class MainBot
         $this->menu($message);
     }
 
-    public function tripsGrouping()
+    public function tripsGroup()
     {
-        $trips = Trip::where('messageId','<>', null)->where('date', '>=', Carbon::today()->toDateString());
+        $config = config('telegram');
+        $channel = $config->channel;
+
+        $day = null;
+        $data = new stdClass;
+        $data->month = null;
+        $data->trips = '';
         
+        $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
+        
+        foreach ($trips as $trip) {
+            $date = Carbon::parse($trip->date);
+            if ($data->month != $date->format('F')) {
+                if (isset($data->month)) {
+                    if (strlen($data->trips) > 4000) {
+                        $i = 0;
+                        $temp = explode("\n", $data->trips);
+                        while ($i < count($temp)) {
+                            $text = '';
+                            while (strlen($text) < 4000) $text .= $temp[$i++];
+                            $data->trips = $text;
+                            $this->api->chat($channel)->sendMessage()->text('tripsGroup', $data)->exec();
+                        }
+                    }
+                }
+                $data->month = $date->format('F');
+                $data->trips = '';
+            }
+
+            if ($day != $date->format('Y/m/d')) {
+                $day = $date->format('F');
+                $data->trips .= "\n✅" . $day . "\n";
+            }
+            $temp = $trip->fromCity . " به " . $trip->toCity;
+            $data->trips .= "✅" . `<a href="t.me/$channel/$trip->messageId">$temp</a>` . "\n";
+        }
     }
 }
