@@ -71,7 +71,7 @@ class PackageBot
         if (isset($package->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
-            $package->statues = $status;
+            $package->status = $status;
             $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
                 if ($package->getRawOriginal('status') == 'opened') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
                 else $url = 't.me/' . $config->channel;
@@ -97,7 +97,7 @@ class PackageBot
         if (isset($package->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
-            $package->statues = 'closedByAdmin';
+            $package->status = 'closedByAdmin';
             $this->api->chat('@' . $channel)->updateButton()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
                 if ($package->status == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
                 else $url = 't.me/' . $config->channel;
