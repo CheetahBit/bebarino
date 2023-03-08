@@ -441,7 +441,7 @@ class PackageBot
                     $m->button('tripperDocs', 'data', 'Package.contactAndImageDocs.tripper,' . $trip->id);
                     $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
                 })->rowButtons(function ($m) use ($package) {
-                    $m->button('packerDocs', 'data', 'Package.contactAndImageDocs.packer' . $package->id);
+                    $m->button('packerDocs', 'data', 'Package.contactAndImageDocs.packer,' . $package->id);
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 })->exec();
         }
