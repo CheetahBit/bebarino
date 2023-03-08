@@ -57,7 +57,9 @@ class InlineBot
                         'description' => ($request->date ?? '') . " " . $request->desc,
                         'input_message_content' => ['message_text' => 'show' . ucfirst($type) . "-" . $request->id],
                         'id' => $type.$request->id,
-                        'count' => (array)$requests
+                        'packages' => $packages->toArray(),
+                        'trips' => $trips->toArray(),
+
                     ];
                 }
                 break;
