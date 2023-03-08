@@ -504,7 +504,7 @@ class TripBot
                 $m->button('closeRequest', 'data', 'Package.status.closed,' . $package->id);
             })->exec();
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
-
+ 
             $trip->requirement();
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
             $trip->packageCode = $package->code;
