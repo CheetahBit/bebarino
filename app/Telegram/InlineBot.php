@@ -49,7 +49,7 @@ class InlineBot
                 $packages = $user->packages;
                 $trips = $user->trips;
                 $requests = collect([]);
-                $requests->merge($packages)->merge($trips)->sortByDesc('updated_at');
+                $requests = $requests->merge($packages)->merge($trips)->sortByDesc('updated_at');
         
                 foreach ($requests as $request) {
                     $type = (isset($request->date) ? 'trip' : 'package');
