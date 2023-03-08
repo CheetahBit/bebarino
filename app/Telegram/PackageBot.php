@@ -487,9 +487,10 @@ class PackageBot
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
 
             $trip->requirement();
+            $package->requirement();
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
             $trip->packageCode = $package->code;
-            
+
             foreach ($config->admins as $admin)
                 $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
                     $data = implode(',', $data);

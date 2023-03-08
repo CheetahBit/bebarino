@@ -506,6 +506,7 @@ class TripBot
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
  
             $trip->requirement();
+            $package->requirement();
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
             $trip->packageCode = $package->code;
             foreach ($config->admins as $admin)
