@@ -7,6 +7,7 @@ use App\Models\Trip;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use stdClass;
 
 class MainBot
@@ -155,11 +156,12 @@ class MainBot
         $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
 
         foreach ($countries as $country) {
+            Log::alert($trips);
             $filtered = $trips->filter(function ($trip,) use ($country) {
                 return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
             });
             if (count($filtered) > 0) {
-                
+                $trips = $trips->diff($filtered);
                 $data->country = $country->fullTitle();
                 $data->trips = '';
                 foreach ($filtered as $trip) {
@@ -182,7 +184,7 @@ class MainBot
                     }
                 } else $this->api->chat($channel)->sendMessage()->text('tripsGroup', (array)$data)->exec();
 
-                $trips = $trips->diff($filtered->toArray());
+                
             }
         }
 
