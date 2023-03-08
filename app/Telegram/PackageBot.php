@@ -98,7 +98,7 @@ class PackageBot
             $config = config('telegram');
             $channel = $config->channel;
             $package->requirement();
-            $package->status = 'closedByAdmin';
+            $package->status = 'statusClosedByAdmin';
             $this->api->chat('@' . $channel)->updateButton()->text('channelPackage', $package)->messageId($package->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
                 if ($package->status == 'closed') $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
                 else $url = 't.me/' . $config->channel;

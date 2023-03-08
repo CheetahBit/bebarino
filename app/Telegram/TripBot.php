@@ -102,7 +102,7 @@ class TripBot
             $config = config('telegram');
             $channel = $config->channel;
             $trip->requirement();
-            $trip->status = 'closedByAdmin';
+            $trip->status = 'statusClosedByAdmin';
             $this->api->chat('@' . $channel)->updateButton()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->channel);
             })->exec();
