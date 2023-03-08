@@ -174,7 +174,7 @@ class MainBot
             }
 
             if ($day != $date->format('Y/m/d')) {
-                $day = $date->format('F');
+                $day = $date->format('Y/m/d');
                 $data->trips .= "\n✅" . $day . "\n";
             }
             $temp = $trip->fromCity . " به " . $trip->toCity;
