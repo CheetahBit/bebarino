@@ -248,7 +248,7 @@ class PackageBot
         $package->delete();
         $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
         $messageId = $callback->message->message_id;
-        $this->api->chat($userId)->updateMessage()->messageId($messageId)->text(plain:$text)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+        $this->api->chat($userId)->updateMessage()->messageId($messageId)->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
             $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
         })->exec();
 
@@ -461,13 +461,15 @@ class PackageBot
                 $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
                 $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
             })->exec();
+
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
                 $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
             })->exec();
+            $this->api->chat($package->userId)->removeKeyboard()->exec();
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
                 $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
             })->exec();
-
+            $this->api->chat($trip->userId)->removeKeyboard()->exec();
             $channel = $config->channel;
             $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
                 $m->button('requestDone', 'url', 't.me/' . $channel);

@@ -212,7 +212,7 @@ class TripBot
         $userId = $result->userId;
         $trip = $result->data;
 
-        if ($config->keywords->desire == $trip->ticket) $trip->ticket = $config->keywords->notEntered;
+        if (!isset($trip->ticket)) $trip->ticket = $config->keywords->notEntered;
 
         $this->api->chat($userId)->sendMessage()->text('confirmTrip', (array)$trip)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('confirm', 'data', 'Trip.store');
@@ -483,11 +483,13 @@ class TripBot
             })->rowButtons(function ($m)  use ($trip) {
                 $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
             })->exec();
+            $this->api->chat($package->userId)->removeKeyboard()->exec();
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
                 $m->button('closeRequest', 'data', 'Package.status.closed,' . $package->id);
             })->rowButtons(function ($m)  use ($package) {
                 $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
             })->exec();
+            $this->api->chat($trip->userId)->removeKeyboard()->exec();
 
             $channel = $config->channel;
             $this->api->chat('@' . $channel)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($channel) {
