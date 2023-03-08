@@ -116,6 +116,7 @@ return json_decode(json_encode([
         "openRequest" => "باز کردن درخواست",
 
         "statusPendingAdmin" => "در انتظار بررسی ادمین",
+        "statusClosedByAdmin" => "بسته شده توسط ادمین",
         "sendRequestToChannel" => "ارسال درخواست به کانال",
 
     ],
