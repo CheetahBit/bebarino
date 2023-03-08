@@ -159,7 +159,7 @@ class MainBot
                 return str_contains($trip->fromCountry, $country->title) ||  str_contains($trip->toCountry, $country->title);
             });
             $data->country = $country->fullTitle();
-            
+            $data->trips = '';
             foreach ($filtered as $trip) {
                 if ($day != $trip->date) {
                     $day = $trip->date;
