@@ -279,7 +279,7 @@ class TripBot
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
         })->exec();
 
-        $this->api->chat($userId)->updateMessage()->text('tripSubmitted')->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+        $this->api->chat($userId)->updateMessage()->text('tripSubmitted', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
             $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
         })->exec();
 
