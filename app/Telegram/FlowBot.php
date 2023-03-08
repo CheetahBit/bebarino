@@ -93,19 +93,16 @@ class FlowBot
         $step = $flow[$cache->cursor];
         $type = $message->entities[0]->type ?? null;
         $error = null;
+        $isDesire = ($message->text ?? null) == $config->keywords->desire;
         $this->api->chat($this->userId)->updateButton()->messageId($messageId - 1)->exec();
         if ($step == 'contact') {
             if (!isset($message->contact)) $error = 'errorInvalidContact';
             else if ($message->contact->user_id != $this->userId) $error = 'errorAnotherContact';
             else $message->text = $message->contact->phone_number;
-        } else if ($step == 'phone' && $type != 'phone_number') $error = 'errorInvalidPhone';
-        else if ($step == 'email' && $type != 'email')  $error = 'errorInvalidEmail';
+        } else if ($step == 'phone' && $type != 'phone_number' && !$isDesire) $error = 'errorInvalidPhone';
+        else if ($step == 'email' && $type != 'email' && !$isDesire)  $error = 'errorInvalidEmail';
         else if ($step == 'date' && Validator::make($message, ['text', 'date_format:Y/m/d'])->fails())  $error = 'errorInvalidDate';
-        else if (
-            ($step == 'passport' || $step == 'ticket') &&
-            ($message->text ?? null) != $config->keywords->desire &&
-            !isset($message->photo)
-        )  $error = 'errorInvalidPhoto';
+        else if (($step == 'passport' || $step == 'ticket') && !$isDesire && !isset($message->photo))  $error = 'errorInvalidPhoto';
 
 
         if (isset($error)) $this->api->chat($this->userId)->sendMessage()->text($error)->exec();
