@@ -485,13 +485,13 @@ class TripBot
             })->rowButtons(function ($m)  use ($trip) {
                 $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
             })->exec();
-            $this->api->chat($package->userId)->removeKeyboard()->exec();
+            $this->api->chat($package->userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
                 $m->button('closeRequest', 'data', 'Package.status.closed,' . $package->id);
             })->rowButtons(function ($m)  use ($package) {
                 $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
             })->exec();
-            $this->api->chat($trip->userId)->removeKeyboard()->exec();
+            $this->api->chat($trip->userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
 
         } else {
             $transfer->update(['status' => 'pendingAdmin']);

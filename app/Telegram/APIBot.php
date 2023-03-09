@@ -130,8 +130,6 @@ class APIBot
         $temp = new stdClass;
         $temp->remove_keyboard = true;
         $this->data->reply_markup = $temp;
-        $this->data->text = '.';
-        $this->data->method = 'sendMessage';
         return $this;
     }
 
