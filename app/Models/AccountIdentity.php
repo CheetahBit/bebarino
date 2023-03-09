@@ -15,8 +15,7 @@ class AccountIdentity extends Model
 
     protected $fillable = [
         'username',
-        'firstname',
-        'lastname',
+        'fullname',
         'passport'
     ];
 
@@ -27,8 +26,7 @@ class AccountIdentity extends Model
 
     protected $casts = [
         'username' => NotEntered::class,
-        'firstname' => NotEntered::class,
-        'lastname' => NotEntered::class,
+        'fullname' => NotEntered::class,
         'passport' => PassportImg::class,
     ];
 
