@@ -195,7 +195,7 @@ return json_decode(json_encode([
 
         "inputContact" => "شماره خود را با زدن دکمه زیر به اشتراک بگذارید",
         "inputUsername" => "نام کاربری خود را وارد کنید",
-        "inputFullname" => "نام خود را وارد کنید",
+        "inputFullname" => "نام کامل خود را وارد کنید",
         "inputPassport" => "تصویر پاسپورت خود را وارد کنید",
 
         "inputPhone" => "شماره موبایل را وارد کنید",
