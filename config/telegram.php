@@ -127,7 +127,7 @@ return json_decode(json_encode([
         "support" => "متن پشتیبانی",
         "accountInfo" => "حساب کاربری",
 
-        "identityInfo" => "اطلاعات هویتی\n\nنام کاربری : :username\nنام : :firstname\nنام خانوادگی : :lastname\nنصویر پاسپورت : :passport",
+        "identityInfo" => "اطلاعات هویتی\n\nنام کاربری : :username\nنام کامل : :fullname\nنصویر پاسپورت : :passport",
         "contactInfo" => "اطلاعات تماس\n\nایمیل : :email\nشماره تماس : :phone\nکشور : :country\nشهر : :city\nنشانی : :address",
         "bankInfo" => "اطلاعات بانکی\n\nکشور : :country\nنام صاحب حساب: :accountName\nشماره جساب : :accountNumber",
 
