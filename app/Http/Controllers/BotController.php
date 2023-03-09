@@ -89,18 +89,18 @@ class BotController extends Controller
 
     public function reset()
     {
-        // $token = config('telegram')->token;
-        // Http::get('https://api.telegram.org/bot' . $token . '/deleteWebhook');
-        // $response = Http::get('https://api.telegram.org/bot' . $token . '/getUpdates');
-        // try {
-        //     $offset = end(json_decode($response)->result)->update_id + 1;
-        //     Http::get('https://api.telegram.org/bot' . $token . '/getUpdates?offset=' . $offset);
-        // } catch (\Throwable $th) {
-        //     //throw $th;
-        // }
+        $token = config('telegram')->token;
+        Http::get('https://api.telegram.org/bot' . $token . '/deleteWebhook');
+        $response = Http::get('https://api.telegram.org/bot' . $token . '/getUpdates');
+        try {
+            $offset = end(json_decode($response)->result)->update_id + 1;
+            Http::get('https://api.telegram.org/bot' . $token . '/getUpdates?offset=' . $offset);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
-        // Http::get('https://api.telegram.org/bot' . $token . '/setwebhook?url=https://bot.cheetahbit.org/api/bot');
+        Http::get('https://api.telegram.org/bot' . $token . '/setwebhook?url=https://bot.cheetahbit.org/api/bot');
 
-        (new MainBot)->tripsGroup();
+        
     }
 }
