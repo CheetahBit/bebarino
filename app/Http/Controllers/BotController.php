@@ -41,8 +41,8 @@ class BotController extends Controller
     public function download($folder, $name)
     {
         $request = request();
-        return dd(request()->headers['host']);
-        Log::alert('Request For Download : ' . print_r($request->header()));
+        // return dd(request()->headers);
+        Log::alert('Request For Download : ' . print_r(request()->headers));
         return Storage::download($folder . '/' . $name, $name . '.jpg');
     }
 
