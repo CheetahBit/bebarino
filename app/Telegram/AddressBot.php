@@ -34,7 +34,7 @@ class AddressBot extends ParentBot
 
         $this->api->updateButton()->messageId($this->messageId)->exec();
 
-        $id =  $this->data ?? $this->cache->address;
+        $id =  $this->data;
         $address = $this->user->addresses()->find($id);
 
         $this->api->sendMessage()->text('addressInfo', $address)->inlineKeyboard()->rowButtons(function ($m) use ($id) {
