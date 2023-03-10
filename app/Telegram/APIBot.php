@@ -25,27 +25,6 @@ class APIBot
         $this->config = config('telegram');
     }
 
-    public function getCache($id)
-    {
-        return json_decode(Cache::store('database')->get($id, '{}'));
-    }
-
-    public function deleteCache($id)
-    {
-        return Cache::store('database')->delete($id);
-    }
-
-    public function setCache($id, $data)
-    {
-        Cache::store('database')->put($id, json_encode($data, JSON_UNESCAPED_UNICODE));
-    }
-
-    public function putCache($id, $key, $value)
-    {
-        $cache = $this->getCache($id);
-        $cache->{$key} = $value;
-        $this->setCache($id, $cache);
-    }
 
     public function chat($id)
     {
@@ -201,10 +180,10 @@ class APIBot
         return $this;
     }
 
-    public function inlineMode($mode)
-    {
-        $this->putCache($this->data->chat_id, 'inline', $mode);
-    }
+    // public function inlineMode($mode)
+    // {
+    //     $this->putCache($this->data->chat_id, 'inline', $mode);
+    // }
 
     public function sendMediaGroup()
     {

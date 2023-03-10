@@ -3,10 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+
 
 class User extends Model
 {
@@ -15,20 +13,12 @@ class User extends Model
         'phone',
     ];
 
-    public function identity()
+    public function account()
     {
-        return $this->hasOne(AccountIdentity::class,'userId');
+        return $this->hasOne(Account::class,'userId');
     }
 
-    public function bank()
-    {
-        return $this->hasOne(AccountBank::class,'userId');
-    }
 
-    public function contact()
-    {
-        return $this->hasOne(AccountContact::class,'userId');
-    }
 
     public function addresses()
     {

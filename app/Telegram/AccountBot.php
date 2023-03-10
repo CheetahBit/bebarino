@@ -2,27 +2,14 @@
 
 namespace App\Telegram;
 
-use App\Models\User;
-use Illuminate\Support\Facades\Cache;
-use stdClass;
-
-class AccountBot
+class AccountBot extends ParentBot
 {
 
-    public $api;
-    public $config;
-
-    public function __construct()
+    public function index()
     {
-        $this->api = new APIBot();
-        $this->config = config('telegram');
-    }
-
-    public function index($message)
-    {
-        $userId = $message->from->id;
-        $this->api->deleteCache($userId);
-        $this->api->chat($userId)->sendMessage()->text('accountInfo')->keyboard()->rowKeys(function ($m) {
+        $this->clear();
+        
+        $this->api->sendMessage()->text('accountInfo')->keyboard()->rowKeys(function ($m) {
             $m->key('contactInfo');
             $m->key('identityInfo');
         })->rowKeys(function ($m) {
@@ -31,49 +18,36 @@ class AccountBot
         })->exec();
     }
 
-    public function show($message)
+    public function show()
     {
-        $userId = $message->from->id;
-        $this->api->deleteCache($userId);
+        $this->clear();
+        if ($this->type == 'message')
+            $this->api->updateButton()->messageId($this->messageId - 1)->exec();
 
-        if (isset($message->message_id)) {
-            $messageId = $message->message_id - 1;
-            $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
-        }
+        $key = $this->cache->key ?? array_search($this->data, (array) $this->config->keywords);
+        $args = $this->user->account;
 
-        $cache = $message->cache;
-        $key = $cache->key ?? str_replace('Info', '', array_search($message->text, (array) $this->config->keywords));
-        $user = User::find($userId);
-        $data = $user->{$key};
-
-        $this->api->chat($userId)->sendMessage()->text($key . "Info", $data)->inlineKeyboard()->rowButtons(function ($m) use ($key) {
+        $this->api->sendMessage()->text($key, $args)->inlineKeyboard()->rowButtons(function ($m) use ($key) {
             $m->button('edit', 'data', 'Account.edit.' . $key);
         })->exec();
     }
 
-    public function edit($callback)
+    public function edit()
     {
-        $key = $callback->data;
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
+        $data = $this->data;
+        $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($data) {
+            $m->button('backward', 'data', 'Account.backward.' . $data);
+        })->messageId($this->messageId)->exec();
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($key){
-            $m->button('backward', 'data', 'Account.backward.'.$key);
-        })->exec();
-
-        $flow = new FlowBot();
-        $flow->start($userId, $key, 'Account', 'update', 'show');
+        $flow = new FlowBot($this->update);
+        $flow->start($this->data, 'update');
     }
 
-    public function update($result)
+    public function update()
     {
-        $userId = $result->userId;
-        $key = $result->name;
-        $data = $result->data;
+        $this->user->account()->update((array)$this->result);
 
-        User::find($userId)->{$key}()->update((array)$data);
-
-        $this->api->chat($userId)->sendMessage()->text('saveSuccessfully')->keyboard()->rowKeys(function ($m) {
+        $this->api->sendMessage()->text('saveSuccessfully')->keyboard()->rowKeys(function ($m) {
             $m->key('contactInfo');
             $m->key('identityInfo');
         })->rowKeys(function ($m) {
@@ -81,29 +55,21 @@ class AccountBot
             $m->key('backward');
         })->exec();
 
-        $message = new stdClass;
-        $message->from = new stdClass;
-        $message->from->id = $userId;
-        $message->cache = (object) ["key" => $key];
-        $this->show($message);
+        $this->show();
     }
 
-    public function backward($callback)
+    public function backward()
     {
-        $key = $callback->data;
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
+        $this->api->updateButton()->messageId($this->messageId)->exec();
 
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->exec();
-        $this->api->chat($userId)->sendMessage()->text('cancelEdit')->keyboard()->rowKeys(function ($m) {
+        $this->api->sendMessage()->text('cancelEdit')->keyboard()->rowKeys(function ($m) {
             $m->key('contactInfo');
             $m->key('identityInfo');
         })->rowKeys(function ($m) {
             $m->key('bankInfo');
             $m->key('backward');
         })->exec();
-        
-        $callback->cache = (object) ["key" => $key];
-        $this->show($callback);
+
+        $this->cache->key = $this->data;
     }
 }

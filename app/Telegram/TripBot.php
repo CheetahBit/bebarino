@@ -2,347 +2,84 @@
 
 namespace App\Telegram;
 
-use App\Models\Address;
 use App\Models\Package;
 use App\Models\Transfer;
 use App\Models\Trip;
-use App\Models\User;
-
 use stdClass;
 
-class TripBot
+class TripBot extends ParentBot
 {
 
-    public $api;
-
-    public function __construct()
+    public function show()
     {
-        $this->api = new APIBot();
-    }
+        if ($this->type = 'callback')
+            $this->api->updateButton()->messageId($this->messageId)->exec();
 
-    public function show($message)
-    {
-        $config = config('telegram');
-        $userId = $message->from->id;
+        $id = $this->data ?? $this->cache->package;
 
-        $id = $message->text ?? $message->cache->trip;
+        $trip = $this->user->trips()->find($id);
+        $status = $trip->getRawOriginal('status');
 
-        if (!isset($message->text)) $this->api->chat($userId)->updateButton()->messageId($message->message->message_id)->exec();
-
-        $trip = User::find($userId)->trips()->find($id);
-        $this->api->chat($userId)->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-            if ($trip->getRawOriginal('status') != 'closedByAdmin')
-                $m->button('edit', 'data', 'Trip.edit');
-            $m->button('backward', 'data', 'MyRequest.index');
-        })->rowButtons(function ($m) use ($trip) {
-            if ($trip->getRawOriginal('status') != 'closedByAdmin') {
-                if ($trip->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
-                else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
+        $this->api->sendMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($status, $id) {
+            if ($status != 'closedByAdmin')
+                $m->button('edit', 'data', 'Trip.edit.' . $id);
+            $m->button('backward', 'data', 'Card.index');
+        })->rowButtons(function ($m) use ($status, $id) {
+            if ($status != 'closedByAdmin') {
+                if ($status == 'closed')
+                    $m->button('openRequest', 'data', 'Trip.status.opened,' .  $id);
+                else
+                    $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $id);
             }
         })->exec();
-
-        $this->api->putCache($userId, 'trip', $id);
     }
 
-    public function status($callback)
+    public function create()
     {
-        $data = explode(",", $callback->data);
-        $status = $data[0];
-        $trip = $data[1];
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
-        $id = $callback->id;
-
-        $user = User::find($userId);
-
-        $trip = $user->trips()->find($trip);
-
-        if ($trip->getRawOriginal('status') == 'closedByAdmin') {
-            $this->api->showAlert($id)->text('requestClosedByAdmin', $trip)->exec();
-            $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-                $m->button('backward', 'data', 'MyRequest.index');
-            })->exec();
-        } else {
-            $this->api->showAlert($id)->text('request' . ucfirst($status))->exec();
-
-            $user->trips()->find($trip)->update(['status' => $status]);
-
-            $trip = $user->trips()->find($trip);
-
-            $transfer = Transfer::where(['trip' => $trip->id]);
-            if ($transfer->exists())  $trip->status = $transfer->first()->status;
-
-
-            $this->api->chat($userId)->updateMessage()->text('tripInfo', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-                $m->button('edit', 'data', 'Trip.edit');
-                $m->button('backward', 'data', 'MyRequest.index');
-            })->rowButtons(function ($m) use ($trip) {
-                if ($trip->getRawOriginal('status') == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
-                else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
-            })->exec();
-
-            $trip->requirement();
-
-            if (isset($trip->messageId)) {
-                $config = config('telegram');
-                $channel = $config->channel;
-                $trip->status = $status;
-                $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
-                    if ($trip->getRawOriginal('status') == 'opened') $url = 't.me/' . $config->bot . '?start=trip-' . $trip->id;
-                    else $url = 't.me/' . $config->channel;
-                    $m->button('sendFormRequest', 'url', $url);
-                })->exec();
-            }
-        }
-    }
-
-    public function close($callback)
-    {
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
-        $id = $callback->id;
-        $data = $callback->data;
-
-        $this->api->showAlert($id)->text('requestClosed')->exec();
-        $trip = Package::find($data);
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-            $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
-        })->exec();
-        $this->api->chat($trip->user->id)->sendMessage()->text('requestClosedByAdmin', $trip)->exec();
-
-        if (isset($trip->messageId)) {
-            $config = config('telegram');
-            $channel = $config->channel;
-            $trip->requirement();
-            $trip->status = 'closedByAdmin';
-            $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($trip->messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
-                // $m->button('sendFormRequest', 'url', 't.me/' . $config->channel);
-            })->exec();
-        }
-        Package::find($data)->update(['status' => 'closedByAdmin']);
-    }
-
-    public function edit($callback)
-    {
-        $userId = $callback->from->id;
-        $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
-        $id = $callback->id;
-        $cache = $callback->cache;
-        $trip = $cache->trip;
-
-        $transfer = Transfer::where(['trip' => $trip])->where(function ($query) {
-            return $query->whereIn('status', ['pendingAdmin', 'verified']);
-        });
-        if ($transfer->exists())
-            $this->api->showAlert($id)->text('notEditable')->exec();
-        else {
-            $flow = new FlowBot();
-            $flow->start($userId, 'trip', 'Trip', 'confirmUpdate', 'form');
-
-            $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
-                $m->button('backward', 'data', 'Trip.show');
-            })->exec();
-        }
-    }
-
-    public function confirmUpdate($result)
-    {
-        $userId = $result->userId;
-        $trip = $result->data;
-
-        $this->api->chat($userId)->sendMessage()->text('confirmTrip', (array)$trip)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('confirm', 'data', 'Trip.update');
-            $m->button('cancel', 'data', 'Main.menu');
-        })->exec();
-    }
-
-    public function update($callback)
-    {
-        $config = config('telegram');
-        $channel = $config->channel;
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
-        $cache = $callback->cache;
-        $data = $cache->flow->data;
-        $id = $this->api->getCache($userId)->trip;
-
-        $user = User::find($userId);
-        (new MyAddressBot)->existsOrStore($userId, $data);
-
-        if ($config->keywords->desire == $data->ticket) $data->ticket = null;
-
-        $trip = $user->trips()->find($id);
-        $trip->update((array)$data);
-
-        $trip = $user->trips()->find($id);
-        $trip->requirement();
-
-        $this->api->chat($userId)->updateMessage()->text('tripInfo', $trip)->messageId($messageId)->exec();
-
-        $messageId = $trip->messageId;
-        if (isset($messageId)) {
-            $result = $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
-                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
-            })->exec();
-
-            if (!isset($result)) {
-                $result = $this->api->sendMessage()->exec();
-                $this->api->deleteMessage()->messageId($messageId)->exec();
-                $trip->update(['messageId' => $result->message_id]);
-            }
-        }
-    }
-
-    public function create($callback)
-    {
-        $userId = $callback->from->id;
-        $messageId =  $callback->message->message_id ?? $callback->message_id - 1;
-
-        $flow = new FlowBot();
-        $flow->start($userId, 'trip', 'Trip', 'confirmStore', 'form');
-
-        $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) {
+        $this->messageId += $this->type == 'message' ? -1 : 0;
+        $this->api->updateButton()->messageId($this->messageId)->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'Main.menu');
         })->exec();
+
+        $flow = new FlowBot($this->update);
+        $flow->start('trip','confirm', 'store');
     }
 
-    public function confirmStore($result)
+    public function store()
     {
-        $config = config('telegram');
-        $userId = $result->userId;
-        $trip = $result->data;
+        $data = $this->cache->flow->data;
 
-        if (!isset($trip->ticket)) $trip->ticket = $config->keywords->notEntered;
-
-        $this->api->chat($userId)->sendMessage()->text('confirmTrip', (array)$trip)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('confirm', 'data', 'Trip.store');
-            $m->button('cancel', 'data', 'Main.menu');
-        })->exec();
-    }
-
-    public function store($callback)
-    {
-        $config = config('telegram');
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
-        $cache = $callback->cache;
-        $data = $cache->flow->data;
-
-        $user = User::find($userId);
-        (new MyAddressBot)->existsOrStore($userId, $data);
-
-        if ($config->keywords->desire == $data->ticket) $data->ticket = null;
-
-        $trip = $user->trips()->create((array)$data);
+        $trip = $this->user->trips()->create((array)$data);
         $id = $trip->id;
         $trip->save();
 
-        $temp = new stdClass;
-        $temp->userId = $userId;
-        $temp->messageId = $messageId;
-        $temp->trip = $id;
-        $temp->package = $this->api->getCache($userId)->package;
+        AddressBot::storeFromToAddress($this->userId, $data);
 
-        $this->request($temp);
+        $this->request($id);
     }
 
-    public function delete($callback)
+    public function form()
     {
-        $config = config('telegram');
-        $channel = $config->channel;
-        $deleted = $config->messages->deleted;
-        $userId = $callback->from->id;
-        $trip = $callback->data;
-        $text = $callback->message->text . "\n\n" . $deleted;
+        $package = explode('-', $this->data)[1];
+        $package = Trip::find($package);
 
-        $trip = Trip::find($trip);
-        $messageId = $trip->messageId;
-        $trip->delete();
-        $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
-        $messageId = $callback->message->message_id;
-        $this->api->chat($userId)->updateMessage()->messageId($messageId)->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-            $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
-        })->exec();
-
-        $this->api->chat($trip->user->id)->sendMessage()->text('requestDeletedByAdmin', $trip)->exec();
-    }
-
-    public function confirmSubmit($result)
-    {
-        $config = config('telegram');
-        $userId = $result->userId;
-        $trip = $result->data;
-
-        if (!isset($trip->ticket)) $trip->ticket = $config->keywords->notEntered;
-
-        $this->api->chat($userId)->sendMessage()->text('confirmTrip', (array)$trip)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('confirm', 'data', 'Trip.submit');
-            $m->button('cancel', 'data', 'Main.menu');
-        })->exec();
-    }
-
-    public function submit($callback)
-    {
-        $config = config('telegram');
-        $channel = $config->channel;
-        $userId = $callback->from->id;
-        $cache = $callback->cache;
-        $messageId = $callback->message->message_id;
-        $data = $cache->flow->data;
-
-        if ($config->keywords->desire == $data->ticket) $data->ticket = null;
-
-        $user = User::find($userId);
-        (new MyAddressBot)->existsOrStore($userId, $data);
-
-        $trip = $user->trips()->create((array) $data);
-        $id = $trip->id;
-        $trip->save();
-
-        $trip = $user->trips()->find($id);
-        $trip->requirement();
-
-        $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
-            $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
-        })->exec();
-
-        $this->api->chat($userId)->updateMessage()->text('tripSubmitted', $trip)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
-            $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
-        })->exec();
-
-        $user->trips()->find($id)->update(['messageId' => $result->message_id]);
-
-        $message = new stdClass;
-        $message->from = (object)['id' => $userId];
-        $main = new MainBot();
-        $main->menu($message);
-    }
-
-    public function form($message)
-    {
-        $config = config('telegram');
-        $userId = $message->from->id;
-        $text = $message->text;
-
-        $package = explode('-', $text)[1];
-        $package = Package::find($package);
-        $main = new MainBot();
-        if ($main->checkLogin($userId)) {
+        if (isset($this->user->phone)) {
             $transfer = Transfer::where('package', $package->id);
             $temp = Transfer::where('package', $package->id);
-            $trips = User::find($userId)->trips()->select('id')->pluck('id')->toArray();
-            if ($package->user->id == $userId)
-                $main->api->chat($userId)->sendMessage()->text('requestIsSelf')->exec();
+            $trips = $this->user->trips()->select('id')->pluck('id')->toArray();
+
+            if ($package->user->id == $this->userId)
+                $this->api->sendMessage()->text('requestIsSelf')->exec();
             else if ($package->getRawOriginal('status') != "opened")
-                $main->api->chat($userId)->sendMessage()->text('requestIsClosed')->exec();
-            else if ($transfer->whereIn('trip', $trips)->exists())
-                $main->api->chat($userId)->sendMessage()->text('requestAlready')->exec();
+                $this->api->sendMessage()->text('requestIsClosed')->exec();
+            else if ($transfer->whereIn('trips', $trips)->exists())
+                $this->api->sendMessage()->text('requestAlready')->exec();
             else if ($temp->where('status', 'verified')->exists())
-                $main->api->chat($userId)->sendMessage()->text('requestIsDone')->exec();
+                $this->api->sendMessage()->text('requestIsDone')->exec();
             else {
                 $package->requirement();
-                $isAdmin = in_array($userId, $config->admins);
-                $main->api->chat($userId)->sendMessage()->text('requestPackageForm', $package, plain:json_encode($trips))->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $package) {
+                $isAdmin = in_array($this->userId, $this->config->admins);
+                $this->api->sendMessage()->text('requestPackageForm', $package, plain: json_encode($trips))->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $package) {
                     if ($isAdmin) {
                         if ($isAdmin) $m->button('delete', 'data', 'Package.delete.' .  $package->id);
                         $m->button('closeRequest', 'data', 'Package.close.' .  $package->id);
@@ -352,179 +89,339 @@ class TripBot
                         $m->button('selectTrip', 'query', time())->inlineMode('trips');
                     }
                 })->exec();
-                $action = $config->actions->selectTrip;
-                $this->api->putCache($userId, 'action', $action);
-                $this->api->putCache($userId, 'package', $package->id);
+                $this->putCache('action', 'selectTrip');
+                $this->putCache('package', $package->id);
+                $this->putCache('inline', 'trips');
             }
-        } else $main->needLogin($userId);
+        } else (new MainBot($this->update))->needLogin();
     }
 
-    public function select($message)
+    public function submit()
     {
-        $userId = $message->from->id;
-        $messageId = $message->message_id;
-        $id = $message->text;
+        $config = $this->config;
+        $channel = $config->channel;
+        $data = $this->cache->flow->data;
 
-        $this->api->chat($userId)->deleteMessage()->messageId($messageId)->exec();
-
-        $data = new stdClass;
-        $data->userId = $userId;
-        $data->messageId = $messageId - 1;
-        $data->trip = $id;
-        $data->package = $message->cache->package;
-
-        $this->request($data);
-    }
-
-    public function request($data)
-    {
-        $userId = $data->userId;
-        $messageId = $data->messageId;
-        $user = User::find($userId);
-        $trip = $user->trips()->find($data->trip);
+        $trip = $this->user->trips()->firstOrCreate((array) $data);
         $trip->requirement();
-        $package = Package::find($data->package);
 
-        $pending = config('telegram')->messages->pending;
-        $this->api->chat($userId)->updateMessage()->text('requestPackageSent', $trip,  "\n\n" . $pending)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-            $m->button('sendRequestToChannel', 'data', 'Trip.sendToChannel.' . $trip->id);
+        $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
+            $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
         })->exec();
 
-        $this->api->chat($package->user->id)->sendMessage()->text('requestPackage', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
-            $data = $data->trip . ',' . $data->package;
-            $m->button('acceptRequest', 'data', 'Trip.accept.' . $data);
-            $m->button('rejectRequest', 'data', 'Trip.reject.' . $data);
+        $this->api->chat($this->userId)->updateMessage()->text('tripSubmitted', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($result, $channel) {
+            $m->button('showInChannel', 'url', 't.me/' . $channel . '/' . $result->message_id);
+        })->messageId($this->messageId)->exec();
+
+        $trip->update(['messageId' => $result->message_id]);
+        AddressBot::storeFromToAddress($this->userId, $data);
+
+        (new MainBot($this->update))->start();
+    }
+
+    public function edit()
+    {
+        $id = $this->data;
+
+        $transfer = Transfer::where(['trip' => $id])->where(function ($query) {
+            return $query->whereIn('status', ['pendingAdmin', 'verified']);
+        });
+
+        if ($transfer->exists())
+            $this->api->showAlert($this->callbackId)->text('notEditable')->exec();
+        else {
+            $this->messageId += $this->type == 'message' ? -1 : 0;
+            $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($id) {
+                $m->button('backward', 'data', 'Trip.show.' . $id);
+            })->messageId($this->messageId)->exec();
+
+            $this->putCache('trip', $id);
+            $flow = new FlowBot($this->update);
+            $flow->start('trip','confirm', 'update');
+        }
+    }
+
+    public function update()
+    {
+        $config = $this->config;
+        $cache = $this->cache;
+        $data = $cache->flow->data;
+        $id = $cache->trip;
+
+        $trip = $this->user->trips()->find($id);
+        $trip->requirement();
+
+        $this->api->updateMessage()->text('tripInfo', $trip)->messageId($this->messageId)->exec();
+
+        if (isset($trip->messageId)) {
+            $result = $this->api->chat('@' . $this->config->channel)->updateMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
+                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
+            })->messageId($trip->messageId)->exec();
+
+            if (!isset($result)) {
+                $this->api->sendMessage()->exec();
+                $this->api->deleteMessage()->messageId($trip->messageId)->exec();
+                $this->user->trips()->find($trip->id)->update(['messageId' => $result->message_id]);
+            }
+        }
+
+        $this->user->trips()->find($id)->update((array)$data);
+
+        AddressBot::storeFromToAddress($this->userId, $data);
+    }
+
+    public function destroy()
+    {
+        $config = $this->config;;
+        $channel = $config->channel;
+        $deleted = $config->messages->deleted;
+
+        $text = $this->text . "\n\n" . $deleted;
+
+        $trip = Trip::find($this->data);
+        $messageId = $trip->messageId;
+        $trip->delete();
+
+        $this->api->chat($this->userId)->updateMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+            $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
+        })->messageId($this->messageId)->exec();
+
+        $this->api->chat($trip->user->id)->sendMessage()->text('requestDeletedByAdmin', $trip)->exec();
+
+        $this->api->chat('@' . $channel)->deleteMessage()->messageId($messageId)->exec();
+    }
+
+    public function status()
+    {
+        $data = explode(",", $this->data);
+        $status = $data[0];
+        $tripId = $data[1];
+
+        $trip = $this->user->trips()->find($tripId);
+
+        if ($trip->getRawOriginal('status') == 'closedByAdmin') {
+            $this->api->showAlert($this->callbackId)->text('requestClosedByAdmin', $trip)->exec();
+            $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) {
+                $m->button('backward', 'data', 'Card.index');
+            })->messageId($this->messageId)->exec();
+        } else {
+            $this->api->showAlert($this->callbackId)->text('request' . ucfirst($status))->exec();
+
+            $trip->update(['status' => $status]);
+            $trip = $this->user->trips()->find($tripId);
+
+            $transfer = Transfer::where(['trip' => $trip->id]);
+            if ($transfer->exists()) $trip->status = $transfer->first()->status;
+
+            $this->api->updateMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) {
+                $m->button('edit', 'data', 'Trip.edit');
+                $m->button('backward', 'data', 'Card.index');
+            })->rowButtons(function ($m) use ($trip) {
+                $status = $trip->getRawOriginal('status');
+                if ($status == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
+                else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
+            })->messageId($this->messageId)->exec();
+
+            $trip->requirement();
+
+            if (isset($trip->messageId)) {
+                $config = $this->config;
+                $trip->status = $status;
+
+                $this->api->chat('@' . $config->channel)->updateMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
+                    $status = $trip->getRawOriginal('status');
+                    if ($status == 'opened')
+                        $url = 't.me/' . $config->bot . '?start=trip-' . $trip->id;
+                    else
+                        $url = 't.me/' . $config->channel;
+                    $m->button('sendFormRequest', 'url', $url);
+                })->messageId($trip->messageId)->exec();
+            }
+        }
+    }
+
+    public function close()
+    {
+        $this->api->showAlert($this->callbackId)->text('requestClosed')->exec();
+
+        $trip = Trip::find($this->data);
+
+        $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+            $m->button('contactPacker', 'url', 'tg://user?id=' .  $trip->userId);
+        })->messageId($this->messageId)->exec();
+
+        $this->api->chat($trip->user->id)->sendMessage()->text('requestClosedByAdmin', $trip)->exec();
+
+        if (isset($trip->messageId)) {
+            $config = config('telegram');
+            $channel = $config->channel;
+            $trip->requirement();
+            $trip->status = 'closedByAdmin';
+            $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($trip->messageId)->exec();
+        }
+
+        Trip::find($trip->id)->update(['status' => 'closedByAdmin']);
+    }
+
+    public function confirm()
+    {
+        $result = $this->result;
+        $data = $result->data;
+        $target = $result->target;
+
+        $this->api->sendMessage()->text('confirmTrip', (array)$data)->inlineKeyboard()->rowButtons(function ($m) use ($target) {
+            $m->button('confirm', 'data', 'Trip.' . $target);
+            $m->button('cancel', 'data', 'Main.menu');
+        })->exec();
+    }
+
+    public function select()
+    {
+        $this->api->deleteMessage()->messageId($this->messageId)->exec();
+        $this->request($this->data);
+    }
+
+    public function request($id)
+    {
+        $pending = $this->config->messages->pending;
+
+        $trip = $this->user->trips()->find($id);
+        $trip->requirement();
+
+        $package = Package::find($this->cache->package);
+
+        $this->api->updateMessage()->text('requestPackageSent', $trip, "\n\n" . $pending)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
+            $m->button('sendRequestToChannel', 'data', 'Package.sendToChannel.' . $trip->id);
+        })->messageId($this->messageId)->exec();
+
+        $this->api->chat($package->user->id)->sendMessage()->text('requestPackage', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($package, $trip) {
+            $data = $package->id . ',' . $trip->id;
+            $m->button('acceptRequest', 'data', 'Package.accept.' . $data);
+            $m->button('rejectRequest', 'data', 'Package.reject.' . $data);
         })->exec();
 
         Transfer::create([
-            'package' => $data->package,
-            'trip' => $data->trip,
+            'trip' => $trip->id,
+            'package' => $package->id,
             'type' => 'tripToPackage',
             'status' => 'pendingPacker'
         ])->save();
     }
 
-    public function sendToChannel($callback)
+    public function sendToChannel()
     {
-        $config = config('telegram');
-        $channel = $config->channel;
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
-        $id = $callback->data;
+        $config = $this->config;
 
-        $user = User::find($userId);
-        $trip = $user->trips()->find($id);
+        $trip = $this->user->trips()->find($this->data);
 
         if (!isset($trip->messageId)) {
             $trip->requirement();
-            $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
+
+            $result = $this->api->chat('@' . $config->channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
             })->exec();
 
-            $this->api->chat($userId)->updateButton()->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
+            $this->api->chat($this->userId)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
                 $m->button('showInChannel', 'url', 't.me/' . $config->channel . '/' . $result->message_id);
-            })->exec();
+            })->messageId($this->messageId)->exec();
 
-            $user->trips()->find($id)->update(['messageId' => $result->message_id]);
+            $this->user->trips()->find($trip->id)->update(['messageId' => $result->message_id]);
         }
     }
 
-    public function reject($callback)
+    public function reject()
     {
-        $config = config('telegram');
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
-        $text = $callback->message->text;
+        $config = $this->config;
+        $text = $this->text;
+
         $reject = $config->messages->rejectRequest;
+        $data = explode(',', $this->data);
 
-        $data = explode(',', $callback->data);
-
-        $trip = Trip::find($data[0]);
+        $package = Package::find($data[0]);
+        $trip = Trip::find($data[1]);
         $trip->requirement();
-        $package = Package::find($data[1]);
-        $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
+        $transfer = Transfer::where(['trip' => $trip->id, 'package' => $package->id]);
 
-        if (in_array($userId, $config->admins)) {
+        if (in_array($this->userId, $config->admins)) {
             $transfer->update(['status' => 'adminRejected']);
-            $this->api->chat($userId)->updateMessage()->text(plain: $text . "\n\n" . $reject)->messageId($messageId)->exec();
+            $this->api->chat($this->userId)->updateMessage()->text(plain: $text . "\n\n" . $reject)->messageId($this->messageId)->exec();
             $this->api->chat($trip->userId)->sendMessage()->text('requestPackage', $trip, "\n\n" . $reject)->exec();
             $this->api->chat($package->userId)->sendMessage()->text('requestPackage', $trip, "\n\n" . $reject)->exec();
         } else {
             $transfer->update(['status' => 'packerRejected']);
             $text .= "\n\n" . $reject;
-            $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->exec();
+            $this->api->chat($this->userId)->updateMessage()->text(plain: $text)->messageId($this->messageId)->exec();
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
         }
     }
 
-    public function accept($callback)
+    public function accept()
     {
-        $config = config('telegram');
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
-        $text = $callback->message->text;
+        $config = $this->config;
+        $text = $this->text;
+
         $accept = $config->messages->acceptRequest;
         $pending = $config->messages->pendingAdmin;
 
-        $data = explode(',', $callback->data);
+        $data = explode(',', $this->data);
 
-        $trip = Trip::find($data[0]);
-        $package = Package::find($data[1]);
-    
-        $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
+        $package = Package::find($data[0]);
+        $trip = Trip::find($data[1]);
 
-        if (in_array($userId, $config->admins)) {
+        $transfer = Transfer::where(['trip' => $trip->id, 'package' => $package->id]);
+
+        if (in_array($this->userId, $config->admins)) {
             $transfer->update(['status' => 'verified']);
             $text .= "\n\n" . $accept;
-            $this->api->chat($userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m)  use ($package, $trip) {
-                $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
-                $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
-            })->exec();
-            $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
-                $m->button('closeRequest', 'data', 'Trip.status.closed,' . $trip->id);
-            })->rowButtons(function ($m)  use ($trip) {
-                $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
-            })->exec();
-            $this->api->chat($package->userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
+            $this->api->chat($this->userId)->updateMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip, $package) {
+                $m->button('contactPacker', 'url', 'tg://user?id=' . $package->userId);
+                $m->button('contactPacker', 'url', 'tg://user?id=' .  $trip->userId);
+            })->messageId($this->messageId)->exec();
+
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
-                $m->button('closeRequest', 'data', 'Package.status.closed,' . $package->id);
-            })->rowButtons(function ($m)  use ($package) {
-                $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
+                $m->button('contactPacker', 'url', 'tg://user?id=' . $package->userId);
             })->exec();
+
             $this->api->chat($trip->userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
 
+            $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
+                $m->button('contactPacker', 'url', 'tg://user?id=' .  $trip->userId);
+            })->exec();
+
+            $this->api->chat($package->userId)->sendMessage()->text('removeKeyboard')->removeKeyboard()->exec();
         } else {
             $transfer->update(['status' => 'pendingAdmin']);
             $text .= "\n\n" . $accept . "\n\n" . $pending;
-            $this->api->chat($package->userId)->updateMessage()->text(plain: $text)->messageId($messageId)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
+
+            $this->api->chat($package->userId)->updateMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
                 $m->button('closeRequest', 'data', 'Package.status.closed,' . $package->id);
-            })->exec();
+            })->messageId($this->messageId)->exec();
+
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
- 
-            $trip->requirement();
+
             $package->requirement();
-            foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
-            $trip->packageCode = $package->code;
+            $trip->requirement();
+            foreach ($trip->toArray() as $key => $value) $package->{'trip' . ucfirst($key)} = $value;
+            $package->tripCode = $trip->code;
+
             foreach ($config->admins as $admin)
-                $this->api->chat($admin)->sendMessage()->text('requestTripAdmin', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
+                $this->api->chat($admin)->sendMessage()->text('requestTripAdmin', $package)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
                     $data = implode(',', $data);
                     $m->button('acceptRequest', 'data', 'Trip.accept.' . $data);
                     $m->button('rejectRequest', 'data', 'Trip.reject.' . $data);
-                })->rowButtons(function ($m)   use ($trip) {
-                    $m->button('tripperDocs', 'data', 'Trip.contactAndImageDocs.tripper,' . $trip->id);
-                    $m->button('contactTripper', 'url', 'tg://user?id=' . $trip->userId);
-                })->rowButtons(function ($m) use ($package) {
+                })->rowButtons(function ($m)   use ($package) {
                     $m->button('packerDocs', 'data', 'Trip.contactAndImageDocs.packer,' . $package->id);
-                    $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
+                    $m->button('contactPacker', 'url', 'tg://user?id=' . $package->userId);
+                })->rowButtons(function ($m) use ($trip) {
+                    $m->button('tripperDocs', 'data', 'Trip.contactAndImageDocs.tripper,' . $trip->id);
+                    $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
                 })->exec();
         }
     }
 
-    public function contactAndImageDocs($callback)
+    public function contactAndImageDocs()
     {
-        $userId = $callback->from->id;
-        $messageId = $callback->message->message_id;
-        $data = explode(',', $callback->data);
+        $data = explode(',', $this->data);
         $id = $data[1];
 
         $ticket = null;
@@ -547,16 +444,16 @@ class TripBot
         $paths = (array)$paths;
 
         if (count($paths) > 0) {
-            $this->api->showAlert($callback->id)->text('sentDocs')->exec();
+            $this->api->showAlert($this->callbackId)->text('sentDocs')->exec();
             $count = count($paths);
             $i = 0;
             foreach ($paths as $path) {
-                $api = $this->api->chat($userId)->sendPhoto()->photo($path);
-                if ($i == 0) $api->reply($messageId);
-                if ($i == $count - 1 && isset($contact)) $api->noreply()->caption('contactInfo', $contact);
+                $api = $this->api->sendPhoto()->photo($path);
+                if ($i == 0) $api->reply($this->messageId);
+                if ($i == $count - 1 && $contact->isFullFill()) $api->noreply()->caption('contactInfo', $contact);
                 $api->exec();
                 $i++;
             };
-        } else $this->api->showAlert($callback->id, true)->text('noDocs')->exec();
+        } else $this->api->showAlert($this->callbackId, true)->text('noDocs')->exec();
     }
 }

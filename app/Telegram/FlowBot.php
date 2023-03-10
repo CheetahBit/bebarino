@@ -6,48 +6,36 @@ use App\Models\Country;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
-use ReflectionClass;
 use stdClass;
 
-class FlowBot
+class FlowBot extends ParentBot
 {
-    public $api;
-    public $userId;
 
-    public function __construct()
+    public function start($name, $method, $target = '')
     {
-        $this->api = new APIBot();
-    }
-
-    public function start($userId, $name, $class, $method, $backward)
-    {
-        $config = config('telegram');
-        $this->userId = $userId;
-
         $flow = new stdClass;
-        $flow->userId = $userId;
         $flow->name = $name;
-        $flow->class = $class;
+        $flow->class = $this->config->flows->{$name}->class;
         $flow->method = $method;
-        $flow->backward = $backward;
+        $flow->target = $target;
         $flow->cursor = -1;
         $flow->data = new stdClass;
 
-        $this->api->putCache($userId, 'flow', $flow);
-        $this->api->putCache($userId, 'action', $config->actions->flow);
+        $this->putCache('flow', $flow);
+        $this->putCache('action', $this->config->actions->flow);
         $this->next();
     }
 
     public function next()
     {
-        $config = config('telegram');
-        $cache = $this->api->getCache($this->userId)->flow;
-        $cache->cursor = count((array)$cache->data);
-        $flow = $config->flows->{$cache->name};
-        if (count($flow) > $cache->cursor) {
-            $step = ucfirst($flow[$cache->cursor]);
+        $flow = $this->cache->flow;
+        $steps = $this->config->flows->{$flow->name}->steps;
+        $flow->cursor = count((array)$flow->data);
 
-            $temp = $this->api->chat($cache->userId)->sendMessage();
+        if (count($steps) > $flow->cursor) {
+            $step = ucfirst($steps[$flow->cursor]);
+
+            $temp = $this->api->chat($this->userId)->sendMessage();
             if ($step == 'Contact') {
                 $temp->text('inputContact')->keyboard()->rowKeys(function ($m) {
                     $m->key('sharePhone', 'request_contact', true);
@@ -64,7 +52,7 @@ class FlowBot
                         foreach ($keys as $key) $m->key($key->fullTitle());
                     });
                 }
-                if (in_array($cache->name, $config->optionals)) {
+                if (in_array($flow->name, $this->config->optionals)) {
                     $temp->rowKeys(function (APIBot $m) {
                         $m->key('desire');
                     });
@@ -72,85 +60,73 @@ class FlowBot
             } else if (
                 str_contains($step, 'Address') && $step != "Address" &&
                 User::find($this->userId)->addresses()->where([
-                    'country' => $cache->data->toCountry ?? $cache->data->fromCountry,
-                    'city' => $cache->data->toCity ?? $cache->data->fromCity,
+                    'country' => $flow->data->toCountry ?? $flow->data->fromCountry,
+                    'city' => $flow->data->toCity ?? $flow->data->fromCity,
                 ])->exists()
             )
                 $temp->text('inputOrSelect' . $step)->inlineKeyboard()->rowButtons(function ($m) {
                     $m->button('selectAddress', 'query', time())->inlineMode('addresses');
                 });
-            else if (in_array($cache->name, $config->optionals))
+            else if (in_array($flow->name, $this->config->optionals))
                 $temp->text('input' . $step)->keyboard()->rowKeys(function ($m) {
                     $m->key('desire');
                 });
             else $temp->text('input' . $step)->removeKeyboard();
             $temp->exec();
-            $this->api->putCache($cache->userId, 'flow', $cache);
-        } else $this->output($cache);
+            $this->putCache('flow', $flow);
+        } else $this->output($flow);
     }
 
-    public function input($message)
+    public function input()
     {
-        $config = config('telegram');
-        $this->userId = $message->from->id;
-        $messageId = $message->message_id;
-        $cache = $message->cache->flow;
-        $flow = $config->flows->{$cache->name};
-        $step = $flow[$cache->cursor];
-        $type = $message->entities[0]->type ?? null;
+        $flow = $this->cache->flow;
+        $flows = $this->config->flows->{$flow->name};
+        $step = $flows[$flow->cursor];
+        $type = $this->update->entities[0]->type ?? null;
         $error = null;
-        
-        $isDesire = ($message->text ?? null) == $config->keywords->desire;
-        $this->api->chat($this->userId)->updateButton()->messageId($messageId - 1)->exec();
+
+        $desire =  $this->config->keywords->desire;
+        $isDesire = ($this->data ?? null) == $desire;
+
+        $this->api->chat($this->userId)->updateButton()->messageId($this->messageId - 1)->exec();
+
         if ($step == 'contact') {
-            if (!isset($message->contact)) $error = 'errorInvalidContact';
-            else if ($message->contact->user_id != $this->userId) $error = 'errorAnotherContact';
-            else $message->text = $message->contact->phone_number;
-        } else if ($step == 'phone' && $type != 'phone_number' && !$isDesire) $error = 'errorInvalidPhone';
-        else if ($step == 'email' && $type != 'email' && !$isDesire)  $error = 'errorInvalidEmail';
+            if (!isset($this->update->contact))
+                $error = 'errorInvalidContact';
+            else if ($this->update->contact->user_id != $this->userId)
+                $error = 'errorAnotherContact';
+            else
+                $this->update->text = $this->update->contact->phone_number;
+        } else if ($step == 'phone' && $type != 'phone_number' && !$isDesire)
+            $error = 'errorInvalidPhone';
+        else if ($step == 'email' && $type != 'email' && !$isDesire)
+            $error = 'errorInvalidEmail';
         else if ($step == 'date') {
-            if (Validator::make((array)$message, ['text' => 'date_format:Y/m/d'])->fails()) $error = 'errorInvalidDate';
-            else if (Carbon::parse($message->text)->lte(Carbon::today())) $error = 'errorDatePast';
-        } else if (($step == 'passport' || $step == 'ticket') && !$isDesire && !isset($message->photo))  $error = 'errorInvalidPhoto';
+            if (Validator::make(['data' => $this->data], ['data' => 'date_format:Y/m/d'])->fails())
+                $error = 'errorInvalidDate';
+            else if (Carbon::parse($this->data)->lte(Carbon::today()))
+                $error = 'errorDatePast';
+        } else if (($step == 'passport' || $step == 'ticket') && !$isDesire && !isset($this->photo))
+            $error = 'errorInvalidPhoto';
 
 
-        if (isset($error)) $this->api->chat($this->userId)->sendMessage()->text($error)->exec();
+        if (isset($error))
+            $this->api->chat($this->userId)->sendMessage()->text($error)->exec();
         else {
-            $cache->data->{$step} = $message->text ?? $this->download($message->photo, $step);
-            if (($message->text ?? null) == $config->keywords->desire) $cache->data->{$step} = null;
+            $flow->data->{$step} = $this->data ?? $this->download($this->photo, $step);
+            if (($this->data ?? null) == $desire)
+                $flow->data->{$step} = null;
         }
 
-
-
-        $this->api->putCache($this->userId, 'flow', $cache);
+        $this->putCache('flow', $flow);
         $this->next();
     }
 
-    public function backward($message)
+    public function output($flow)
     {
-        $userId = $message->from->id;
-        $cache = $this->api->getCache($userId);
-        $flow = $cache->flow;
-        $flow->cursor -= 2;
-        if ($cache->cursor >= 0) {
-            $this->api->putCache($userId, 'flow', $flow);
-            $this->next();
-        } else {
-            $message = new stdClass;
-            $message->from->id = $userId;
-            $message->cache = $cache;
-            if ($flow->backward == 'menu') (new MainBot)->menu($message);
-            else {
-                $class = new ReflectionClass($flow->class . "Bot");
-                $class->{$flow->backward}($message);
-            }
-        };
-    }
-
-    public function output($result)
-    {
-        $class = new ("App\Telegram\\" . $result->class . "Bot")();
-        $class->{$result->method}($result);
+        $class = new ("App\Telegram\\" . $flow->class . "Bot")($this->update);
+        $class->result = $flow;
+        $class->{$flow->method}();
     }
 
     public function download($photo, $step)

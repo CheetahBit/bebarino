@@ -11,13 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('account_contacts', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
             $table->foreignId('userId');
+            $table->string('username')->nullable();
+            $table->string('fullname')->nullable();
+            $table->string('passport')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('country')->nullable();
             $table->string('city')->nullable();
             $table->text('address')->nullable();
+            $table->string('bankCuntry')->nullable();
+            $table->string('accountNumber')->nullable();
+            $table->string('accountName')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('account_contacts');
+        Schema::dropIfExists('accounts');
     }
 };

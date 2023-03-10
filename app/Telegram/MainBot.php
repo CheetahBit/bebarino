@@ -10,150 +10,123 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use stdClass;
 
-class MainBot
+class MainBot extends ParentBot
 {
-    public $api;
 
-    public function __construct()
+    public function start()
     {
-        $this->api = new APIBot();
-    }
+        $this->clear();
 
-    public function menu($message)
-    {
-        $userId = $message->from->id;
-        $this->api->deleteCache($userId);
+        $user =  $this->register($this->userId);
+        $isLogged = isset($user->phone);
 
-        $isLogged = false;
-        if ($this->checkExistsUser($userId)) $isLogged = $this->checkLogin($userId);
         $menu =  $isLogged ? 'mainMenu' : 'guestMenu';
 
-        $this->api->chat($userId)->sendMessage()->text($menu)->keyboard()->rowKeys(function (APIBot $m)  use ($isLogged) {
+        $this->api->sendMessage()->text($menu)->keyboard()->rowKeys(function ($m)  use ($isLogged) {
             $m->key($isLogged ? 'account' : 'beginning');
-        })->rowKeys(function (APIBot $m) use ($isLogged) {
+        })->rowKeys(function ($m) use ($isLogged) {
             if ($isLogged) {
                 $m->key('submitTrip');
                 $m->key('submitPackage');
             }
-        })->rowKeys(function (APIBot $m) use ($isLogged) {
+        })->rowKeys(function ($m) use ($isLogged) {
             if ($isLogged) {
-                $m->key('myAddresses');
-                $m->key('myRequests');
+                $m->key('addresses');
+                $m->key('cards');
             }
-        })->rowKeys(function (APIBot $m) {
+        })->rowKeys(function ($m) {
             $m->key('support');
             $m->key('aboutUs');
         })->exec();
 
-
-        $messageId = $message->message_id ?? $message->message->message_id + 1;
-        $this->api->chat($userId)->updateButton()->messageId($messageId - 1)->exec();
+        $this->messageId += $this->type == 'message' ? -1 : 0;
+        $this->api->updateButton()->messageId($this->messageId)->exec();
     }
 
-    public function beginning($message)
+    public function beginning()
     {
-        $userId = $message->from->id;
-        $user = User::find($userId);
-        if (isset($user->phone))
-            $this->api->chat($userId)->sendMessage()->text('alreadyLogged')->exec();
+        if (isset($this->user->phone))
+            $this->api->chat($this->userId)->sendMessage()->text('alreadyLogged')->exec();
         else {
-            $flow = new FlowBot();
-            $flow->start($userId, 'beginning', 'Main', 'login', 'menu');
+            $flow = new FlowBot($this->update);
+            $flow->start('beginning', 'setPhone');
         }
     }
 
-    public function login($result)
+    public function setPhone()
     {
-        $userId = $result->userId;
-        $data = $result->data;
-
-        $user = User::find($userId);
-        $user->update(['phone' => $data->contact]);
-        $user->contact()->update(['phone' => $data->contact]);
-
-        $this->api->chat($userId)->sendMessage()->text('loginSuccessfully')->exec();
-
-        $message = new stdClass;
-        $message->from = new stdClass;
-        $message->from->id = $userId;
-        $this->menu($message);
+        $phone = $this->result->contact;
+        $this->user->update(['phone' => $phone]);
+        $this->user->contact()->update(['phone' => $phone]);
+        $this->api->sendMessage()->text('loginSuccessfully')->exec();
+        $this->start();
     }
 
-    public function support($message)
+    public function support()
     {
-        $userId = $message->from->id;
-        $this->api->chat($userId)->sendMessage()->text('support')->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('contactSupport', 'url', 'tg://user?id=' . config('telegram')->support);
+        $config = $this->config;
+        $this->api->sendMessage()->text('support')->inlineKeyboard()->rowButtons(function ($m) use ($config) {
+            $m->button('contactSupport', 'url', 'tg://user?id=' . $config->support);
         })->exec();
     }
 
-    public function aboutUs($message)
+    public function aboutUs()
     {
-        $userId = $message->from->id;
-        $this->api->chat($userId)->sendMessage()->text('aboutUs')->exec();
+        $this->api->sendMessage()->text('aboutUs')->exec();
     }
 
-    public function submitTrip($message)
+    public function submitTrip()
     {
-        $userId = $message->from->id;
-        if ($this->checkLogin($userId)) {
-            $this->api->chat($userId)->sendMessage()->text('submitTrip')->inlineKeyboard()->rowButtons(function ($m) {
+        if (isset($this->user->phone)) {
+            $this->api->sendMessage()->text('submitTrip')->inlineKeyboard()->rowButtons(function ($m) {
                 $m->button('backward', 'data', 'Main.menu');
             })->exec();
-            $flow = new FlowBot();
-            $flow->start($userId, 'trip', 'Trip', 'confirmSubmit', 'menu');
-        } else $this->needLogin($userId);
+            $flow = new FlowBot($this->update);
+            $flow->start('trip', 'confirm', 'submit');
+        } else $this->needLogin();
     }
 
-    public function submitPackage($message)
+    public function submitPackage()
     {
-        $userId = $message->from->id;
-        if ($this->checkLogin($userId)) {
-            $this->api->chat($userId)->sendMessage()->text('submitPackage')->inlineKeyboard()->rowButtons(function ($m) {
+        if (isset($this->user->phone)) {
+            $this->api->sendMessage()->text('submitPackage')->inlineKeyboard()->rowButtons(function ($m) {
                 $m->button('backward', 'data', 'Main.menu');
             })->exec();
-            $flow = new FlowBot();
-            $flow->start($userId, 'package', 'Package', 'confirmSubmit', 'menu');
-        } else $this->needLogin($userId);
+            $flow = new FlowBot($this->update);
+            $flow->start('package', 'confirm', 'submit');
+        } else $this->needLogin();
     }
 
-    public function checkLogin($userId)
+    private function register()
     {
-        return (bool) User::find($userId)?->phone ?? false;
-    }
-
-    private function checkExistsUser($userId)
-    {
-        $user = User::find($userId);
-        if (!$user) {
-            $user = User::create(['id' => $userId]);
+        $user = User::firstOrCreate(['id' => $this->userId]);
+        if (!isset($user->identity)) {
             $user->identity()->create()->save();
             $user->bank()->create()->save();
             $user->contact()->create()->save();
-            $user->save();
-        } else return true;
-        return false;
+        }
+        return $user;
     }
 
-    public function needLogin($userId)
+    public function needLogin()
     {
-        $this->api->chat($userId)->sendMessage()->text('needLogin')->exec();
-        $message = (object)["from" => (object)["id" => $userId]];
-        $this->menu($message);
+        $this->api->sendMessage()->text('needLogin')->exec();
+        $this->start();
     }
 
-    public function tripsGroup()
+    static function sendGroupedTripsCards()
     {
         $config = config('telegram');
         $channel = '@' . $config->channel;
-
 
         $data = new stdClass;
         $data->country = null;
         $data->trips = '';
 
         $countries = Country::where('id', '>', 1)->get();
-        $trips = Trip::where('messageId', '<>', null)->where('date', '>=', Carbon::today()->format('Y/m/d'))->orderBy('date', 'asc')->get();
+        $trips = Trip::where('messageId', '<>', null)
+            ->where('date', '>=', Carbon::today()->format('Y/m/d'))
+            ->orderBy('date', 'asc')->get();
 
 
         $func = function ($trips, $country) use ($channel) {
