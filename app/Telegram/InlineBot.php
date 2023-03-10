@@ -29,7 +29,7 @@ class InlineBot extends ParentBot
                 'city' => $flow->data->toCity ?? $flow->data->fromCity,
             ]);
         $addresses = $addresses->orderBy('updated_at', 'desc')->get();
-        $select = $this->cache->action == 'selectAddress';
+        $select = $this->cache->action == 'showAddress';
         foreach ($addresses as $address) {
             $results[] = [
                 'type' => 'article',
@@ -39,6 +39,13 @@ class InlineBot extends ParentBot
                 'id' => $address->id,
             ];
         }
+        if($select) $results[] = [
+            'type' => 'article',
+            'title' => $this->config->keywords->createAddress,
+            'input_message_content' => ['message_text' => 'createAddress'],
+            'id' => 'createAddress',
+        ];
+
         return $results;
     }
 
