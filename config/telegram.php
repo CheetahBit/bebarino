@@ -1,10 +1,10 @@
 <?php
 
-require './bot/actions.php';
-require './bot/flows.php';
-require './bot/keywords.php';
-require './bot/messages.php';
-require './bot/optionals.php';
+include './bot/actions.php';
+include './bot/flows.php';
+include './bot/keywords.php';
+include './bot/messages.php';
+include './bot/optionals.php';
 
 
 return collect([
