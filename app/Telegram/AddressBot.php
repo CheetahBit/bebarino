@@ -62,6 +62,7 @@ class AddressBot extends ParentBot
     {
         $address = $this->user->addresses()->find($this->cache->address);
         $address->update((array)$this->result->data);
+        $this->data = $this->cache->address;
         $this->show();
     }
 
