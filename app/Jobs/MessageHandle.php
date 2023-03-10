@@ -61,6 +61,6 @@ class MessageHandle implements ShouldQueue
 
     public function failed(Exception $exception)
     {
-        Log::error(var_dump($exception));
+        Log::error('Error '.dd($exception));
     }
 }
