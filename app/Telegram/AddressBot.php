@@ -90,11 +90,10 @@ class AddressBot extends ParentBot
 
     public function backward()
     {
+        $this->api->updateButton()->messageId($this->messageId)->exec();
         $this->api->sendMessage()->text('removeKeyboard')->keyboard()->rowKeys(function ($m) {
             $m->key('backward');
         })->exec();
-
-        $this->api->updateButton()->messageId($this->messageId)->exec();
         $this->index();
     }
 
