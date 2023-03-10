@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\NotEntered;
+use App\Casts\PassportImg;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
