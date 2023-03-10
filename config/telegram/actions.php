@@ -1,6 +1,6 @@
 <?php
 
-return $actions = [
+return [
     "/start" => ["class" => "Main", "method" => "menu"],
     "backward" => ["class" => "Main", "method" => "menu"],
     "beginning" => ["class" => "Main", "method" => "beginning"],

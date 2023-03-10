@@ -14,10 +14,4 @@ return [
     // "admins" => [1613366049],
     "admins" => [130912163],
     "support" => 1613366049,
-    
-    // "actions" => $actions,
-    // "flows" => $flows,
-    // "keywords" => $keywords,
-    // "messages" => $messages,
-    // "optionals" => $optionals,
 ];

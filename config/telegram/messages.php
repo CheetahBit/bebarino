@@ -1,6 +1,6 @@
 <?php
 
-$messages =  [
+return [
     "guestMenu" => "منوی میهمان",
     "mainMenu" => "منوی اصلی",
     "aboutUs" => "متن درباره ما",

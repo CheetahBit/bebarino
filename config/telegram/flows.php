@@ -1,6 +1,6 @@
 <?php
 
-return $flows = [
+return [
     "beginning" => [
         "class" => "Main",
         "steps" => ["contact"],
