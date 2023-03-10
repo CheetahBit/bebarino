@@ -12,7 +12,7 @@ class AddressBot extends ParentBot
     public function index()
     {
         $this->clear();
-        
+
         if ($this->type == 'message')
             $this->api->updateButton()->messageId($this->messageId - 1)->exec();
 
@@ -27,17 +27,17 @@ class AddressBot extends ParentBot
 
     public function show()
     {
-        if($this->type == 'message' && !isset($this->result)){
+        if ($this->type == 'message' && !isset($this->result)) {
             $this->api->deleteMessage()->messageId($this->messageId)->exec();
             $this->messageId--;
         }
 
         $this->api->updateButton()->messageId($this->messageId)->exec();
 
-        $id =  $this->data;
+        $id = $this->data;
         $address = $this->user->addresses()->find($id);
 
-        $this->api->sendMessage()->text('addressInfo', $address)->inlineKeyboard()->rowButtons(function ($m) use ($id) {
+        $this->api->sendMessage()->text('addressInfo', $address, plain: $id)->inlineKeyboard()->rowButtons(function ($m) use ($id) {
             $m->button('delete', 'data', 'Address.destroy.' . $id);
             $m->button('edit', 'data', 'Address.edit.' . $id);
             $m->button('backward', 'data', 'Address.backward');
@@ -55,8 +55,8 @@ class AddressBot extends ParentBot
         $this->putCache('messageId', $result->message_id);
 
         $flow = new FlowBot($this->update);
-        $flow->start('address','update');
-    } 
+        $flow->start('address', 'update');
+    }
 
     public function update()
     {
@@ -68,7 +68,7 @@ class AddressBot extends ParentBot
 
     public function create()
     {
-        if($this->type == 'message'){
+        if ($this->type == 'message') {
             $this->api->deleteMessage()->messageId($this->messageId)->exec();
             $this->messageId--;
         }
@@ -78,15 +78,15 @@ class AddressBot extends ParentBot
         })->messageId($this->messageId)->exec();
 
         $flow = new FlowBot($this->update);
-        $flow->start('address','store');
+        $flow->start('address', 'store');
     }
 
     public function store()
     {
         $address = $this->user->addresses()->firstOrCreate((array)$this->result->data);
+        $this->data = $address->id;
 
         $this->api->sendMessage()->text('saveSuccessfully')->exec();
-        $this->data = $address->id;
         $this->show();
     }
 
