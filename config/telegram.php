@@ -7,7 +7,7 @@ require './config/telegram/messages.php';
 require './config/telegram/optionals.php';
 
 
-return json_decode(json_encode([
+return [
     "token" => env("BOT_TOKEN"),
     "channel" => "bebarinoTest",
     "bot" => "follow4u_bot",
@@ -15,9 +15,9 @@ return json_decode(json_encode([
     "admins" => [130912163],
     "support" => 1613366049,
     
-    "actions" => $actions,
-    "flows" => $flows,
-    "keywords" => $keywords,
-    "messages" => $messages,
-    "optionals" => $optionals,
-]));
+    // "actions" => $actions,
+    // "flows" => $flows,
+    // "keywords" => $keywords,
+    // "messages" => $messages,
+    // "optionals" => $optionals,
+];
