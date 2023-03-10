@@ -2,8 +2,7 @@
 
 namespace App\Jobs;
 
-use ErrorException;
-use Exception;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -59,7 +58,7 @@ class MessageHandle implements ShouldQueue
     }
 
 
-    public function failed(Exception $exception)
+    public function failed(Throwable $exception)
     {
         Log::error('Error '.dd($exception));
     }
