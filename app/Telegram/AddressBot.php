@@ -30,7 +30,7 @@ class AddressBot extends ParentBot
         $this->messageId += $this->type == 'message' ? -1 : 0;
         $this->api->updateButton()->messageId($this->messageId)->exec();
 
-        $id = $this->data;
+        $id = $this->cache->address ?? $this->data;
         $address = $this->user->addresses()->find($id);
 
         $this->api->sendMessage()->text('addressInfo', $address)->inlineKeyboard()->rowButtons(function ($m) use ($id) {
@@ -43,11 +43,12 @@ class AddressBot extends ParentBot
     public function edit()
     {
         $id = $this->data;
-        $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($id) {
+        $result = $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($id) {
             $m->button('backward', 'data', 'Address.show.' . $id);
         })->messageId($this->messageId)->exec();
 
         $this->putCache('address', $id);
+        $this->putCache('messageId', $result->message_id);
 
         $flow = new FlowBot($this->update);
         $flow->start('address','update');
@@ -66,7 +67,7 @@ class AddressBot extends ParentBot
             $this->api->deleteMessage()->messageId($this->messageId)->exec();
             $this->messageId--;
         }
-        
+
         $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'Address.backward');
         })->messageId($this->messageId)->exec();
