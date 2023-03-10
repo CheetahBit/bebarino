@@ -27,7 +27,7 @@ class AddressBot extends ParentBot
 
     public function show()
     {
-        if($this->type == 'message'){
+        if($this->type == 'message' && !isset($this->result)){
             $this->api->deleteMessage()->messageId($this->messageId)->exec();
             $this->messageId--;
         }
@@ -83,10 +83,9 @@ class AddressBot extends ParentBot
     public function store()
     {
         $address = $this->user->addresses()->firstOrCreate((array)$this->result->data);
-        $id = $address->id;
 
         $this->api->sendMessage()->text('saveSuccessfully')->exec();
-        $this->data = $id;
+        $this->data = $address->id;
         $this->show();
     }
 
