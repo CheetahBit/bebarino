@@ -21,6 +21,7 @@ class AccountBot extends ParentBot
     public function show()
     {
         $this->clear();
+        dd($this);
         if ($this->type == 'message')
             $this->api->updateButton()->messageId($this->messageId - 1)->exec();
 
