@@ -36,11 +36,12 @@ class AccountBot extends ParentBot
     public function edit()
     {
         $key = $this->data;
-        $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($key) {
+        $result = $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($key) {
             $m->button('backward', 'data', 'Account.backward.' . $key);
         })->messageId($this->messageId)->exec();
 
         $this->putCache('key', $key);
+        $this->putCache('messageId', $result->message_id);
 
         $flow = new FlowBot($this->update);
         $flow->start($this->data, 'update');
@@ -49,6 +50,8 @@ class AccountBot extends ParentBot
     public function update()
     {
         $this->user->account()->update((array)$this->result->data);
+
+        $this->api->updateButton()->messageId($this->cache->messageId)->exec();
 
         $this->api->sendMessage()->text('saveSuccessfully')->keyboard()->rowKeys(function ($m) {
             $m->key('contactInfo');

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('city')->nullable();
             $table->text('address')->nullable();
-            $table->string('bankCuntry')->nullable();
+            $table->string('bankCountry')->nullable();
             $table->string('accountNumber')->nullable();
             $table->string('accountName')->nullable();
             $table->timestamps();
