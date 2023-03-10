@@ -93,8 +93,8 @@ class AddressBot extends ParentBot
     public function destroy()
     {
         $this->user->addresses()->find($this->data)->delete();
-        $this->api->sendMessage()->text('deleteSuccessfully')->exec();
         $this->api->updateMessage()->messageId($this->messageId)->exec();
+        $this->api->sendMessage()->text('deleteSuccessfully')->exec();
         $this->index();
     }
 
