@@ -36,6 +36,14 @@ class FlowBot extends ParentBot
             $step = ucfirst($steps[$flow->cursor]);
 
             $temp = $this->api->chat($this->userId)->sendMessage();
+
+            if (str_contains($flow->name, 'Info') && !str_contains($step, 'Country') && $step != 'paspport') {
+                $value = $this->user->account->{$step};
+                $temp->rowKeys(function ($m) use ($value) {
+                    $m->key($value);
+                });
+            }
+
             if ($step == 'Contact') {
                 $temp->text('inputContact')->keyboard()->rowKeys(function ($m) {
                     $m->key('sharePhone', 'request_contact', true);
@@ -72,6 +80,8 @@ class FlowBot extends ParentBot
                     $m->key('desire');
                 });
             else $temp->text('input' . $step)->removeKeyboard();
+
+
             $temp->exec();
             $this->putCache('flow', $flow);
         } else $this->output($flow);
