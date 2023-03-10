@@ -39,7 +39,7 @@ class MainBot extends ParentBot
             $m->key('aboutUs');
         })->exec();
 
-        $this->messageId += ($this->type == 'message' ? -1 : 0);
+        $this->messageId -= ($this->type == 'message' ? 1 : 0);
         $this->api->updateButton()->messageId($this->messageId)->exec();
     }
 
