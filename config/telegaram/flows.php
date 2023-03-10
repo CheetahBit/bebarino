@@ -1,6 +1,6 @@
 <?php
 
-$flows = [
+return collect([
     "beginning" => [
         "class" => "Main",
         "steps" => ["contact"],
@@ -37,4 +37,4 @@ $flows = [
             "desc"
         ],
     ]
-];
+]);

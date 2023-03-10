@@ -1,6 +1,6 @@
 <?php
 
-$messages = [
+return collect([
     "guestMenu" => "منوی میهمان",
     "mainMenu" => "منوی اصلی",
     "aboutUs" => "متن درباره ما",
@@ -112,4 +112,4 @@ $messages = [
     "errorInvalidPhoto" => 'خطای تصویر',
     "errorInvalidDate" => 'خطای تاریخ',
     "errorDatePast" => 'تاریخ گذشته',
-];
+]);

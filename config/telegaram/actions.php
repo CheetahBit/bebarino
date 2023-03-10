@@ -1,6 +1,6 @@
 <?php
 
-$actions = [
+ return  collect([
     "/start" => ["class" => "Main", "method" => "menu"],
     "backward" => ["class" => "Main", "method" => "menu"],
     "beginning" => ["class" => "Main", "method" => "beginning"],
@@ -32,4 +32,4 @@ $actions = [
 
     "selectTrip" => ["class" => "Trip", "method" => "select"],
     "createTrip" => ["class" => "Trip", "method" => "create"],
-];
+]);
