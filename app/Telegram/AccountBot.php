@@ -45,7 +45,7 @@ class AccountBot extends ParentBot
 
     public function update()
     {
-        $this->user->account()->update((array)$this->result);
+        $this->user->account()->update((array)$this->result->data);
 
         $this->api->sendMessage()->text('saveSuccessfully')->keyboard()->rowKeys(function ($m) {
             $m->key('contactInfo');
