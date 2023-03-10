@@ -64,8 +64,8 @@ class MessageHandle implements ShouldQueue
     }
 
 
-    public function failed(Throwable $exception)
+    public function failed($exception)
     {
-        Log::error($exception->getTraceAsString());
+        Log::error($exception);
     }
 }
