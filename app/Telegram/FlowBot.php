@@ -38,10 +38,11 @@ class FlowBot extends ParentBot
             $temp = $this->api->chat($this->userId)->sendMessage();
 
             if (str_contains($flow->name, 'Info') && !str_contains($step, 'Country') && $step != 'passport') {
-                $value = $this->user->account->getRawOriginal($step);
-                $temp->keyboard()->rowKeys(function ($m) use ($step) {
-                    $m->key($step);
-                });
+                $value = $this->user->account->getRawOriginal(lcfirst($step));
+                if (isset($value))
+                    $temp->keyboard()->rowKeys(function ($m) use ($value) {
+                        $m->key($value);
+                    });
             }
 
             if ($step == 'Contact') {
