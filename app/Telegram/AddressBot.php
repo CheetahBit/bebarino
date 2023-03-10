@@ -62,6 +62,11 @@ class AddressBot extends ParentBot
 
     public function create()
     {
+        if($this->type == 'message'){
+            $this->api->deleteMessage()->messageId($this->messageId)->exec();
+            $this->messageId--;
+        }
+        
         $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('backward', 'data', 'Address.backward');
         })->messageId($this->messageId)->exec();
