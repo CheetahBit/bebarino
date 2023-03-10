@@ -1,10 +1,10 @@
 <?php
 
-require './config/telegram/actions.php';
-require './config/telegram/flows.php';
-require './config/telegram/keywords.php';
-require './config/telegram/messages.php';
-require './config/telegram/optionals.php';
+include './config/telegram/actions.php';
+include './config/telegram/flows.php';
+include './config/telegram/keywords.php';
+include './config/telegram/messages.php';
+include './config/telegram/optionals.php';
 
 
 return json_decode(json_encode([
