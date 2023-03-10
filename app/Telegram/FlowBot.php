@@ -22,7 +22,7 @@ class FlowBot extends ParentBot
         $flow->data = new stdClass;
 
         $this->putCache('flow', $flow);
-        $this->putCache('action', $this->config->actions->flow);
+        $this->putCache('action', 'flow');
         $this->next();
     }
 
