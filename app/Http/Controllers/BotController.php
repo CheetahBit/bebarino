@@ -22,7 +22,6 @@ class BotController extends Controller
     {
         try {
             $update = json_decode($request->getContent());
-            //exec('echo "" > ' . storage_path('logs/laravel.log'));
             Log::alert(json_encode($update, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
             if (isset($update->message))
