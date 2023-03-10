@@ -42,7 +42,7 @@ class BotController extends Controller
     {
         $request = request();
         // return dd(request()->headers);
-        Log::alert('Request For Download : ' . request()->headers);
+        Log::alert('Request For Download : ' . request()->header('User-Agent'));
         return Storage::download($folder . '/' . $name, $name . '.jpg');
     }
 
