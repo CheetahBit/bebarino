@@ -29,6 +29,7 @@ class InlineHandle implements ShouldQueue
      */
     public function handle(): void
     {
+        $this->inline->type = 'inline';
         if ($this->inline->chat_type = "sender") (new InlineBot($this->inline))->handle();
     }
 
