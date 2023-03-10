@@ -19,6 +19,7 @@ class ParentBot
     public $inlineId;
     public $data;
     public $text;
+    public $contact;
     public $photo;
     public $result;
 
@@ -37,6 +38,7 @@ class ParentBot
         $this->callbackId = $update->id ?? null;
         $this->inlineId = $update?->id ?? null;
         $this->photo = $update?->photo ?? null;
+        $this->contact = $update?->contact ?? null;
 
         $this->api->chat($this->userId);
     }
