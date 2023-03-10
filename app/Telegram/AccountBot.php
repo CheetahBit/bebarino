@@ -34,10 +34,12 @@ class AccountBot extends ParentBot
 
     public function edit()
     {
-        $data = $this->data;
-        $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($data) {
-            $m->button('backward', 'data', 'Account.backward.' . $data);
+        $key = $this->data;
+        $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($key) {
+            $m->button('backward', 'data', 'Account.backward.' . $key);
         })->messageId($this->messageId)->exec();
+
+        $this->putCache('key', $key);
 
         $flow = new FlowBot($this->update);
         $flow->start($this->data, 'update');
