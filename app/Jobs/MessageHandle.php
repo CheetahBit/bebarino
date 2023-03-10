@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use ErrorException;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -58,7 +59,7 @@ class MessageHandle implements ShouldQueue
             $this->message->type = "this->message";
             $class = new ("App\Telegram\\" . $action->class . "Bot")($this->message);
             $class->{$action->method}();
-        } catch (ErrorException $th) {
+        } catch (Exception $th) {
             Log::error($th->getMessage());
         }
     }
