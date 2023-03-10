@@ -1,6 +1,6 @@
 <?php
 
-return json_encode(json_encode([
+return [
     "beginning" => [
         "class" => "Main",
         "steps" => ["contact"],
@@ -37,4 +37,4 @@ return json_encode(json_encode([
             "desc"
         ],
     ]
-]));
+];

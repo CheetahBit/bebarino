@@ -1,6 +1,6 @@
 <?php
 
- return json_encode(json_encode([
+return [
     "/start" => ["class" => "Main", "method" => "menu"],
     "backward" => ["class" => "Main", "method" => "menu"],
     "beginning" => ["class" => "Main", "method" => "beginning"],
@@ -32,4 +32,4 @@
 
     "selectTrip" => ["class" => "Trip", "method" => "select"],
     "createTrip" => ["class" => "Trip", "method" => "create"],
-]));
+];
