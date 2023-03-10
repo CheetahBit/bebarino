@@ -9,7 +9,7 @@ return [
 
     "identityInfo" => "اطلاعات هویتی\n\nنام کاربری : :username\nنام کامل : :fullname\nنصویر پاسپورت : :passport",
     "contactInfo" => "اطلاعات تماس\n\nایمیل : :email\nشماره تماس : :phone\nکشور : :country\nشهر : :city\nنشانی : :address",
-    "bankInfo" => "اطلاعات بانکی\n\nکشور : :country\nنام صاحب حساب: :accountName\nشماره جساب : :accountNumber",
+    "bankInfo" => "اطلاعات بانکی\n\nکشور : :bankCountry\nنام صاحب حساب: :accountName\nشماره جساب : :accountNumber",
 
     "addresses" => "آدرس‌های من",
     "addressInfo" => "آدرس\n\nکشور : :country\nشهر : :city\nنشانی : :address",
@@ -81,6 +81,7 @@ return [
     "inputCountry" => "کشور را انتخاب یا وارد کنید",
     "inputCity" => "شهر را وارد کنید",
     "inputAddress" => "نشانی را وارد کنید",
+    "inputBankCountry" => "کشور را انتخاب یا وارد کنید",
     "inputAccountName" => "نام صاحب حساب را وارد کنید",
     "inputAccountNumber" => "شماره حساب را وارد کنید",
 
