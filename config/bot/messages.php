@@ -103,6 +103,7 @@ return [
 
     "loginSuccessfully" => "باموفقیت وارد شدبد!",
     "saveSuccessfully" => "باموفقیت ذخیره شد !",
+    "deleteSuccessfully" => "باموفقیت حذف شد !",
     "notFound" => "موردی یافت نشد!",
     "notEditable" => "امکان ویرایش وجود ندارد",
 
