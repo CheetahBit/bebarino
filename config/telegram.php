@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 return json_decode(json_encode([
     "token" => env("BOT_TOKEN"),
     "channel" => "bebarinoTest",
@@ -10,10 +7,9 @@ return json_decode(json_encode([
     // "admins" => [1613366049],
     "admins" => [130912163],
     "support" => 1613366049,
-    require './config/telegram/actions.php',
-    require './config/telegram/flows.php',
-    require './config/telegram/keywords.php',
-    require './config/telegram/messages.php',
-    require './config/telegram/optionals.php',
-
+    require './config/bot/actions.php',
+    require './config/bot/flows.php',
+    require './config/bot/keywords.php',
+    require './config/bot/messages.php',
+    require './config/bot/optionals.php',
 ]));
