@@ -65,6 +65,9 @@ class MainBot extends ParentBot
     public function support()
     {
         $config = $this->config;
+
+        $this->api->updateButton()->messageId($this->messageId-1)->exec();
+
         $this->api->sendMessage()->text('support')->inlineKeyboard()->rowButtons(function ($m) use ($config) {
             $m->button('contactSupport', 'url', 'tg://user?id=' . $config->support);
         })->exec();
@@ -72,6 +75,7 @@ class MainBot extends ParentBot
 
     public function aboutUs()
     {
+        $this->api->updateButton()->messageId($this->messageId-1)->exec();
         $this->api->sendMessage()->text('aboutUs')->exec();
     }
 
