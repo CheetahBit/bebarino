@@ -6,7 +6,7 @@ include('./config/telegram/keywords.php');
 include('./config/telegram/messages.php');
 include('./config/telegram/optionals.php');
 
-
+return $actions;
 return json_decode(json_encode([
     "token" => env("BOT_TOKEN"),
     "channel" => "bebarinoTest",
