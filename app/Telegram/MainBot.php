@@ -57,7 +57,7 @@ class MainBot extends ParentBot
     {
         $phone = $this->result->contact;
         $this->user->update(['phone' => $phone]);
-        $this->user->contact()->update(['phone' => $phone]);
+        $this->user->account()->update(['phone' => $phone]);
         $this->api->sendMessage()->text('loginSuccessfully')->exec();
         $this->start();
     }
@@ -100,11 +100,8 @@ class MainBot extends ParentBot
     private function register()
     {
         $user = User::firstOrCreate(['id' => $this->userId]);
-        if (!isset($user->identity)) {
-            $user->identity()->create()->save();
-            $user->bank()->create()->save();
-            $user->contact()->create()->save();
-        }
+        if (!isset($user->account)) 
+            $user->account()->create()->save();
         return $user;
     }
 
