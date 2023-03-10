@@ -1,6 +1,6 @@
 <?php
 
-return collect([
+return json_encode(json_encode([
     "beginning" => "شروع (عضویت در ربات)",
     "account" => "👤 حساب کاربری",
     "aboutUs" => "🏢 درباره ما",
@@ -50,4 +50,4 @@ return collect([
     "statusPendingAdmin" => "در انتظار بررسی ادمین",
     "statusClosedByAdmin" => "بسته شده توسط ادمین",
     "sendRequestToChannel" => "ارسال درخواست به کانال",
-]);
+]));

@@ -1,3 +1,3 @@
 <?php
 
-return collect(["identity", "contact", "bank"]);
+return json_encode(json_encode(["identity", "contact", "bank"]));

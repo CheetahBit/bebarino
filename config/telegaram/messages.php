@@ -1,6 +1,6 @@
 <?php
 
-return collect([
+return json_encode(json_encode([
     "guestMenu" => "منوی میهمان",
     "mainMenu" => "منوی اصلی",
     "aboutUs" => "متن درباره ما",
@@ -112,4 +112,4 @@ return collect([
     "errorInvalidPhoto" => 'خطای تصویر',
     "errorInvalidDate" => 'خطای تاریخ',
     "errorDatePast" => 'تاریخ گذشته',
-]);
+]));
