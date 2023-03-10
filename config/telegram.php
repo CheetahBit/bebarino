@@ -3,7 +3,7 @@
 
 
 
-return [
+return collect([
     "token" => env("BOT_TOKEN"),
     "channel" => "bebarinoTest",
     "bot" => "follow4u_bot",
@@ -16,4 +16,4 @@ return [
     require './config/telegram/messages.php',
     require './config/telegram/optionals.php',
 
-];
+]);
