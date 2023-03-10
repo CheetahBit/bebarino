@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use stdClass;
 use Throwable;
@@ -44,8 +45,11 @@ class MessageHandle implements ShouldQueue
                 $action = $config->actions->{$text};
         }
 
-        if (!isset($action->class))
-            $action = $config->actions->{$this->message->cache->action};
+        if (!isset($action->class)){
+            $userId = $this->message->from->id;
+            $cache  = Cache::get($userId);
+            $action = $config->actions->{$cache->action};
+        }
 
         $this->message->type = "this->message";
         $class = new ("App\Telegram\\" . $action->class . "Bot")($this->message);
