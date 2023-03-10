@@ -1,3 +1,3 @@
 <?php
 
-return ["identity", "contact", "bank"];
+$optionals = ["identity", "contact", "bank"];
