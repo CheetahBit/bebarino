@@ -5,15 +5,15 @@ return [
         "class" => "Main",
         "steps" => ["contact"],
     ],
-    "identity" => [
+    "identityInfo" => [
         "class" => "Account",
         "steps" => ["username", "fullname", "passport"],
     ],
-    "contact" => [
+    "contactInfo" => [
         "class" => "Account",
         "steps" => ["email", "phone", "country", "city", "address"],
     ],
-    "bank" => [
+    "bankInfo" => [
         "class" => "Account",
         "steps" => ["bankCountry", "accountName", "accountNumber"],
     ],
