@@ -29,7 +29,7 @@ class InlineBot extends ParentBot
                 'city' => $flow->data->toCity ?? $flow->data->fromCity,
             ]);
         $addresses = $addresses->orderBy('updated_at', 'desc')->get();
-        $select = $this->cache->action->class == 'MyAddress';
+        $select = $this->cache->action->class == 'addresses';
         foreach ($addresses as $address) {
             $results[] = [
                 'type' => 'article',

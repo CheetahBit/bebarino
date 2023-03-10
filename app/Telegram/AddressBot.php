@@ -16,7 +16,7 @@ class AddressBot extends ParentBot
         if ($this->type == 'message')
             $this->api->updateButton()->messageId($this->messageId - 1)->exec();
 
-        $this->api->sendMessage()->text('myAddresses')->inlineKeyboard()->rowButtons(function ($m) {
+        $this->api->sendMessage()->text('addresses')->inlineKeyboard()->rowButtons(function ($m) {
             $m->button('createAddress', 'data', 'Address.create');
             $m->button('addresses', 'query', time());
         })->exec();
