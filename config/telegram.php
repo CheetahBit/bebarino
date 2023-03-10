@@ -1,10 +1,10 @@
 <?php
 
-include './config/telegram/actions.php';
-include './config/telegram/flows.php';
-include './config/telegram/keywords.php';
-include './config/telegram/messages.php';
-include './config/telegram/optionals.php';
+include('./config/telegram/actions.php');
+include('./config/telegram/flows.php');
+include('./config/telegram/keywords.php');
+include('./config/telegram/messages.php');
+include('./config/telegram/optionals.php');
 
 
 return json_decode(json_encode([
@@ -14,7 +14,7 @@ return json_decode(json_encode([
     // "admins" => [1613366049],
     "admins" => [130912163],
     "support" => 1613366049,
-    
+
     "actions" => $actions,
     "flows" => $flows,
     "keywords" => $keywords,
