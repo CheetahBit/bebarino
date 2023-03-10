@@ -32,7 +32,7 @@ class ParentBot
         $this->userId = $update->from->id;
         $this->cache = json_decode(Cache::get($this->userId, '{}'));
         $this->user = User::find($this->userId);
-        $this->messageId = $update->message_id ?? $update->message->message_id;
+        $this->messageId = $update->message_id ?? $update->message->message_id ?? null;
         $this->data = $update->data ?? $update->text ?? null;
         $this->text = $update->text ?? $update->message->text ?? null;
         $this->callbackId = $update->id ?? null;
