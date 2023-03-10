@@ -40,7 +40,7 @@ class MainBot extends ParentBot
         })->exec();
 
         $this->messageId -= ($this->type == 'message' ? 1 : 0);
-        $this->api->updateButton()->messageId($this->messageId)->exec();
+        $this->api->chat($this->userId)->updateButton()->messageId($this->messageId)->exec();
     }
 
     public function beginning()
