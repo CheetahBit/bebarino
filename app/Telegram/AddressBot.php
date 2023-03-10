@@ -65,7 +65,7 @@ class AddressBot extends ParentBot
     {
         if($this->type == 'message'){
             $this->api->deleteMessage()->messageId($this->messageId)->exec();
-            $this->messageId--;
+            //$this->messageId--;
         }
 
         $this->api->updateButton()->inlineKeyboard()->rowButtons(function ($m) {
