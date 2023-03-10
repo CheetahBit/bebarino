@@ -56,7 +56,7 @@ class AddressBot extends ParentBot
     public function update()
     {
         $address = $this->user->addresses()->find($this->cache->address);
-        $address->update((array)$this->result);
+        $address->update((array)$this->result->data);
         $this->show();
     }
 
@@ -72,7 +72,7 @@ class AddressBot extends ParentBot
 
     public function store()
     {
-        $address = $this->user->addresses()->firstOrCreate((array)$this->result);
+        $address = $this->user->addresses()->firstOrCreate((array)$this->result->data);
         $id = $address->id;
 
         $this->api->sendMessage()->text('saveSuccessfully')->exec();
