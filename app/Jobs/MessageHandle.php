@@ -52,7 +52,7 @@ class MessageHandle implements ShouldQueue
             $action = $config->actions->{$cache->action};
         }
 
-        $this->message->type = "this->message";
+        $this->message->type = "message";
         $class = new ("App\Telegram\\" . $action->class . "Bot")($this->message);
         $class->{$action->method}();
     }
