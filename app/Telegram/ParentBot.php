@@ -34,9 +34,9 @@ class ParentBot
         $this->messageId = $update->message_id ?? $update->message->message_id;
         $this->data = $update->data ?? $update->text;
         $this->text = $update->text ?? $update->message->text;
-        $this->callbackId = $update?->id;
-        $this->inlineId = $update?->id;
-        $this->photo = $update?->photo;
+        $this->callbackId = $update->id ?? null;
+        $this->inlineId = $update?->id ?? null;
+        $this->photo = $update?->photo ?? null;
 
         $this->api->chat($this->userId);
     }
