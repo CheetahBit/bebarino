@@ -80,8 +80,8 @@ class FlowBot extends ParentBot
     public function input()
     {
         $flow = $this->cache->flow;
-        $flows = $this->config->flows->{$flow->name};
-        $step = $flows[$flow->cursor];
+        $steps = $this->config->flows->{$flow->name}->steps;
+        $step = $steps[$flow->cursor];
         $type = $this->update->entities[0]->type ?? null;
         $error = null;
 
