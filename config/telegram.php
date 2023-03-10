@@ -1,10 +1,10 @@
 <?php
 
-require './config/telegram/actions.php';
-require './config/telegram/flows.php';
-require './config/telegram/keywords.php';
-require './config/telegram/messages.php';
-require './config/telegram/optionals.php';
+require './config/bot/actions.php';
+require './config/bot/flows.php';
+require './config/bot/keywords.php';
+require './config/bot/messages.php';
+require './config/bot/optionals.php';
 
 
 return collect([
