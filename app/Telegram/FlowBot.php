@@ -125,7 +125,7 @@ class FlowBot extends ParentBot
     public function output($flow)
     {
         $class = new ("App\Telegram\\" . $flow->class . "Bot")($this->update);
-        $class->result = $flow;
+        $class->result->data = $flow;
         $class->{$flow->method}();
     }
 
