@@ -40,10 +40,10 @@ class BotController extends Controller
 
     public function download($folder, $name)
     {
-        $request = request();
-        // return dd(request()->headers);
-        Log::alert('Request For Download : ' . request()->header('User-Agent'));
-        return Storage::download($folder . '/' . $name, $name . '.jpg');
+        $userAgent = request()->header('User-Agent');
+        if (str_contains($userAgent, 'TelegramBot'))
+            return Storage::download($folder . '/' . $name, $name . '.jpg');
+        else redirect('tg://resolve?username=' . config('telegram')->bot);
     }
 
     public function reset()
@@ -59,7 +59,7 @@ class BotController extends Controller
         }
 
         Http::get('https://api.telegram.org/bot' . $token . '/setwebhook?url=https://bot.cheetahbit.org/api/bot');
-    
+
         // return config('telegram')->keywords;
     }
 }
