@@ -104,7 +104,7 @@ class TripBot extends ParentBot
 
         $trip = $this->user->trips()->firstOrCreate((array) $data);
 
-        $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
+        $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
         })->exec();
 
