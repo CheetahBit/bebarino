@@ -54,14 +54,14 @@ class Trip extends Model
         );
     }
 
-    public function hasPassport()
+    public function hasPassport(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->user->account->hasPassport(),
         );
     }
 
-    public function hasContact()
+    public function hasContact(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->user->account->hasContact(),
