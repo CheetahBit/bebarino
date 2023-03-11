@@ -15,7 +15,8 @@ class StatusLabel implements CastsAttributes
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         $config = config('telegram');
-        return $config->keywords->{'status' . ucfirst($value)};
+        $status = 'status' . ucfirst($value ?? 'opened');
+        return $config->keywords->{$status};
     }
 
     /**
