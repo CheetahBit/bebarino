@@ -110,9 +110,9 @@ class PackageBot extends ParentBot
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
         })->exec();
 
-        $this->api->chat($this->userId)->updateMessage()->text('packageSubmitted', $package)->inlineKeyboard()->rowButtons(function ($m) use ($result, $channel) {
-            $m->button('showInChannel', 'url', 't.me/' . $channel . '/' . $result->message_id);
-        })->messageId($this->messageId)->exec();
+        // $this->api->chat($this->userId)->updateMessage()->text('packageSubmitted', $package)->inlineKeyboard()->rowButtons(function ($m) use ($result, $channel) {
+        //     $m->button('showInChannel', 'url', 't.me/' . $channel . '/' . $result->message_id);
+        // })->messageId($this->messageId)->exec();
 
         $package->update(['messageId' => $result->message_id]);
         AddressBot::storeFromToAddress($this->user, $data);
