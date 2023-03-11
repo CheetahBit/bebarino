@@ -72,11 +72,12 @@ class FlowBot extends ParentBot
                     'country' => $flow->data->toCountry ?? $flow->data->fromCountry,
                     'city' => $flow->data->toCity ?? $flow->data->fromCity,
                 ])->exists()
-            )
+            ) {
                 $temp->text('inputOrSelect' . $step)->inlineKeyboard()->rowButtons(function ($m) {
-                    $m->button('selectAddress', 'query', time())->inlineMode('addresses');
+                    $m->button('selectAddress', 'query', time());
                 });
-            else if (in_array($flow->name, $this->config->optionals))
+                $this->putCache('inline', 'addresses');
+            } else if (in_array($flow->name, $this->config->optionals))
                 $temp->text('input' . $step)->keyboard()->rowKeys(function ($m) {
                     $m->key('desire');
                 });
