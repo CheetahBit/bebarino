@@ -39,7 +39,7 @@ class PackageBot extends ParentBot
     {
         $this->messageId += $this->type == 'message' ? -1 : 0;
         $this->api->updateButton()->messageId($this->messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('backward', 'data', 'Main.menu');
+            $m->button('backward', 'data', 'Main.start');
         })->exec();
 
         $flow = new FlowBot($this->update);
@@ -110,9 +110,9 @@ class PackageBot extends ParentBot
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
         })->exec();
 
-        // $this->api->chat($this->userId)->updateMessage()->text('packageSubmitted', $package)->inlineKeyboard()->rowButtons(function ($m) use ($result, $channel) {
-        //     $m->button('showInChannel', 'url', 't.me/' . $channel . '/' . $result->message_id);
-        // })->messageId($this->messageId)->exec();
+        $this->api->chat($this->userId)->updateMessage()->text('packageSubmitted', $package)->inlineKeyboard()->rowButtons(function ($m) use ($result, $channel) {
+            $m->button('showInChannel', 'url', 't.me/' . $channel . '/' . $result->message_id);
+        })->messageId($this->messageId)->exec();
 
         $package->update(['messageId' => $result->message_id]);
         AddressBot::storeFromToAddress($this->user, $data);
@@ -272,7 +272,7 @@ class PackageBot extends ParentBot
 
         $this->api->sendMessage()->text('confirmPackage', (array)$data)->inlineKeyboard()->rowButtons(function ($m) use ($target) {
             $m->button('confirm', 'data', 'Package.' . $target);
-            $m->button('cancel', 'data', 'Main.menu');
+            $m->button('cancel', 'data', 'Main.start');
         })->exec();
     }
 

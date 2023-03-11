@@ -38,7 +38,7 @@ class TripBot extends ParentBot
     {
         $this->messageId += $this->type == 'message' ? -1 : 0;
         $this->api->updateButton()->messageId($this->messageId)->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('backward', 'data', 'Main.menu');
+            $m->button('backward', 'data', 'Main.start');
         })->exec();
 
         $flow = new FlowBot($this->update);
@@ -270,7 +270,7 @@ class TripBot extends ParentBot
 
         $this->api->sendMessage()->text('confirmTrip', (array)$data)->inlineKeyboard()->rowButtons(function ($m) use ($target) {
             $m->button('confirm', 'data', 'Trip.' . $target);
-            $m->button('cancel', 'data', 'Main.menu');
+            $m->button('cancel', 'data', 'Main.start');
         })->exec();
     }
 

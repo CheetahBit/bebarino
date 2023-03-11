@@ -83,7 +83,7 @@ class MainBot extends ParentBot
     {
         if (isset($this->user->phone)) {
             $this->api->sendMessage()->text('submitTrip')->inlineKeyboard()->rowButtons(function ($m) {
-                $m->button('backward', 'data', 'Main.menu');
+                $m->button('backward', 'data', 'Main.start');
             })->exec();
             $flow = new FlowBot($this->update);
             $flow->start('trip', 'confirm', 'submit');
@@ -94,7 +94,7 @@ class MainBot extends ParentBot
     {
         if (isset($this->user->phone)) {
             $this->api->sendMessage()->text('submitPackage')->inlineKeyboard()->rowButtons(function ($m) {
-                $m->button('backward', 'data', 'Main.menu');
+                $m->button('backward', 'data', 'Main.start');
             })->exec();
             $flow = new FlowBot($this->update);
             $flow->start('package', 'confirm', 'submit');
