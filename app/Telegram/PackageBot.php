@@ -105,7 +105,7 @@ class PackageBot extends ParentBot
 
         $this->user->packages()->create((array) $data)->save();
 
-        $package = $this->user->packages()->latest()->first();
+        $package = $this->user->packages()->orderBy('id', 'desc')->first();
         $package->requirement();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
