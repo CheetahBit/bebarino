@@ -5,6 +5,7 @@ namespace App\Telegram;
 use App\Models\Package;
 use App\Models\Transfer;
 use App\Models\Trip;
+use Illuminate\Support\Facades\Log;
 use stdClass;
 
 class PackageBot extends ParentBot
@@ -104,6 +105,7 @@ class PackageBot extends ParentBot
         $data = $this->cache->flow->data;
 
         $package = $this->user->packages()->firstOrCreate((array) $data);
+        Log::alert($package);
         $package->requirement();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
