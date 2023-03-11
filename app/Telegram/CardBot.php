@@ -13,10 +13,11 @@ class CardBot extends ParentBot
         $this->api->updateButton()->messageId($this->messageId)->exec();
 
         $this->api->sendMessage()->text('cards')->inlineKeyboard()->rowButtons(function ($m) {
-            $m->button('cards', 'query', time())->inlineMode('cards');
+            $m->button('cards', 'query', time());
         })->exec();
 
         $this->putCache('action', 'showCard');
+        $this->putCache('inline', 'cards');
     }
 
     public function show()
