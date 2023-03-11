@@ -78,7 +78,6 @@ class PackageBot extends ParentBot
             else if ($temp->where('status', 'verified')->exists())
                 $this->api->sendMessage()->text('requestIsDone')->exec();
             else {
-                $trip->requirement();
                 $isAdmin = in_array($this->userId, $this->config->admins);
                 $this->api->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $trip) {
                     if ($isAdmin) {
@@ -150,7 +149,7 @@ class PackageBot extends ParentBot
         $id = $cache->package;
 
         $package = $this->user->packages()->find($id);
-        $package->requirement();
+        
 
         $this->api->updateMessage()->text('packageInfo', $package)->messageId($this->messageId)->exec();
 
@@ -223,7 +222,7 @@ class PackageBot extends ParentBot
                 else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
             })->messageId($this->messageId)->exec();
 
-            $package->requirement();
+            
 
             if (isset($package->messageId)) {
                 $config = $this->config;
@@ -256,7 +255,7 @@ class PackageBot extends ParentBot
         if (isset($package->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
-            $package->requirement();
+            
             $package->status = 'closedByAdmin';
             $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($package->messageId)->exec();
         }
@@ -287,7 +286,7 @@ class PackageBot extends ParentBot
         $pending = $this->config->messages->pending;
 
         $package = $this->user->packages()->find($id);
-        $package->requirement();
+        
 
         $trip = Trip::find($this->cache->trip);
 
@@ -316,7 +315,7 @@ class PackageBot extends ParentBot
         $package = $this->user->packages()->find($this->data);
 
         if (!isset($package->messageId)) {
-            $package->requirement();
+            
 
             $result = $this->api->chat('@' . $config->channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
@@ -340,7 +339,7 @@ class PackageBot extends ParentBot
 
         $trip = Trip::find($data[0]);
         $package = Package::find($data[1]);
-        $package->requirement();
+        
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
         if (in_array($this->userId, $config->admins)) {
@@ -399,9 +398,7 @@ class PackageBot extends ParentBot
             })->messageId($this->messageId)->exec();
 
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
-
-            $trip->requirement();
-            $package->requirement();
+            
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
             $trip->packageCode = $package->code;
 

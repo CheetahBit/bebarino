@@ -77,7 +77,7 @@ class TripBot extends ParentBot
             else if ($temp->where('status', 'verified')->exists())
                 $this->api->sendMessage()->text('requestIsDone')->exec();
             else {
-                $package->requirement();
+                
                 $isAdmin = in_array($this->userId, $this->config->admins);
                 $this->api->sendMessage()->text('requestPackageForm', $package, plain: json_encode($trips))->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $package) {
                     if ($isAdmin) {
@@ -148,8 +148,7 @@ class TripBot extends ParentBot
         $id = $cache->trip;
 
         $trip = $this->user->trips()->find($id);
-        $trip->requirement();
-
+        
         $this->api->updateMessage()->text('tripInfo', $trip)->messageId($this->messageId)->exec();
 
         if (isset($trip->messageId)) {
@@ -221,7 +220,7 @@ class TripBot extends ParentBot
                 else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
             })->messageId($this->messageId)->exec();
 
-            $trip->requirement();
+            
 
             if (isset($trip->messageId)) {
                 $config = $this->config;
@@ -254,7 +253,7 @@ class TripBot extends ParentBot
         if (isset($trip->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
-            $trip->requirement();
+            
             $trip->status = 'closedByAdmin';
             $this->api->chat('@' . $channel)->updateMessage()->text('channelTrip', $trip)->messageId($trip->messageId)->exec();
         }
@@ -267,6 +266,8 @@ class TripBot extends ParentBot
         $result = $this->result;
         $data = $result->data;
         $target = $result->target;
+
+        if(!isset($data->ticket)) $data->ticket = $this->config->keywords->notEntered;
 
         $this->api->sendMessage()->text('confirmTrip', (array)$data)->inlineKeyboard()->rowButtons(function ($m) use ($target) {
             $m->button('confirm', 'data', 'Trip.' . $target);
@@ -285,7 +286,7 @@ class TripBot extends ParentBot
         $pending = $this->config->messages->pending;
 
         $trip = $this->user->trips()->find($id);
-        $trip->requirement();
+        
 
         $package = Package::find($this->cache->package);
 
@@ -314,7 +315,7 @@ class TripBot extends ParentBot
         $trip = $this->user->trips()->find($this->data);
 
         if (!isset($trip->messageId)) {
-            $trip->requirement();
+            
 
             $result = $this->api->chat('@' . $config->channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
@@ -338,7 +339,7 @@ class TripBot extends ParentBot
 
         $package = Package::find($data[0]);
         $trip = Trip::find($data[1]);
-        $trip->requirement();
+        
         $transfer = Transfer::where(['trip' => $trip->id, 'package' => $package->id]);
 
         if (in_array($this->userId, $config->admins)) {
@@ -398,8 +399,8 @@ class TripBot extends ParentBot
 
             $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
 
-            $package->requirement();
-            $trip->requirement();
+            
+            
             foreach ($trip->toArray() as $key => $value) $package->{'trip' . ucfirst($key)} = $value;
             $package->tripCode = $trip->code;
 
