@@ -115,7 +115,7 @@ class PackageBot extends ParentBot
             $m->button('showInChannel', 'url', 't.me/' . $channel . '/' . $result->message_id);
         })->messageId($this->messageId)->exec();
 
-        $package->update(['messageId' => $result->message_id]);
+        $this->user->packages($package->id)->find()->update(['messageId' => $result->message_id]);
         AddressBot::storeFromToAddress($this->userId, $data);
 
         (new MainBot($this->update))->start();
