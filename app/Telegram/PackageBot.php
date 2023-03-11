@@ -103,7 +103,9 @@ class PackageBot extends ParentBot
         $channel = $config->channel;
         $data = $this->cache->flow->data;
 
-        $package = $this->user->packages()->firstOrNew((array) $data);
+        $this->user->packages()->create((array) $data)->save();
+
+        $package = $this->user->packages()->latest()->first();
         $package->requirement();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
@@ -114,9 +116,7 @@ class PackageBot extends ParentBot
             $m->button('showInChannel', 'url', 't.me/' . $channel . '/' . $result->message_id);
         })->messageId($this->messageId)->exec();
 
-        $package->messageId = $result->message_id;
-        $package->save();
-        
+        $package->update(['messageId' => $result->message_id]);
         AddressBot::storeFromToAddress($this->userId, $data);
 
         (new MainBot($this->update))->start();
