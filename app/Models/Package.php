@@ -40,8 +40,8 @@ class Package extends Model
 
     public function requirement()
     {
-        $this->hasPassport = $this->user->identity->hasPassport();
-        $this->hasContact = $this->user->contact->hasContact();
+        $this->hasPassport = $this->user->account->hasPassport();
+        $this->hasContact = $this->user->account->hasContact();
     }
 
     protected function code(): Attribute
