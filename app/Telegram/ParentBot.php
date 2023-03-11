@@ -30,7 +30,7 @@ class ParentBot
         $this->config = config('telegram');
         $this->type = $update->type;
         $this->userId = $update->from->id;
-        $this->cache = json_decode(Cache::storage('database')->get($this->userId, '{}'));
+        $this->cache = json_decode(Cache::store('database')->get($this->userId, '{}'));
         $this->user = User::find($this->userId);
         $this->messageId = $update->message_id ?? $update->message->message_id ?? null;
         $this->data = $update->data ?? $update->text ?? null;
@@ -47,7 +47,7 @@ class ParentBot
     public function putCache($key, $value)
     {
         $this->cache->{$key} = $value;
-        Cache::storage('database')->set($this->userId, json_encode($this->cache, JSON_UNESCAPED_UNICODE));
+        Cache::store('database')->set($this->userId, json_encode($this->cache, JSON_UNESCAPED_UNICODE));
     }
 
     public function clear()

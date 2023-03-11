@@ -48,7 +48,7 @@ class MessageHandle implements ShouldQueue
 
         if (!isset($action->class)) {
             $userId = $this->message->from->id;
-            $cache  = json_decode(Cache::storage('database')->get($userId, '{}'));
+            $cache  = json_decode(Cache::store('database')->get($userId, '{}'));
             $action = $config->actions->{$cache->action};
         }
 
