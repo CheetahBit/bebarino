@@ -42,7 +42,7 @@ class PackageBot extends ParentBot
         })->exec();
 
         $flow = new FlowBot($this->update);
-        $flow->start('package','confirm', 'store');
+        $flow->start('package', 'confirm', 'store');
     }
 
     public function store()
@@ -103,7 +103,7 @@ class PackageBot extends ParentBot
         $channel = $config->channel;
         $data = $this->cache->flow->data;
 
-        $package = $this->user->packages()->firstOrCreate((array) $data);
+        $package = $this->user->packages()->firstOrNew((array) $data);
         $package->requirement();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
@@ -114,7 +114,9 @@ class PackageBot extends ParentBot
             $m->button('showInChannel', 'url', 't.me/' . $channel . '/' . $result->message_id);
         })->messageId($this->messageId)->exec();
 
-        $package->update(['messageId' => $result->message_id]);
+        $package->messageId = $result->message_id;
+        $package->save();
+        
         AddressBot::storeFromToAddress($this->userId, $data);
 
         (new MainBot($this->update))->start();
@@ -138,7 +140,7 @@ class PackageBot extends ParentBot
 
             $this->putCache('package', $id);
             $flow = new FlowBot($this->update);
-            $flow->start('package','confirm', 'update');
+            $flow->start('package', 'confirm', 'update');
         }
     }
 
