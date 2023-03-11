@@ -44,19 +44,31 @@ class Trip extends Model
         return $this->belongsTo(User::class, 'userId');
     }
 
-    public function hasTicket()
+    public function hasTicket(): Attribute
     {
-        $ticket = $this->getRawOriginal('ticket');
-        return $ticket !== null ? "✅" : "❌";
+        return Attribute::make(
+            get: function () {
+                $ticket = $this->getRawOriginal('ticket');
+                return $ticket !== null ? "✅" : "❌";
+            },
+        );
+    }
+
+    public function hasPassport()
+    {
+        return Attribute::make(
+            get: fn () => $this->user->account->hasPassport(),
+        );
+    }
+
+    public function hasContact()
+    {
+        return Attribute::make(
+            get: fn () => $this->user->account->hasContact(),
+        );
     }
 
 
-    public function requirement()
-    {
-        $this->hasTicket = $this->hasTicket();
-        $this->hasPassport = $this->user->identity->hasPassport();
-        $this->hasContact = $this->user->contact->hasContact();
-    }
 
     protected function code(): Attribute
     {

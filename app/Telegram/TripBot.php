@@ -103,7 +103,6 @@ class TripBot extends ParentBot
         $data = $this->cache->flow->data;
 
         $trip = $this->user->trips()->firstOrCreate((array) $data);
-        $trip->requirement();
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
             $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
@@ -114,7 +113,7 @@ class TripBot extends ParentBot
         })->messageId($this->messageId)->exec();
 
         $trip->update(['messageId' => $result->message_id]);
-        AddressBot::storeFromToAddress($this->userId, $data);
+        AddressBot::storeFromToAddress($this->user, $data);
 
         (new MainBot($this->update))->start();
     }

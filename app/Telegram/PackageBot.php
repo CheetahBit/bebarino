@@ -115,7 +115,7 @@ class PackageBot extends ParentBot
         })->messageId($this->messageId)->exec();
 
         $package->update(['messageId' => $result->message_id]);
-        AddressBot::storeFromToAddress($this->userId, $data);
+        AddressBot::storeFromToAddress($this->user, $data);
 
         (new MainBot($this->update))->start();
     }
