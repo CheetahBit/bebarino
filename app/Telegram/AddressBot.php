@@ -37,7 +37,7 @@ class AddressBot extends ParentBot
         $id = $this->data;
         $address = $this->user->addresses()->find($id);
 
-        $this->api->sendMessage()->text('addressInfo', $address)->inlineKeyboard()->rowButtons(function ($m) use ($id) {
+        $this->api->sendMessage()->text('addressInfo', $address, plain: $id)->inlineKeyboard()->rowButtons(function ($m) use ($id) {
             $m->button('delete', 'data', 'Address.destroy.' . $id);
             $m->button('edit', 'data', 'Address.edit.' . $id);
             $m->button('backward', 'data', 'Address.backward');
