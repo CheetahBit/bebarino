@@ -31,6 +31,9 @@ class Package extends Model
         'id',
         'userId',
         'created_at',
+        'updated_at',
+        'hasPassport',
+        'hasContact',
     ];
     
     public function user()
