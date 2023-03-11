@@ -39,14 +39,18 @@ class Package extends Model
         return $this->belongsTo(User::class, 'userId');
     }
 
-    public function getHasPassport()
+    public function hasPassport()
     {
-        return $this->user->account->hasPassport();  
+        return Attribute::make(
+            get: fn () => $this->user->account->hasPassport(),
+        );
     }
 
-    public function getHasContact()
+    public function hasContact()
     {
-        return $this->user->account->hasContact();  
+        return Attribute::make(
+            get: fn () => $this->user->account->hasContact(),
+        );
     }
 
     protected function code(): Attribute
