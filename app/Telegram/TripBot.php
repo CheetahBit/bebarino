@@ -447,7 +447,7 @@ class TripBot extends ParentBot
             $count = count($paths);
             $i = 0;
             foreach ($paths as $path) {
-                $api = $this->api->sendPhoto()->photo($path);
+                $api = $this->api->chat($this->userId)->sendPhoto()->photo($path);
                 if ($i == 0) $api->reply($this->messageId);
                 if ($i == $count - 1 && $contact) $api->noreply()->caption('contactInfo', $contact);
                 $api->exec();
