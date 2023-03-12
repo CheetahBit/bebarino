@@ -40,10 +40,11 @@ class BotController extends Controller
 
     public function download($folder, $name)
     {
-        $userAgent = request()->header('User-Agent');
-        if (str_contains($userAgent, 'TelegramBot'))
-            return Storage::download($folder . '/' . $name, $name . '.jpg');
-        else return redirect('tg://resolve?username=' . config('telegram')->bot);
+        return Storage::download($folder . '/' . $name, $name . '.jpg');
+        // $userAgent = request()->header('User-Agent');
+        // if (str_contains($userAgent, 'TelegramBot'))
+        //     return Storage::download($folder . '/' . $name, $name . '.jpg');
+        // else return redirect('tg://resolve?username=' . config('telegram')->bot);
     }
 
     public function reset()
