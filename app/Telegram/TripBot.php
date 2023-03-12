@@ -291,7 +291,7 @@ class TripBot extends ParentBot
         $package = Package::find($this->cache->package);
 
         $this->api->updateMessage()->text('requestPackageSent', $trip, "\n\n" . $pending)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
-            $m->button('sendRequestToChannel', 'data', 'Package.sendToChannel.' . $trip->id);
+            $m->button('sendRequestToChannel', 'data', 'Trip.sendToChannel.' . $trip->id);
         })->messageId($this->messageId)->exec();
 
         $this->api->chat($package->user->id)->sendMessage()->text('requestPackage', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($package, $trip) {
@@ -315,8 +315,6 @@ class TripBot extends ParentBot
         $trip = $this->user->trips()->find($this->data);
 
         if (!isset($trip->messageId)) {
-            
-
             $result = $this->api->chat('@' . $config->channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
                 $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
             })->exec();
