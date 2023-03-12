@@ -43,7 +43,7 @@ class PackageBot extends ParentBot
         })->exec();
 
         $flow = new FlowBot($this->update);
-        $flow->start('package','confirm', 'store');
+        $flow->start('package', 'confirm', 'store');
     }
 
     public function store()
@@ -79,7 +79,7 @@ class PackageBot extends ParentBot
                 $this->api->sendMessage()->text('requestIsDone')->exec();
             else {
                 $isAdmin = in_array($this->userId, $this->config->admins);
-                $this->api->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $trip) {
+                $result = $this->api->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $trip) {
                     if ($isAdmin) {
                         $m->button('delete', 'data', 'Trip.destroy.' .  $trip->id);
                         $m->button('closeRequest', 'data', 'Trip.close.' .  $trip->id);
@@ -89,10 +89,12 @@ class PackageBot extends ParentBot
                         $m->button('selectPackage', 'query', time());
                     }
                 })->exec();
-
-                $this->putCache('action', 'selectPackage');
-                $this->putCache('trip', $trip->id);
-                $this->putCache('inline', 'packages');
+                if ($isAdmin) {
+                    $this->putCache('action', 'selectPackage');
+                    $this->putCache('trip', $trip->id);
+                    $this->putCache('messageId', $result->message_id);
+                    $this->putCache('inline', 'packages');
+                }
             }
         } else (new MainBot($this->update))->needLogin();
     }
@@ -137,7 +139,7 @@ class PackageBot extends ParentBot
 
             $this->putCache('package', $id);
             $flow = new FlowBot($this->update);
-            $flow->start('package','confirm', 'update');
+            $flow->start('package', 'confirm', 'update');
         }
     }
 
@@ -149,7 +151,7 @@ class PackageBot extends ParentBot
         $id = $cache->package;
 
         $package = $this->user->packages()->find($id);
-        
+
 
         $this->api->updateMessage()->text('packageInfo', $package)->messageId($this->messageId)->exec();
 
@@ -222,7 +224,7 @@ class PackageBot extends ParentBot
                 else $m->button('closeRequest', 'data', 'Package.status.closed,' .  $package->id);
             })->messageId($this->messageId)->exec();
 
-            
+
 
             if (isset($package->messageId)) {
                 $config = $this->config;
@@ -255,7 +257,7 @@ class PackageBot extends ParentBot
         if (isset($package->messageId)) {
             $config = config('telegram');
             $channel = $config->channel;
-            
+
             $package->status = 'closedByAdmin';
             $this->api->chat('@' . $channel)->updateMessage()->text('channelPackage', $package)->messageId($package->messageId)->exec();
         }
@@ -278,7 +280,7 @@ class PackageBot extends ParentBot
     public function select()
     {
         $this->api->deleteMessage()->messageId($this->messageId)->exec();
-        $this->messageId--;
+        $this->messageId = $this->cache->messageId;
         $this->request($this->data);
     }
 
@@ -287,7 +289,7 @@ class PackageBot extends ParentBot
         $pending = $this->config->messages->pending;
 
         $package = $this->user->packages()->find($id);
-        
+
         $trip = Trip::find($this->cache->trip);
 
         $this->api->updateMessage()->text('requestTripSent', $package, "\n\n" . $pending)->inlineKeyboard()->rowButtons(function ($m) use ($package) {
@@ -337,7 +339,7 @@ class PackageBot extends ParentBot
 
         $trip = Trip::find($data[0]);
         $package = Package::find($data[1]);
-        
+
         $transfer = Transfer::where(['package' => $package->id, 'trip' => $trip->id]);
 
         if (in_array($this->userId, $config->admins)) {
@@ -396,7 +398,7 @@ class PackageBot extends ParentBot
             })->messageId($this->messageId)->exec();
 
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
-            
+
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
             $trip->packageCode = $package->code;
 
