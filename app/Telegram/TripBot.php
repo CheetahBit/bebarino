@@ -394,13 +394,11 @@ class TripBot extends ParentBot
             $transfer->update(['status' => 'pendingAdmin']);
             $text .= "\n\n" . $accept . "\n\n" . $pending;
 
-            $this->api->chat($package->userId)->updateMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
+            $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($package) {
                 $m->button('closeRequest', 'data', 'Package.status.closed,' . $package->id);
             })->messageId($this->messageId)->exec();
 
-            $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
-
-
+            $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
 
             foreach ($trip->toArray() as $key => $value) $package->{'trip' . ucfirst($key)} = $value;
             $package->tripCode = $trip->code;

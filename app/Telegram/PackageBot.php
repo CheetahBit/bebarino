@@ -394,11 +394,11 @@ class PackageBot extends ParentBot
             $transfer->update(['status' => 'pendingAdmin']);
             $text .= "\n\n" . $accept . "\n\n" . $pending;
 
-            $this->api->chat($trip->userId)->updateMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
+            $this->api->chat($package->userId)->updateMessage()->text(plain: $text)->inlineKeyboard()->rowButtons(function ($m)  use ($trip) {
                 $m->button('closeRequest', 'data', 'Trip.status.closed,' . $trip->id);
             })->messageId($this->messageId)->exec();
 
-            $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
+            $this->api->chat($trip->userId)->sendMessage()->text(plain: $text)->exec();
 
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
             $trip->packageCode = $package->code;
