@@ -108,7 +108,7 @@ class FlowBot extends ParentBot
             else if ($this->update->contact->user_id != $this->userId)
                 $error = 'errorAnotherContact';
             else
-                $this->update->data->phone = $this->update->contact->phone_number;
+                $this->data = $this->update->contact->phone_number;
         } else if ($step == 'phone' && $type != 'phone_number' && !$isDesire)
             $error = 'errorInvalidPhone';
         else if ($step == 'email' && $type != 'email' && !$isDesire)
