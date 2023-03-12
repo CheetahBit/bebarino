@@ -278,6 +278,7 @@ class PackageBot extends ParentBot
     public function select()
     {
         $this->api->deleteMessage()->messageId($this->messageId)->exec();
+        $this->messageId--;
         $this->request($this->data);
     }
 

@@ -278,6 +278,7 @@ class TripBot extends ParentBot
     public function select()
     {
         $this->api->deleteMessage()->messageId($this->messageId)->exec();
+        $this->messageId--;
         $this->request($this->data);
     }
 
@@ -287,7 +288,6 @@ class TripBot extends ParentBot
 
         $trip = $this->user->trips()->find($id);
         
-
         $package = Package::find($this->cache->package);
 
         $this->api->updateMessage()->text('requestPackageSent', $trip, "\n\n" . $pending)->inlineKeyboard()->rowButtons(function ($m) use ($trip) {
