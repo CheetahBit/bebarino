@@ -366,8 +366,8 @@ class TripBot extends ParentBot
 
         $data = explode(',', $this->data);
 
-        $package = Package::find($data[0]);
-        $trip = Trip::find($data[1]);
+        $trip = Trip::find($data[0]);
+        $package = Package::find($data[1]);
 
         $transfer = Transfer::where(['trip' => $trip->id, 'package' => $package->id]);
 
