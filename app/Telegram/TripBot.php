@@ -77,7 +77,7 @@ class TripBot extends ParentBot
             else if ($temp->where('status', 'verified')->exists())
                 $this->api->sendMessage()->text('requestIsDone')->exec();
             else {
-
+                $this->clear();
                 $isAdmin = in_array($this->userId, $this->config->admins);
                 $result = $this->api->sendMessage()->text('requestPackageForm', $package, plain: json_encode($trips))->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $package) {
                     if ($isAdmin) {

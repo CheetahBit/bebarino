@@ -78,6 +78,7 @@ class PackageBot extends ParentBot
             else if ($temp->where('status', 'verified')->exists())
                 $this->api->sendMessage()->text('requestIsDone')->exec();
             else {
+                $this->clear();
                 $isAdmin = in_array($this->userId, $this->config->admins);
                 $result = $this->api->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $trip) {
                     if ($isAdmin) {
