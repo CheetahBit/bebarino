@@ -434,12 +434,12 @@ class PackageBot extends ParentBot
             $ticket = $trip->getRawOriginal('ticket');
         }
 
-        $passport = $user->identity->getRawOriginal('passport');
-        $contact = $user->contact;
+        $passport = $user->account->hasContact() == "✅";
+        $contact = $user->account->hasContact() == "✅";
 
         $paths = new stdClass;
         if (isset($ticket)) $paths->ticket = "tickets/" . $ticket;
-        if (isset($passport)) $paths->passport = "passports/" . $passport;
+        if ($passport) $paths->passport = "passports/" . $passport;
         $paths = (array)$paths;
 
         if (count($paths) > 0) {
@@ -449,7 +449,7 @@ class PackageBot extends ParentBot
             foreach ($paths as $path) {
                 $api = $this->api->sendPhoto()->photo($path);
                 if ($i == 0) $api->reply($this->messageId);
-                if ($i == $count - 1 && $contact->isFullFill()) $api->noreply()->caption('contactInfo', $contact);
+                if ($i == $count - 1 && $contact) $api->noreply()->caption('contactInfo', $contact);
                 $api->exec();
                 $i++;
             };

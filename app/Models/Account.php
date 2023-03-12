@@ -57,7 +57,15 @@ class Account extends Model
     public function hasContact()
     {
         $flag = true;
-        foreach ($this->fillable as $column) {
+        $contact = [
+            'phone',
+            'email',
+            'country',
+            'city',
+            'address',
+        ];
+
+        foreach ($contact as $column) {
             if ($this->getRawOriginal($column) == null) {
                 $flag =  false;
             }
