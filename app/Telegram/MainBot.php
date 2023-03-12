@@ -55,7 +55,7 @@ class MainBot extends ParentBot
 
     public function setPhone()
     {
-        $phone = $this->result->data->contact;
+        $phone = $this->result->data->phone;
         $this->user->update(['phone' => $phone]);
         $this->user->account()->update(['phone' => $phone]);
         $this->api->sendMessage()->text('loginSuccessfully')->exec();
