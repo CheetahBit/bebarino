@@ -86,7 +86,7 @@ class TripBot extends ParentBot
                         $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                     } else {
                         $m->button('createTrip', 'data', 'Trip.create');
-                        $m->button('selectTrip', 'query', time())->inlineMode('trips');
+                        $m->button('selectTrip', 'query', time());
                     }
                 })->exec();
                 $this->putCache('action', 'selectTrip');
