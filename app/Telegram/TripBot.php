@@ -72,7 +72,7 @@ class TripBot extends ParentBot
                 $this->api->sendMessage()->text('requestIsSelf')->exec();
             else if ($package->getRawOriginal('status') != "opened")
                 $this->api->sendMessage()->text('requestIsClosed')->exec();
-            else if ($transfer->whereIn('trips', $trips)->exists())
+            else if ($transfer->whereIn('trip', $trips)->exists())
                 $this->api->sendMessage()->text('requestAlready')->exec();
             else if ($temp->where('status', 'verified')->exists())
                 $this->api->sendMessage()->text('requestIsDone')->exec();
