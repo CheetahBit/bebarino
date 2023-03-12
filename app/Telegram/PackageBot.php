@@ -90,7 +90,7 @@ class PackageBot extends ParentBot
                         $m->button('selectPackage', 'query', time());
                     }
                 })->exec();
-                if ($isAdmin) {
+                if (!$isAdmin) {
                     $this->putCache('action', 'selectPackage');
                     $this->putCache('trip', $trip->id);
                     $this->putCache('messageId', $result->message_id);

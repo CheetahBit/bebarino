@@ -89,7 +89,7 @@ class TripBot extends ParentBot
                         $m->button('selectTrip', 'query', time());
                     }
                 })->exec();
-                if ($isAdmin) {
+                if (!$isAdmin) {
                     $this->putCache('action', 'selectTrip');
                     $this->putCache('package', $package->id);
                     $this->putCache('messageId', $result->message_id);
