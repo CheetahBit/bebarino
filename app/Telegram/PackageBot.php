@@ -54,7 +54,7 @@ class PackageBot extends ParentBot
         $id = $package->id;
         $package->save();
 
-        AddressBot::storeFromToAddress($this->userId, $data);
+        AddressBot::storeFromToAddress($this->user, $data);
 
         $this->request($id);
     }
@@ -167,7 +167,7 @@ class PackageBot extends ParentBot
 
         $this->user->packages()->find($id)->update((array)$data);
 
-        AddressBot::storeFromToAddress($this->userId, $data);
+        AddressBot::storeFromToAddress($this->user, $data);
     }
 
     public function destroy()

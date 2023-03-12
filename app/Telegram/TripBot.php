@@ -53,7 +53,7 @@ class TripBot extends ParentBot
         $id = $trip->id;
         $trip->save();
 
-        AddressBot::storeFromToAddress($this->userId, $data);
+        AddressBot::storeFromToAddress($this->user, $data);
 
         $this->request($id);
     }
@@ -165,7 +165,7 @@ class TripBot extends ParentBot
 
         $this->user->trips()->find($id)->update((array)$data);
 
-        AddressBot::storeFromToAddress($this->userId, $data);
+        AddressBot::storeFromToAddress($this->user, $data);
     }
 
     public function destroy()
