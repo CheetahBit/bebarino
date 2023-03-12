@@ -61,7 +61,7 @@ class TripBot extends ParentBot
     public function form()
     {
         $package = explode('-', $this->data)[1];
-        $package = Trip::find($package);
+        $package = Package::find($package);
 
         if (isset($this->user->phone)) {
             $transfer = Transfer::where('package', $package->id);
