@@ -400,8 +400,12 @@ class TripBot extends ParentBot
 
             $this->api->chat($package->userId)->sendMessage()->text(plain: $text)->exec();
 
-            foreach ($trip->toArray() as $key => $value) $package->{'trip' . ucfirst($key)} = $value;
+            foreach ($trip->toArray() as $key => $value)
+                $package->{'trip' . ucfirst($key)} = $value;
             $package->tripCode = $trip->code;
+            $package->tripHasPassport = $trip->hasPassport;
+            $package->tripHasContact = $trip->hasContact;
+            $package->tripHasTicket = $trip->hasTicket;
 
             foreach ($config->admins as $admin)
                 $this->api->chat($admin)->sendMessage()->text('requestTripAdmin', $package)->inlineKeyboard()->rowButtons(function ($m) use ($data) {

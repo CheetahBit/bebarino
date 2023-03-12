@@ -402,6 +402,8 @@ class PackageBot extends ParentBot
 
             foreach ($package->toArray() as $key => $value) $trip->{'package' . ucfirst($key)} = $value;
             $trip->packageCode = $package->code;
+            $trip->packageHasPassport = $package->hasPassport;
+            $trip->packageHasContact = $package->hasContact;
 
             foreach ($config->admins as $admin)
                 $this->api->chat($admin)->sendMessage()->text('requestPackageAdmin', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($data) {
