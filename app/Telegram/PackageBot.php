@@ -127,7 +127,7 @@ class PackageBot extends ParentBot
         $id = $this->data;
 
         $transfer = Transfer::where(['package' => $id])->where(function ($query) {
-            return $query->whereIn('status', ['pendingAdmin', 'verified']);
+            return $query->whereIn('status', ['pendingAdmin', 'pendingPacker']);
         });
 
         if ($transfer->exists())

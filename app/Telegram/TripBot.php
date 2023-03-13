@@ -126,7 +126,7 @@ class TripBot extends ParentBot
         $id = $this->data;
 
         $transfer = Transfer::where(['trip' => $id])->where(function ($query) {
-            return $query->whereIn('status', ['pendingAdmin', 'verified']);
+            return $query->whereIn('status', ['pendingAdmin', 'pendingTripper']);
         });
 
         if ($transfer->exists())
@@ -209,7 +209,7 @@ class TripBot extends ParentBot
             $this->api->showAlert($this->callbackId)->text('request' . ucfirst($status))->exec();
 
             $trip->update(['status' => $status]);
-            
+
             $trip = $this->user->trips()->find($tripId);
 
             $transfer = Transfer::where(['trip' => $trip->id]);
