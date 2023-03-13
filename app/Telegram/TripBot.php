@@ -209,6 +209,7 @@ class TripBot extends ParentBot
             $this->api->showAlert($this->callbackId)->text('request' . ucfirst($status))->exec();
 
             $trip->update(['status' => $status]);
+            
             $trip = $this->user->trips()->find($tripId);
 
             $transfer = Transfer::where(['trip' => $trip->id]);
@@ -222,7 +223,6 @@ class TripBot extends ParentBot
                 if ($status == 'closed') $m->button('openRequest', 'data', 'Trip.status.opened,' .  $trip->id);
                 else $m->button('closeRequest', 'data', 'Trip.status.closed,' .  $trip->id);
             })->messageId($this->messageId)->exec();
-
 
 
             if (isset($trip->messageId)) {

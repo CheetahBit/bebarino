@@ -226,7 +226,6 @@ class PackageBot extends ParentBot
             })->messageId($this->messageId)->exec();
 
 
-
             if (isset($package->messageId)) {
                 $config = $this->config;
                 $package->status = $status;
