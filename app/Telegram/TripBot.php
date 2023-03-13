@@ -86,7 +86,7 @@ class TripBot extends ParentBot
             $this->clear();
             $result = $this->api->sendMessage()->text('requestPackageForm', $package, plain: json_encode($trips))->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $package) {
                 if ($isAdmin) {
-                    if ($isAdmin) $m->button('delete', 'data', 'Package.delete.' .  $package->id);
+                    if ($isAdmin) $m->button('delete', 'data', 'Package.destroy.' .  $package->id);
                     $m->button('closeRequest', 'data', 'Package.close.' .  $package->id);
                     $m->button('contactPacker', 'url', 'tg://user?id=' .  $package->userId);
                 } else {
