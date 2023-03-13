@@ -61,9 +61,9 @@ class PackageBot extends ParentBot
 
     public function form()
     {
-        $data = explode('T',$this->data);
-        if($data[0] == '#') $data[1] -= 1000;
-      
+        $data = explode('T', $this->data);
+        if ($data[0] == '#') $data[1] -= 1000;
+
         $trip = Trip::find($data[1]);
 
         if (isset($this->user->phone)) {
@@ -71,33 +71,36 @@ class PackageBot extends ParentBot
             $temp = Transfer::where('trip', $trip->id);
             $packages = $this->user->packages()->select('id')->pluck('id')->toArray();
 
-            if ($trip->user->id == $this->userId)
-                $this->api->sendMessage()->text('requestIsSelf')->exec();
-            else if ($trip->getRawOriginal('status') != "opened")
-                $this->api->sendMessage()->text('requestIsClosed')->exec();
-            else if ($transfer->whereIn('package', $packages)->exists())
-                $this->api->sendMessage()->text('requestAlready')->exec();
-            else if ($temp->where('status', 'verified')->exists())
-                $this->api->sendMessage()->text('requestIsDone')->exec();
-            else {
-                $this->clear();
-                $isAdmin = in_array($this->userId, $this->config->admins);
-                $result = $this->api->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $trip) {
-                    if ($isAdmin) {
-                        $m->button('delete', 'data', 'Trip.destroy.' .  $trip->id);
-                        $m->button('closeRequest', 'data', 'Trip.close.' .  $trip->id);
-                        $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
-                    } else {
-                        $m->button('createPackage', 'data', 'Package.create');
-                        $m->button('selectPackage', 'query', time());
-                    }
-                })->exec();
-                if (!$isAdmin) {
-                    $this->putCache('action', 'selectPackage');
-                    $this->putCache('trip', $trip->id);
-                    $this->putCache('messageId', $result->message_id);
-                    $this->putCache('inline', 'packages');
+            $isAdmin = in_array($this->userId, $this->config->admins);
+
+            if (!$isAdmin) {
+                if ($trip->user->id == $this->userId)
+                    return $this->api->sendMessage()->text('requestIsSelf')->exec();
+                else if ($trip->getRawOriginal('status') != "opened")
+                    return $this->api->sendMessage()->text('requestIsClosed')->exec();
+                else if ($transfer->whereIn('package', $packages)->exists())
+                    return $this->api->sendMessage()->text('requestAlready')->exec();
+                else if ($temp->where('status', 'verified')->exists())
+                    return $this->api->sendMessage()->text('requestIsDone')->exec();
+            }
+
+            $this->clear();
+
+            $result = $this->api->sendMessage()->text('requestTripForm', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($isAdmin, $trip) {
+                if ($isAdmin) {
+                    $m->button('delete', 'data', 'Trip.destroy.' .  $trip->id);
+                    $m->button('closeRequest', 'data', 'Trip.close.' .  $trip->id);
+                    $m->button('contactTripper', 'url', 'tg://user?id=' .  $trip->userId);
+                } else {
+                    $m->button('createPackage', 'data', 'Package.create');
+                    $m->button('selectPackage', 'query', time());
                 }
+            })->exec();
+            if (!$isAdmin) {
+                $this->putCache('action', 'selectPackage');
+                $this->putCache('trip', $trip->id);
+                $this->putCache('messageId', $result->message_id);
+                $this->putCache('inline', 'packages');
             }
         } else (new MainBot($this->update))->needLogin();
     }
