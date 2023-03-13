@@ -51,6 +51,7 @@ class InlineBot extends ParentBot
 
     public function getCards()
     {
+        $results = [];
         $packages = $this->user->packages;
         $trips = $this->user->trips;
         $requests = collect([]);
@@ -80,6 +81,7 @@ class InlineBot extends ParentBot
 
     public function getPackages()
     {
+        $results = [];
         $packages = $this->user->packages()->get()->reverse()->values();
         foreach ($packages as $package) {
             if (Transfer::where(['package' => $package->id])->exists()) continue;
@@ -104,6 +106,7 @@ class InlineBot extends ParentBot
 
     public function getTrips()
     {
+        $results = [];
         $trips = $this->user->trips()->get()->reverse()->values();
         foreach ($trips as $trip) {
             if (Transfer::where(['trip' => $trip->id])->exists()) continue;
