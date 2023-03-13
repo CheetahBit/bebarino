@@ -32,8 +32,8 @@ return [
     "packageSubmitted" => "بسته شما ثبت شد\n\nشماره درخواست :code\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتوضیحات : :desc",
     "tripSubmitted" => "سفر شما ثبت شد\n\nشماره درخواست :code\n\nاز مبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nتصویر بلیط : :ticket\n\nتوضیحات : :desc",
 
-    "packageInfo" => "بسته\n\nمبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nنوضیحات: :desc\n\nوضعیت درخواست : :status",
-    "tripInfo" => "سفر\n\nمبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc\n\nوضعیت درخواست : :status",
+    "packageInfo" => "بسته\n\nشماره درخواست :code\n\nمبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nنوضیحات: :desc\n\nوضعیت درخواست : :status",
+    "tripInfo" => "سفر\n\nشماره درخواست :code\n\nمبدا : :fromCountry , :fromCity , :fromAddress\nبه مقصد : :toCountry , :toCity , :toAddress\n\nتاریخ سفر : :date\nجداکثر وزن : :weight\nقیمت پیشنهادی : :price\nنصویر بلیط : :ticket\n\nنوضیحات: :desc\n\nوضعیت درخواست : :status",
 
     "requestClosed" => "درخواست بسته شد",
     "requestOpened" => "درخواست باز شد",
