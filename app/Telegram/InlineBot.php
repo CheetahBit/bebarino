@@ -71,7 +71,7 @@ class InlineBot extends ParentBot
 
         if (count($results) < 1) $results[] = [
             'type' => 'article',
-            'title' => $this->config->keywords->cardsNotFound,
+            'title' => $this->config->messages->cardsNotFound,
             'input_message_content' => ['message_text' => '/start'],
             'id' => 'cardsNotFound',
         ];
