@@ -61,12 +61,10 @@ class PackageBot extends ParentBot
 
     public function form()
     {
-        $trip = str_replace('#T','',$this->data);
-
-        if(str_contains($trip, ' ')) $trip = trim($trip);
-        else $trip  - 1000;
-        
-        $trip = Trip::find($trip);
+        $data = explode('T',$this->data);
+        if($data[0] == '#') $data[1] -= 1000;
+      
+        $trip = Trip::find($data[1]);
 
         if (isset($this->user->phone)) {
             $transfer = Transfer::where('trip', $trip->id);
