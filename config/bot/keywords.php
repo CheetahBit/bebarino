@@ -49,5 +49,6 @@ return [
 
     "statusPendingAdmin" => "در انتظار بررسی ادمین",
     "statusClosedByAdmin" => "بسته شده توسط ادمین",
+    "statusVerified" => "واگذار شد",
     "sendRequestToChannel" => "ارسال درخواست به کانال",
 ];
