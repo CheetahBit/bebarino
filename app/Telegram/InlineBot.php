@@ -39,7 +39,7 @@ class InlineBot extends ParentBot
                 'id' => $address->id,
             ];
         }
-        if($select) $results[] = [
+        if ($select) $results[] = [
             'type' => 'article',
             'title' => $this->config->keywords->createAddress,
             'input_message_content' => ['message_text' => 'createAddress'],
@@ -67,6 +67,14 @@ class InlineBot extends ParentBot
                 'id' => $type . $request->id,
             ];
         }
+
+        if (count($results) < 1) $results[] = [
+            'type' => 'article',
+            'title' => $this->config->keywords->cardsNotFound,
+            'input_message_content' => ['message_text' => '/start'],
+            'id' => 'cardsNotFound',
+        ];
+
         return $results;
     }
 
