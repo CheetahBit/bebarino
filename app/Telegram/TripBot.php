@@ -61,7 +61,10 @@ class TripBot extends ParentBot
     public function form()
     {
         $package = str_replace('#P','',$this->data);
-        if(str_contains($package, ' ')) $package = trim($package) - 1000;
+        
+        if(str_contains($package, ' ')) $package = trim($package);
+        else $package - 1000;
+
         $package = Package::find($package);
 
         if (isset($this->user->phone)) {

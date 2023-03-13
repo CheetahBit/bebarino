@@ -62,7 +62,10 @@ class PackageBot extends ParentBot
     public function form()
     {
         $trip = str_replace('#T','',$this->data);
-        if(str_contains($trip, ' ')) $trip = trim($trip) - 1000;
+
+        if(str_contains($trip, ' ')) $trip = trim($trip);
+        else $trip  - 1000;
+        
         $trip = Trip::find($trip);
 
         if (isset($this->user->phone)) {
