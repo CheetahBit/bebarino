@@ -61,7 +61,7 @@ class PackageBot extends ParentBot
 
     public function form()
     {
-        $trip = explode('-', $this->data)[1];
+        $trip = trim(str_replace('#T','',$this->data));
         $trip = Trip::find($trip);
 
         if (isset($this->user->phone)) {
@@ -109,7 +109,7 @@ class PackageBot extends ParentBot
         $package = $this->user->packages()->firstOrCreate((array) $data);
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
-            $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
+            $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=#P' . $package->id);
         })->exec();
 
         $this->api->chat($this->userId)->updateMessage()->text('packageSubmitted', $package)->inlineKeyboard()->rowButtons(function ($m) use ($result, $channel) {
@@ -158,7 +158,7 @@ class PackageBot extends ParentBot
 
         if (isset($package->messageId)) {
             $result = $this->api->chat('@' . $this->config->channel)->updateMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
-                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
+                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=#P' . $package->id);
             })->messageId($package->messageId)->exec();
 
             if (!isset($result)) {
@@ -233,7 +233,7 @@ class PackageBot extends ParentBot
                 $this->api->chat('@' . $config->channel)->updateMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
                     $status = $package->getRawOriginal('status');
                     if ($status == 'opened')
-                        $url = 't.me/' . $config->bot . '?start=package-' . $package->id;
+                        $url = 't.me/' . $config->bot . '?start=#P' . $package->id;
                     else
                         $url = 't.me/' . $config->channel;
                     $m->button('sendFormRequest', 'url', $url);
@@ -318,7 +318,7 @@ class PackageBot extends ParentBot
 
         if (!isset($package->messageId)) {
             $result = $this->api->chat('@' . $config->channel)->sendMessage()->text('channelPackage', $package)->inlineKeyboard()->rowButtons(function ($m) use ($package, $config) {
-                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=package-' . $package->id);
+                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=#P' . $package->id);
             })->exec();
 
             $this->api->chat($this->userId)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {

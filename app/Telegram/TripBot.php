@@ -60,7 +60,7 @@ class TripBot extends ParentBot
 
     public function form()
     {
-        $package = explode('-', $this->data)[1];
+        $package = trim(str_replace('#P','',$this->data));
         $package = Package::find($package);
 
         if (isset($this->user->phone)) {
@@ -108,7 +108,7 @@ class TripBot extends ParentBot
         $trip = $this->user->trips()->firstOrCreate((array) $data);
 
         $result = $this->api->chat('@' . $channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
-            $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
+            $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=#T' . $trip->id);
         })->exec();
 
         $this->api->chat($this->userId)->updateMessage()->text('tripSubmitted', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($result, $channel) {
@@ -156,7 +156,7 @@ class TripBot extends ParentBot
 
         if (isset($trip->messageId)) {
             $result = $this->api->chat('@' . $this->config->channel)->updateMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
-                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
+                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=#T' . $trip->id);
             })->messageId($trip->messageId)->exec();
 
             if (!isset($result)) {
@@ -232,7 +232,7 @@ class TripBot extends ParentBot
                 $this->api->chat('@' . $config->channel)->updateMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
                     $status = $trip->getRawOriginal('status');
                     if ($status == 'opened')
-                        $url = 't.me/' . $config->bot . '?start=trip-' . $trip->id;
+                        $url = 't.me/' . $config->bot . '?start=#T' . $trip->id;
                     else
                         $url = 't.me/' . $config->channel;
                     $m->button('sendFormRequest', 'url', $url);
@@ -319,7 +319,7 @@ class TripBot extends ParentBot
 
         if (!isset($trip->messageId)) {
             $result = $this->api->chat('@' . $config->channel)->sendMessage()->text('channelTrip', $trip)->inlineKeyboard()->rowButtons(function ($m) use ($trip, $config) {
-                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=trip-' . $trip->id);
+                $m->button('sendFormRequest', 'url', 't.me/' . $config->bot . '?start=#T' . $trip->id);
             })->exec();
 
             $this->api->chat($this->userId)->updateButton()->inlineKeyboard()->rowButtons(function ($m) use ($result, $config) {
