@@ -214,7 +214,7 @@ class TripBot extends ParentBot
             $transfer = Transfer::where(['trip' => $trip->id]);
             if ($transfer->exists()) $trip->status = $transfer->first()->status;
 
-            $this->api->updateMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) {
+            $this->api->chat($this->userId)->updateMessage()->text('tripInfo', $trip)->inlineKeyboard()->rowButtons(function ($m) {
                 $m->button('edit', 'data', 'Trip.edit');
                 $m->button('backward', 'data', 'Card.index');
             })->rowButtons(function ($m) use ($trip) {

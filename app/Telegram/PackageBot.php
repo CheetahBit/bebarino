@@ -216,7 +216,7 @@ class PackageBot extends ParentBot
             $transfer = Transfer::where(['package' => $package->id]);
             if ($transfer->exists()) $package->status = $transfer->first()->status;
 
-            $this->api->updateMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) {
+            $this->api->chat($this->userId)->updateMessage()->text('packageInfo', $package)->inlineKeyboard()->rowButtons(function ($m) {
                 $m->button('edit', 'data', 'Package.edit');
                 $m->button('backward', 'data', 'Card.index');
             })->rowButtons(function ($m) use ($package) {
